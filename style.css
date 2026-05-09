@@ -3947,3 +3947,19 @@ body.light-mode .signature-light {
   border-top: 1px solid rgba(0,0,0,0.08);
 }
   
+.signature-dark {
+  display: block;
+}
+
+.signature-light {
+  display: none;
+}
+
+/* LIGHT MODE ONLY */
+body.light-mode .signature-dark {
+  display: none;
+}
+
+body.light-mode .signature-light {
+  display: block;
+}
