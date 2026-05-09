@@ -3872,4 +3872,29 @@ section.guestbook .guestbook-entries p {
 }
 
 
+.signature-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1rem 2rem;
+  background: #0f1117; /* optional */
+}
+
+.signature {
+  width: min(420px, 90%);
+  opacity: 0.9;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.08));
+}
+
+.signature:hover {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+  .signature {
+  mix-blend-mode: screen;
+}
+  
   
