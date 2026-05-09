@@ -3896,5 +3896,54 @@ section.guestbook .guestbook-entries p {
   .signature {
   mix-blend-mode: screen;
 }
-  
+
+
+  .signature-footer {
+  width: 100%;
+  padding: 5rem 2rem 4rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+}
+
+.signature {
+  width: clamp(180px, 28vw, 340px);
+  opacity: 0.72;
+  transition: all 0.3s ease;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* DARK MODE */
+.signature-dark {
+  display: block;
+}
+
+.signature-light {
+  display: none;
+}
+
+/* LIGHT MODE */
+body.light-mode .signature-dark {
+  display: none;
+}
+
+body.light-mode .signature-light {
+  display: block;
+  opacity: 0.18;
+}
+
+/* hover */
+.signature-footer:hover .signature {
+  opacity: 1;
+}
+
+  .signature-footer {
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+  body.light-mode .signature-footer {
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
   
