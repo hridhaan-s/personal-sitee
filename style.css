@@ -4552,3 +4552,21 @@ body.light-mode .signature-light {
   }
 
 }
+
+
+
+.projects-github {
+  margin-top: 10px;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.projects-github a {
+  color: #c9a227;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.projects-github a:hover {
+  text-decoration: underline;
+}
