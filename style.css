@@ -4629,4 +4629,74 @@ body.light-mode .signature-light {
 }
 
 
+.projects-github {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #555 !important;
+  text-align: left;
+}
 
+.projects-github a {
+  color: #2563eb !important;
+  text-decoration: none;
+  font-weight: 600;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.projects-github a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0%;
+  height: 2px;
+  background-color: #2563eb;
+  transition: width 0.25s ease;
+}
+
+.projects-github a:hover::after {
+  width: 100%;
+}
+
+.projects-github a:hover {
+  color: #1d4ed8 !important;
+}
+
+.projects-github {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #555 !important;
+  text-align: left;
+}
+
+.projects-github a {
+  color: #2563eb !important;
+  text-decoration: none;
+  font-weight: 600;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.projects-github a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0%;
+  height: 2px;
+  background-color: #2563eb;
+  transition: width 0.25s ease;
+}
+
+.projects-github a:hover::after {
+  width: 100%;
+}
+
+.projects-github a:hover {
+  color: #1d4ed8 !important;
+}
