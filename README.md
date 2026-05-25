@@ -1,4 +1,9 @@
 A Page to display my projects and my Astrophotgraphs 
-I used css, html and some java to make this (Vibe Coded) to save time 
+I used css, html and java to make my personal site
 
-https://hridhaan.bitbuzz.club/ --> 
+Visit it here:
+www.Hridhaan.me
+
+*Fun Fact i got this domain with Github Pro (Student dev Pack)
+
+Last Updated: 25 May 2026
