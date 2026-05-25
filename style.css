@@ -4761,3 +4761,11 @@ body.light-mode .signature-light {
     transform: translateY(0);
   }
 }
+
+
+
+  .social-links a svg {
+  width: 28px;
+  height: 28px;
+  fill: currentColor;
+}
