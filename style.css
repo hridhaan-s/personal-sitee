@@ -4769,3 +4769,24 @@ body.light-mode .signature-light {
   height: 28px;
   fill: currentColor;
 }
+
+
+.visitor-badge{
+  display:flex;
+  justify-content:center;
+  margin-top:20px;
+  opacity:.82;
+  transition:all .35s ease;
+}
+
+.visitor-badge:hover{
+  opacity:1;
+  transform:translateY(-2px) scale(1.03);
+}
+
+.visitor-badge img{
+  border-radius:12px;
+  box-shadow:
+    0 0 10px rgba(255,255,255,.06),
+    0 0 25px rgba(255,215,0,.08);
+}
