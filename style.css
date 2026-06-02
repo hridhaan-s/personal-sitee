@@ -4903,3 +4903,115 @@ body.light-mode .signature-light {
   opacity:.75;
   line-height:1.8;
 }
+
+  .oss-impact{
+  padding:8rem 0;
+}
+
+.section-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:2rem;
+  margin-bottom:5rem;
+}
+
+.eyebrow{
+  font-size:.75rem;
+  letter-spacing:.2em;
+  opacity:.6;
+}
+
+.section-header h2{
+  font-size:clamp(2rem,5vw,4rem);
+  margin-top:.5rem;
+  line-height:1;
+}
+
+.github-link{
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  text-decoration:none;
+  color:inherit;
+  opacity:.75;
+  transition:.25s;
+}
+
+.github-link:hover{
+  opacity:1;
+}
+
+.github-link svg{
+  width:16px;
+  height:16px;
+}
+
+.impact-stat{
+  margin-bottom:5rem;
+}
+
+.impact-stat span{
+  font-size:clamp(5rem,12vw,10rem);
+  font-weight:700;
+  line-height:.9;
+  letter-spacing:-0.06em;
+}
+
+.impact-stat p{
+  margin-top:1rem;
+  max-width:500px;
+  opacity:.7;
+}
+
+.contribution-list{
+  display:flex;
+  flex-direction:column;
+}
+
+.contribution{
+  display:block;
+  text-decoration:none;
+  color:inherit;
+  padding:2rem 0;
+  border-top:1px solid rgba(255,255,255,.08);
+  transition:.25s;
+}
+
+.contribution:last-child{
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.contribution:hover{
+  padding-left:1rem;
+}
+
+.contribution-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.contribution-top h3{
+  font-size:1.5rem;
+}
+
+.contribution-top span{
+  font-size:.8rem;
+  opacity:.6;
+  text-transform:uppercase;
+  letter-spacing:.15em;
+}
+
+.impact{
+  margin-top:.75rem;
+  font-size:2rem;
+  font-weight:600;
+}
+
+.contribution ul{
+  margin-top:1rem;
+  padding-left:1.2rem;
+  opacity:.75;
+  line-height:1.8;
+}
