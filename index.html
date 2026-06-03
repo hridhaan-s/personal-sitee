@@ -751,5 +751,21 @@
 
     
 <script src="script.js"></script>
+
+  <script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
+
+<script>
+const lenis = new Lenis({
+    duration: 1.2,
+    smoothWheel: true
+});
+
+function raf(time){
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+}
+
+requestAnimationFrame(raf);
+</script>
 </body>
 </html>
