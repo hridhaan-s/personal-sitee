@@ -5015,3 +5015,16 @@ body.light-mode .signature-light {
   opacity:.75;
   line-height:1.8;
 }
+
+.project-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 12px;
+}
+  .project-card img {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    width: 100%;
+}
