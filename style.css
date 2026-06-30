@@ -5016,15 +5016,96 @@ body.light-mode .signature-light {
   line-height:1.8;
 }
 
-.project-card img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    object-position: top;
-    border-radius: 12px;
+/* ==========================================================================
+   PORTFOLIO ADD-ON: GRID TIGHTENING & CARD ENHANCEMENTS
+   ========================================================================== */
+
+/* 1. Force the grid to maintain equal height layout and drop awkward voids */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2.5rem 2rem;
+  align-items: stretch;
 }
-  .project-card img {
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    width: 100%;
+
+/* 2. Style the project card container to space internal content properly */
+.project-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--card-bg, #ffffff);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              box-shadow 0.3s ease;
+}
+
+/* 3. Subtle lift effect on hover to remove the flat/dull look */
+.project-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* 4. Mimic the exact golden pill-tag style from your design screenshot */
+.project-card .tag {
+  display: inline-block;
+  align-self: flex-start;
+  background: #fef3c7 !important; /* Soft warm yellow */
+  color: #d97706 !important;       /* Deep gold text */
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  margin-bottom: 1.25rem;
+}
+
+/* Dark mode compatibility for the pill tags */
+body.dark .project-card .tag {
+  background: rgba(217, 119, 6, 0.15) !important;
+  color: #fbbf24 !important;
+}
+
+/* 5. Set consistent dimensions for thumbnails to avoid unaligned layout lines */
+.project-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
+}
+
+/* 6. Push titles and descriptions around smoothly */
+.project-card h3 {
+  font-size: 1.35rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.project-card p {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex-grow: 1; /* Automatically absorbs extra space to equalize card sizing */
+}
+
+/* 7. Pin the link text exactly to the bottom edge of the grid alignments */
+.project-card .project-links {
+  margin-top: auto; 
+  padding-top: 0.5rem;
+}
+
+.project-card .project-links a,
+.project-card .project-link-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+/* Subtle slide effect on link hover */
+.project-card .project-links a:hover {
+  padding-left: 4px;
 }
