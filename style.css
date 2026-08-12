@@ -22,7 +22,6 @@ body {
   background: var(--bg);
   color: var(--text);
   transition: background 0.4s, color 0.4s;
-  scroll-behavior: smooth;
 }
 
 /* ===============================
@@ -693,11 +692,6 @@ a, button {
   gap: 14px;
   width: max-content;
 
-  animation-name: toolsScroll;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-
 /* Faster, premium speeds */
 .tools-lane.slow   .tools-track { animation-duration: 26s; }
 .tools-lane.medium .tools-track { animation-duration: 20s; }
@@ -785,7 +779,6 @@ a, button {
   width: max-content;
 
   transform: translateX(-25%);
-  animation: toolsScroll linear infinite;
 }
 
 @keyframes toolsScroll {
@@ -1024,14 +1017,7 @@ a, button {
   gap: 14px;
   width: max-content;
 
-  animation: skillsInfinite linear infinite;
 }
-
-/* speeds */
-.tools-lane.slow   .tools-track { animation-duration: 22s; }
-.tools-lane.medium .tools-track { animation-duration: 18s; }
-.tools-lane.fast   .tools-track { animation-duration: 14s; }
-
 /* 🔑 REAL INFINITE MARQUEE */
 @keyframes skillsInfinite {
   from {
