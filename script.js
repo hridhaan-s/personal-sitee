@@ -128,7 +128,7 @@ function useRequestedSocialIcons() {
     GitHub: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>`,
     LinkedIn: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>`,
     Slack: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="3" height="8" x="13" y="2" rx="1.5"></rect><path d="M19 8.5c1.5 0 3-1.5 3-3s-1.5-3-3-3-3 1.5-3 3v3h3z"></path><rect width="3" height="8" x="8" y="14" rx="1.5"></rect><path d="M5 15.5c-1.5 0-3-1.5-3-3s1.5-3 3-3 3 1.5 3 3v3H5z"></path><rect width="8" height="3" x="14" y="13" rx="1.5"></rect><path d="M15.5 19c0 1.5 1.5 3 3 3s3-1.5 3-3-1.5-3-3-3h-3v3z"></path><rect width="8" height="3" x="2" y="8" rx="1.5"></rect><path d="M8.5 5C8.5 3.5 7 2 5.5 2S2.5 3.5 2.5 5s1.5 3 3 3h3V5z"></path></svg>`,
-    YouTube: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7.1C2.6 5 4.3 3.3 6.4 3.1 9.6 2.8 14.4 2.8 17.6 3.1 19.7 3.3 21.4 5 21.5 7.1c.2 1.6.2 4.2.2 4.9 0 .7 0 3.3-.2 4.9-.1 2.1-1.8 3.8-3.9 4-3.2.3-8 .3-11.2 0-2.1-.2-3.8-1.9-3.9-4-.2-1.6-.2-4.2.2-4.9Z"></path><path d="m10 15 5-3-5-3v6Z"></path></svg>`
+    YouTube: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7.1C2.6 5 4.3 3.3 6.4 3.1 9.6 2.8 14.4 2.8 17.6 3.1 19.7 3.3 21.4 5 21.5 7.1c.2 1.6.2 4.2.2 4.9 0 .7 0 3.3-.2 4.9-.1 2.1-1.8 3.8-3.9 4-3.2.3-8 .3-11.2 0-2.1-.2-3.8-1.9-3.9-4-.2-1.6-.2-4.2-.2-4.9 0-.7 0-3.3.2-4.9Z"></path><path d="m10 15 5-3-5-3v6Z"></path></svg>`
   };
 
   document.querySelectorAll(".social-row a").forEach((link) => {
@@ -160,6 +160,7 @@ function installHeroLayoutFix() {
     .contact-list b{font-weight:400;color:#aeb4b2;text-decoration:underline;text-underline-offset:4px}
     .contact-list a:hover b{color:#f0f2f1}
     .contact-page .site-footer{margin-top:70px}
+    .local-time strong{font-weight:700;color:inherit}
     @media(max-width:800px){.intro{display:flex;flex-direction:column;align-items:stretch;gap:26px;min-height:0}.intro-content{order:1}.intro-photo{order:2;width:min(180px,52vw);margin:0 auto;align-self:center}.social-row{order:3}.contact-page{padding-top:42px}.contact-list a{padding:16px 2px}}
   `;
   document.head.appendChild(style);
@@ -183,7 +184,8 @@ function addNewDelhiTime() {
   });
 
   const update = () => {
-    paragraph.textContent = `At the moment, it's ${formatter.format(new Date())} in New Delhi.`;
+    const formatted = formatter.format(new Date());
+    paragraph.innerHTML = `At the moment, it's <strong>${formatted}</strong> in New Delhi.`;
   };
 
   update();
