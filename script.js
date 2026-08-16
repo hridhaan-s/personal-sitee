@@ -81,7 +81,7 @@ async function loadScrapbookProjects() {
       const href = `https://scrapbook.hridhaan.me/project.html?slug=${encodeURIComponent(p.slug)}`;
       const type = p.type || "Project";
       const description = (p.description || "").split("\n")[0];
-      return `<a class="project-row" href="${href}" target="_blank" rel="noreferrer"><div class="project-index">${String(i + 1).padStart(2, "0")}</div><img class="project-cover" src="${p.coverImage}" alt="${escapeHtml(p.title)}" loading="lazy"><div class="project-main"><h3>${escapeHtml(p.title)}</h3><p>${escapeHtml(description)}</p></div><div class="project-tag">${escapeHtml(type)}</div><div class="project-arrow">↗</div></a>`;
+      return `<a class="project-row" href="${href}" target="_blank" rel="noreferrer"><div class="project-index"></div><img class="project-cover" src="${p.coverImage}" alt="${escapeHtml(p.title)}" loading="lazy"><div class="project-main"><h3>${escapeHtml(p.title)}</h3><p>${escapeHtml(description)}</p></div><div class="project-tag">${escapeHtml(type)}</div><div class="project-arrow">↗</div></a>`;
     }).join("");
   } catch (err) { console.error("Scrapbook project sync failed:", err); }
 }
@@ -139,3 +139,18 @@ async function loadGuestbook() {
   } catch (err) { console.error("Guestbook error:", err); }
 }
 loadGuestbook();
+
+/* OLED layout: bring the About content into the left side of the homepage hero. */
+function moveAboutIntoHero() {
+  const hero = document.querySelector("#page-home .hero");
+  const about = document.querySelector("#page-home #about");
+  const heroCopy = hero?.querySelector(":scope > div:first-child");
+  const aboutGrid = about?.querySelector(".about-grid");
+  if (!hero || !about || !heroCopy || !aboutGrid || heroCopy.querySelector(".hero-about")) return;
+  const wrapper = document.createElement("div");
+  wrapper.className = "hero-about";
+  wrapper.appendChild(aboutGrid);
+  heroCopy.appendChild(wrapper);
+  about.remove();
+}
+moveAboutIntoHero();
