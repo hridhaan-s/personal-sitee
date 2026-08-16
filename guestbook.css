@@ -60,29 +60,19 @@ body::after { opacity:.28; transform:scale(1.7); background-image:radial-gradien
 .hero-typing { display:inline-flex !important; align-items:center; min-height:44px !important; margin:0 !important; padding:8px 15px !important; border:1px solid #29292f !important; border-radius:999px !important; background:rgba(255,255,255,.035) !important; color:#d7d7dc !important; font-size:14px !important; box-shadow:0 0 30px rgba(255,255,255,.025) !important; }
 .hero-links { margin-top:26px !important; }
 .hero-note, .hero-frame { display:none !important; }
-#about { display:block !important; }
+#about { display:block !important; position:relative; padding-top:122px !important; }
+#about::before { content:""; display:block; position:absolute; top:34px; left:0; right:0; height:54px; background:currentColor url('/hs-wordmark.svg') center/100% 54px no-repeat; color:#8f8f98; opacity:.82; }
 #about .about-grid { grid-template-columns:240px 1fr; }
+
+/* Keep the navigation language simple and personal. */
+.desktop-nav a[href="#links"], .mobile-nav a[href="#links"] { font-size:0 !important; }
+.desktop-nav a[href="#links"]::after, .mobile-nav a[href="#links"]::after { content:"Connect"; font-size:14px; }
 
 @media (max-width:900px) {
   .hero { grid-template-columns:1fr !important; gap:28px !important; min-height:auto !important; padding:72px 0 58px !important; }
   .hero-art { order:-1; justify-self:center !important; max-width:330px !important; }
   .hero-copy { text-align:left; }
+  #about { padding-top:108px !important; }
+  #about::before { top:26px; height:44px; background-size:100% 44px; }
   #about .about-grid { grid-template-columns:1fr; }
-}
-
-/* Human-first homepage: compact hero, natural rhythm, About directly underneath. */
-#page-home > .hero { min-height:0 !important; padding-top:30px !important; padding-bottom:20px !important; align-items:start !important; }
-#page-home > #about { display:block !important; width:min(860px,100%); margin:0 auto !important; padding-top:20px !important; padding-bottom:58px !important; }
-#page-home > #about .section-kicker { display:none !important; }
-#page-home > #about .about-grid { display:block; border-top:1px solid #24242a; padding-top:24px; }
-#page-home > #about .about-grid h2 { margin-bottom:18px; font-size:clamp(30px,4vw,44px); }
-#page-home > #about .prose { max-width:700px; font-size:16px; line-height:1.7; color:#a9a9b1; }
-#page-home > #about .prose p { margin-bottom:14px; }
-#page-home > #about .highlight { background:none; color:#f5f5f5; font-weight:600; }
-@media (min-width:901px) {
-  #page-home > .hero { grid-template-columns:minmax(0,1fr) minmax(280px,380px) !important; gap:54px !important; }
-}
-@media (max-width:900px) {
-  #page-home > .hero { padding-top:24px !important; padding-bottom:14px !important; }
-  #page-home > #about { padding-top:14px !important; }
 }
