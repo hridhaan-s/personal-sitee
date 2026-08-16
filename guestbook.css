@@ -1,23 +1,15 @@
 @import url('/oled.css');
 
-/* ===============================
-   GUESTBOOK — PREMIUM APPLE STYLE
-================================ */
-section.guestbook { display:flex; justify-content:center; margin:140px 0; padding:0 16px; }
-.guestbook-card { width:100%; max-width:560px; background:rgba(255,255,255,0.85); backdrop-filter:blur(18px); border-radius:22px; padding:32px; box-shadow:0 30px 60px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.6); }
-.dark .guestbook-card { background:rgba(18,18,18,0.75); box-shadow:0 30px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06); }
+/* Guestbook */
+section.guestbook { display:flex; justify-content:center; margin:48px 0 !important; padding:0 !important; }
+.guestbook-card { width:100%; max-width:560px; background:rgba(18,18,18,.75); backdrop-filter:blur(18px); border-radius:22px; padding:32px; box-shadow:0 30px 60px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06); }
 .guestbook-cta { display:inline-block; margin-bottom:14px; font-size:14px; font-weight:500; text-decoration:none; color:var(--gold); }
 .guestbook h3 { font-size:16px; font-weight:600; margin-bottom:18px; }
-.guestbook-entries { max-height:260px; overflow-y:auto; padding-right:6px; mask-image:linear-gradient(to bottom,black 85%,transparent 100%); }
-.guestbook-entries li { list-style:none; padding:14px 16px; margin-bottom:10px; border-radius:14px; background:rgba(0,0,0,0.03); animation:fadeUp .45s ease both; }
-.dark .guestbook-entries li { background:rgba(255,255,255,0.05); }
-.guestbook-entries strong { font-size:13px; color:#666; display:block; margin-bottom:4px; }
-.dark .guestbook-entries strong { color:#aaa; }
+.guestbook-entries { max-height:260px; overflow-y:auto; padding-right:6px; }
+.guestbook-entries li { list-style:none; padding:14px 16px; margin-bottom:10px; border-radius:14px; background:rgba(255,255,255,.05); }
+.guestbook-entries strong { font-size:13px; color:#aaa; display:block; margin-bottom:4px; }
 .guestbook-entries p { margin:0; font-size:14px; line-height:1.45; }
 .placeholder { font-size:14px; color:#999; }
-@keyframes fadeUp { from {opacity:0; transform:translateY(6px)} to {opacity:1; transform:none} }
-section.guestbook { margin:48px 0 !important; padding:0 !important; }
-section.guestbook + footer, section.guestbook + .footer { margin-top:32px !important; }
 
 .section-kicker { font-size:0 !important; letter-spacing:0 !important; }
 #about .section-kicker::after { content:"About"; }
@@ -43,15 +35,14 @@ section.guestbook + footer, section.guestbook + .footer { margin-top:32px !impor
 }
 @media (max-width:600px) { .project-row, .project-row:has(.project-cover) { grid-template-columns:1fr 24px !important; } }
 
-/* OLED base */
+/* OLED + compact personal-site layout */
 :root, .dark { --bg:#000 !important; --surface:#000 !important; --text:#f5f5f5 !important; --muted:#9a9aa3 !important; --line:#24242a !important; --accent:#d8b36a !important; }
 body, .site-shell, .page { background:#000 !important; color:var(--text) !important; }
-.site-header { background:rgba(0,0,0,.78) !important; border-bottom:1px solid #17171b !important; }
+.site-header { background:rgba(0,0,0,.88) !important; border-bottom:1px solid #17171b !important; }
 body::before, body::after { content:""; position:fixed; inset:0; pointer-events:none; z-index:-1; }
 body::before { opacity:.48; background-image:radial-gradient(circle at 7% 13%,rgba(255,255,255,.8) 0 1px,transparent 1.5px),radial-gradient(circle at 17% 68%,rgba(255,255,255,.5) 0 1px,transparent 1.6px),radial-gradient(circle at 29% 24%,rgba(255,255,255,.7) 0 1px,transparent 1.5px),radial-gradient(circle at 39% 82%,rgba(255,255,255,.38) 0 1px,transparent 1.7px),radial-gradient(circle at 51% 12%,rgba(255,255,255,.65) 0 1px,transparent 1.5px),radial-gradient(circle at 62% 59%,rgba(255,255,255,.45) 0 1px,transparent 1.6px),radial-gradient(circle at 73% 18%,rgba(255,255,255,.8) 0 1px,transparent 1.5px),radial-gradient(circle at 84% 76%,rgba(255,255,255,.55) 0 1px,transparent 1.6px),radial-gradient(circle at 94% 34%,rgba(255,255,255,.72) 0 1px,transparent 1.5px); }
 body::after { opacity:.2; transform:scale(1.7); background-image:radial-gradient(circle at 12% 42%,rgba(180,205,255,.8) 0 1px,transparent 1.7px),radial-gradient(circle at 46% 53%,rgba(255,220,180,.7) 0 1px,transparent 1.8px),radial-gradient(circle at 78% 31%,rgba(190,210,255,.7) 0 1px,transparent 1.7px),radial-gradient(circle at 91% 88%,rgba(255,255,255,.7) 0 1px,transparent 1.8px); }
 
-/* Compact, human-written portfolio layout */
 .site-shell { width:min(770px,calc(100% - 36px)) !important; }
 .site-header { width:100%; min-height:76px; grid-template-columns:1fr auto !important; gap:28px !important; }
 .brand { font-size:14px !important; }
@@ -60,33 +51,32 @@ body::after { opacity:.2; transform:scale(1.7); background-image:radial-gradient
 .desktop-nav a[href="#links"], .mobile-nav a[href="#links"] { font-size:0 !important; }
 .desktop-nav a[href="#links"]::after, .mobile-nav a[href="#links"]::after { content:"Connect"; font-size:14px; }
 
-.hero { display:block !important; min-height:0 !important; padding:72px 0 46px !important; }
+/* Reference-style intro: text first, no fake hero effects. */
+.hero { display:block !important; min-height:0 !important; padding:72px 0 36px !important; }
 .hero-art { display:none !important; }
 .hero-copy { max-width:760px !important; }
-.hero-copy .eyebrow { font-size:0 !important; margin:0 0 12px !important; color:var(--text) !important; }
-.hero-copy .eyebrow::after { content:"Hey, I'm Hridhaan! 👋"; font-size:34px; font-weight:700; line-height:1.15; letter-spacing:-.035em; color:#dce1df; }
+.hero-copy .eyebrow { display:block !important; font-size:34px !important; font-weight:700 !important; line-height:1.15 !important; letter-spacing:-.035em !important; color:#dce1df !important; margin:0 0 22px !important; }
+.hero-copy .eyebrow::after { content:none !important; }
 .hero h1 { display:none !important; }
-.hero-lead { max-width:760px !important; margin:0 !important; line-height:1.65 !important; letter-spacing:0 !important; color:#c3c9c7 !important; font-size:0 !important; }
-.hero-lead::after { content:"I'm a high-school student interested in cybersecurity, space, and technology. I like making things that are useful, learning how systems work, and going down the occasional rabbit hole just because it looks interesting."; font-size:18px; line-height:1.65; }
+.hero-lead { display:block !important; max-width:760px !important; margin:0 !important; font-size:18px !important; line-height:1.65 !important; letter-spacing:0 !important; color:#c3c9c7 !important; }
+.hero-lead::after { content:none !important; }
 .hero-typing-wrap { display:none !important; }
 .hero-links { margin-top:27px !important; gap:22px !important; }
 .text-link { font-size:15px !important; color:#b9c0bd !important; border-color:#6f7774 !important; }
 .text-link.muted { color:#9a9f9d !important; border-color:#303431 !important; }
 
-/* A quiet visual hand-off into the About section. */
-#about { width:100% !important; padding:92px 0 68px !important; position:relative !important; }
-#about::before { content:""; position:absolute; top:28px; left:0; right:0; height:34px; background:url('/hs-wordmark.svg') center/auto 34px no-repeat; opacity:.62; }
+#about { width:100% !important; padding:42px 0 68px !important; position:relative !important; }
+#about::before { content:""; display:block; height:1px; width:100%; background:#202321; margin-bottom:34px; }
 #about .section-kicker { display:none !important; }
-#about .about-grid { display:block !important; border-top:1px solid #202321 !important; padding-top:34px !important; }
+#about .about-grid { display:block !important; border:0 !important; padding:0 !important; }
 #about .about-grid h2 { display:none !important; }
 #about .prose { max-width:760px !important; font-size:17px !important; line-height:1.7 !important; color:#b9bfbd !important; }
 #about .prose p { margin:0 0 18px !important; }
 #about .prose p:first-child { font-size:25px !important; font-weight:650 !important; color:#d7dcda !important; margin-bottom:20px !important; }
 #about .highlight { background:none !important; font-weight:650 !important; color:#d9dddb !important; }
 
-#projects, #links, #page-home > .feature-grid { width:100% !important; }
-#projects { padding:68px 0 !important; }
-#links { padding:68px 0 !important; }
+#projects { width:100% !important; padding:68px 0 !important; }
+#links { width:100% !important; padding:68px 0 !important; }
 .section-heading-row { align-items:baseline !important; }
 
 @media (max-width:900px) {
@@ -94,8 +84,7 @@ body::after { opacity:.2; transform:scale(1.7); background-image:radial-gradient
   .site-header { min-height:68px; }
   .desktop-nav { display:none; }
   .hero { padding:56px 0 38px !important; }
-  .hero-copy .eyebrow::after { font-size:29px; }
-  .hero-lead::after { font-size:17px; }
-  #about { padding-top:82px !important; }
-  #about::before { top:24px; height:28px; background-size:auto 28px; }
+  .hero-copy .eyebrow { font-size:29px !important; }
+  .hero-lead { font-size:17px !important; }
+  #about { padding-top:36px !important; }
 }
