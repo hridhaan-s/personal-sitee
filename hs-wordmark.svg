@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 90" role="img" aria-labelledby="title desc">
+  <title id="title">Hridhaan Sahay wordmark</title>
+  <desc id="desc">A minimal horizontal Hridhaan Sahay wordmark with an orbital accent.</desc>
+  <g fill="none" stroke="currentColor" stroke-linecap="round">
+    <path d="M20 45H300" stroke-width="1" opacity=".22"/>
+    <path d="M600 45H880" stroke-width="1" opacity=".22"/>
+    <ellipse cx="450" cy="45" rx="44" ry="14" stroke-width="1" opacity=".34" transform="rotate(-12 450 45)"/>
+    <circle cx="450" cy="45" r="4" fill="currentColor" stroke="none"/>
+  </g>
+  <text x="450" y="51" text-anchor="middle" fill="currentColor" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="600" letter-spacing="5">HRIDHAAN SAHAY</text>
+</svg>
