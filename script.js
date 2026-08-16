@@ -13,16 +13,13 @@ function updateActiveNav(page) {
 
 function showPage(page, push = true) {
   if (!home) return;
-
   const safePage = pages[page] ? page : "home";
   Object.values(pages).forEach((element) => element?.classList.add("hidden"));
   pages[safePage]?.classList.remove("hidden");
   updateActiveNav(safePage);
 
   const path = safePage === "home" ? "/" : `/${safePage}`;
-  if (push && location.pathname !== path) {
-    history.pushState({}, "", path);
-  }
+  if (push && location.pathname !== path) history.pushState({}, "", path);
 
   document.title = safePage === "home"
     ? "Hridhaan Sahay"
@@ -62,12 +59,10 @@ document.querySelectorAll("[data-space-scroll]").forEach((link) => {
 
 const menuToggle = document.querySelector(".menu-toggle");
 const mobileNav = document.querySelector(".mobile-nav");
-
 menuToggle?.addEventListener("click", () => {
   const open = mobileNav?.classList.toggle("open") ?? false;
   menuToggle.setAttribute("aria-expanded", String(open));
 });
-
 mobileNav?.querySelectorAll("a").forEach((link) => {
   link.addEventListener("click", () => {
     mobileNav.classList.remove("open");
@@ -75,68 +70,52 @@ mobileNav?.querySelectorAll("a").forEach((link) => {
   });
 });
 
-function promoteAboutToHero() {
+function moveAboutIntoHero() {
   const about = document.getElementById("about");
-  const intro = document.querySelector(".intro-content");
-  if (!about || !intro || intro.dataset.aboutMoved === "true") return;
+  const intro = document.querySelector(".intro");
+  const content = about?.querySelector(".about-content");
+  const social = about?.querySelector(".social-row");
+  if (!about || !intro || !content || intro.dataset.aboutMoved === "true") return;
 
-  const label = about.querySelector(".section-label");
-  const content = about.querySelector(".about-content");
-  const social = about.querySelector(".social-row");
-  const introLinks = intro.querySelector(".intro-links");
-  const introHeading = intro.querySelector("h1");
+  const introContent = intro.querySelector(".intro-content");
+  if (!introContent) return;
 
-  if (!label || !content) return;
+  // Remove the temporary/generic hero copy. The About copy is the hero now.
+  introContent.querySelector("h1")?.remove();
+  introContent.querySelectorAll(":scope > p").forEach((paragraph) => paragraph.remove());
+  introContent.querySelectorAll(":scope > .intro-links").forEach((links) => links.remove());
 
-  introHeading?.remove();
-  intro.querySelectorAll(".intro-links").forEach((element) => element.remove());
+  // The label is redundant once About becomes the main introduction.
+  about.querySelector(".section-label")?.remove();
 
-  label.style.marginBottom = "10px";
   content.style.maxWidth = "680px";
-  content.style.fontSize = "17px";
-  content.style.lineHeight = "1.7";
-
-  intro.append(label, content);
-
-  if (social) {
-    social.style.marginTop = "10px";
-    intro.appendChild(social);
-  }
+  introContent.appendChild(content);
+  if (social) introContent.appendChild(social);
 
   about.remove();
   intro.dataset.aboutMoved = "true";
 }
 
-promoteAboutToHero();
+moveAboutIntoHero();
 
 async function loadBlog() {
   const wrap = document.querySelector("#page-blog .blog-wrap");
   if (!wrap) return;
-
   try {
     const response = await fetch("/blog/posts.json", { cache: "no-store" });
     if (!response.ok) throw new Error(`Blog data returned ${response.status}`);
-
-    const posts = (await response.json())
-      .filter(Boolean)
-      .sort((a, b) => new Date(b.date) - new Date(a.date));
+    const posts = (await response.json()).filter(Boolean).sort((a, b) => new Date(b.date) - new Date(a.date));
 
     wrap.innerHTML = posts.map((post) => `
       <article class="blog-card" data-slug="${escapeHtml(post.slug)}">
-        <div>
-          <span class="blog-meta">${escapeHtml(post.displayDate || post.date)} · ${escapeHtml(post.readTime || "5 min read")}</span>
-          <h3>${escapeHtml(post.title)}</h3>
-          <p>${escapeHtml(post.excerpt || "")}</p>
-        </div>
+        <div><span class="blog-meta">${escapeHtml(post.displayDate || post.date)} · ${escapeHtml(post.readTime || "5 min read")}</span><h3>${escapeHtml(post.title)}</h3><p>${escapeHtml(post.excerpt || "")}</p></div>
         <button class="read-btn" type="button">Read →</button>
       </article>
     `).join("");
 
     const bySlug = Object.fromEntries(posts.map((post) => [post.slug, post]));
     wrap.querySelectorAll(".read-btn").forEach((button) => {
-      button.addEventListener("click", () => {
-        renderPost(bySlug[button.closest(".blog-card")?.dataset.slug], wrap);
-      });
+      button.addEventListener("click", () => renderPost(bySlug[button.closest(".blog-card")?.dataset.slug], wrap));
     });
 
     const requested = new URLSearchParams(location.search).get("post");
@@ -149,63 +128,14 @@ async function loadBlog() {
 
 function renderPost(post, wrap) {
   if (!post) return;
-
-  const body = (post.sections || []).map((section) =>
-    section.type === "heading"
-      ? `<h4>${escapeHtml(section.text)}</h4>`
-      : `<p>${escapeHtml(section.text)}</p>`
-  ).join("");
-
-  wrap.innerHTML = `
-    <article class="blog-post">
-      <span class="blog-meta">${escapeHtml(post.displayDate || post.date)} · ${escapeHtml(post.readTime || "5 min read")}</span>
-      <h2>${escapeHtml(post.title)}</h2>
-      <button class="back-btn" type="button">← Back to Blog</button>
-      ${body}
-    </article>
-  `;
-
-  wrap.querySelector(".back-btn")?.addEventListener("click", () => {
-    history.pushState({}, "", "/blog");
-    loadBlog();
-  });
-
+  const body = (post.sections || []).map((section) => section.type === "heading" ? `<h4>${escapeHtml(section.text)}</h4>` : `<p>${escapeHtml(section.text)}</p>`).join("");
+  wrap.innerHTML = `<article class="blog-post"><span class="blog-meta">${escapeHtml(post.displayDate || post.date)} · ${escapeHtml(post.readTime || "5 min read")}</span><h2>${escapeHtml(post.title)}</h2><button class="back-btn" type="button">← Back to Blog</button>${body}</article>`;
+  wrap.querySelector(".back-btn")?.addEventListener("click", () => { history.pushState({}, "", "/blog"); loadBlog(); });
   history.pushState({}, "", `/blog?post=${encodeURIComponent(post.slug)}`);
 }
 
 function escapeHtml(value) {
-  return String(value).replace(/[&<>\"]/g, (character) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;"
-  }[character]));
+  return String(value).replace(/[&<>\"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[character]));
 }
 
-function addSocialRow() {
-  const about = document.getElementById("about");
-  if (!about || document.querySelector(".social-row")) return;
-
-  const links = [
-    { label: "Email", href: "mailto:hi@Hridhaan.me", icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>' },
-    { label: "GitHub", href: "https://github.com/hridhaan-s", icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4 1.2-4-2-5-2m10 4v-3.5c0-1 .1-1.4-.5-2 2-.2 4.1-1 4.1-4.5a3.5 3.5 0 0 0-.9-2.5 3.3 3.3 0 0 0-.1-2.5s-.8-.3-2.6 1a9 9 0 0 0-4.8 0c-1.8-1.3-2.6-1-2.6-1a3.3 3.3 0 0 0-.1 2.5 3.5 3.5 0 0 0-.9 2.5c0 3.5 2.1 4.3 4.1 4.5-.5.5-.6 1-.6 2V21"/></svg>' },
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/hridhaan-sahay", icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9v9M6 6.5v.1M10 18v-5a4 4 0 0 1 8 0v5M10 9v9"/></svg>' },
-    { label: "Slack", href: "https://app.slack.com/client/E09V59WQY1E/", icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4a2 2 0 1 0 0 4h2V4a2 2 0 0 0-2 0Zm6 2a2 2 0 1 0-4 0v2h4a2 2 0 0 0 0-2ZM20 9a2 2 0 1 0-4 0v2h4a2 2 0 0 0 0-2Zm-2 6a2 2 0 1 0-2-2h-2v4a2 2 0 1 0 4-2ZM9 20a2 2 0 1 0 0-4H7v4a2 2 0 0 0 2 0ZM4 15a2 2 0 1 0 4 0v-2H4a2 2 0 0 0 0 2Zm2-6a2 2 0 1 0 2 2h2V7a2 2 0 0 0-4 2Z"/></svg>' },
-    { label: "YouTube", href: "https://www.youtube.com/@Astro-2HR", icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="m10 9 5 3-5 3z"/></svg>' },
-    { label: "BitBuzz", href: "https://www.youtube.com/@Bitbuzz-club", icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h10a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-5l-4 3v-3H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/><path d="M9 10h6M9 13h4"/></svg>' }
-  ];
-
-  const row = document.createElement("div");
-  row.className = "social-row";
-  row.setAttribute("aria-label", "Social links");
-  row.innerHTML = links.map((link) => `
-    <a href="${link.href}" ${link.href.startsWith("http") ? 'target="_blank" rel="noreferrer"' : ""} aria-label="${link.label}" title="${link.label}">
-      ${link.icon}<span>${link.label}</span>
-    </a>
-  `).join("");
-
-  about.insertAdjacentElement("afterend", row);
-}
-
-addSocialRow();
 loadBlog();
