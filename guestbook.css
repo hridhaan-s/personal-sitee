@@ -19,7 +19,6 @@ section.guestbook { display:flex; justify-content:center; margin:140px 0; paddin
 section.guestbook { margin:48px 0 !important; padding:0 !important; }
 section.guestbook + footer, section.guestbook + .footer { margin-top:32px !important; }
 
-/* Remove the editorial section numbering: "01 — About", "02 — Projects", etc. */
 .section-kicker { font-size:0 !important; letter-spacing:0 !important; }
 #about .section-kicker::after { content:"About"; }
 #projects .section-kicker::after { content:"Projects"; }
@@ -30,14 +29,10 @@ section.guestbook + footer, section.guestbook + .footer { margin-top:32px !impor
 #page-blog > .subpage-head .section-kicker::after { content:"Blog"; }
 .section-kicker::after { font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; }
 
-/* No numbered project catalogue. */
 .project-index { display:none !important; }
 .project-row { grid-template-columns:1fr 150px 32px !important; }
 .project-row:has(.project-cover) { grid-template-columns:150px 1fr 150px 32px !important; }
 
-/* OLED hero overrides are in oled.css. */
-
-/* Space hero now follows the same restrained framed-art language instead of the oversized black orb. */
 .space-orbit-art { width:min(420px,100%) !important; aspect-ratio:1 !important; border-radius:0 !important; background:var(--surface) !important; border:1px solid var(--line) !important; box-shadow:18px 18px 0 color-mix(in srgb,var(--line) 45%,transparent) !important; overflow:hidden !important; }
 .space-orbit-art::before { content:""; position:absolute; inset:22px; background:linear-gradient(135deg,rgba(0,0,0,.03),rgba(0,0,0,0)),url("https://cdn.hackclub.com/01a00c03-ca41-7851-80cf-6ef9a3eebd77/luna__2_11_25__.png") center/cover no-repeat; border:1px solid var(--line); }
 .space-orbit-art::after, .space-orbit-art .orbit, .space-orbit-art .planet, .space-orbit-art .star-field { display:none !important; }
@@ -48,3 +43,34 @@ section.guestbook + footer, section.guestbook + .footer { margin-top:32px !impor
   .project-cover { grid-column:1 !important; width:100% !important; height:170px !important; }
 }
 @media (max-width:600px) { .project-row, .project-row:has(.project-cover) { grid-template-columns:1fr 24px !important; } }
+
+/* Final OLED hero overrides — intentionally last so the original editorial rules cannot undo them. */
+:root, .dark { --bg:#000 !important; --surface:#000 !important; --text:#f5f5f5 !important; --muted:#8f8f98 !important; --line:#24242a !important; --accent:#d8b36a !important; }
+body, .site-shell, .page { background:#000 !important; color:var(--text) !important; }
+.site-header { background:rgba(0,0,0,.72) !important; border-bottom-color:#1c1c20 !important; }
+.hero { grid-template-columns:minmax(0,1fr) minmax(320px,460px) !important; gap:70px !important; align-items:center !important; }
+.hero > div:first-child { max-width:700px; }
+.hero-lead { display:none !important; }
+.hero-typing { display:inline-flex !important; align-items:center; min-height:46px; margin:8px 0 0 !important; padding:9px 15px; border:1px solid #27272d; border-radius:999px; background:rgba(255,255,255,.025); color:#d7d7dc; font-size:14px; box-shadow:0 0 28px rgba(255,255,255,.025); }
+.hero-art { width:min(460px,100%) !important; justify-self:end !important; }
+.hero-frame { border:0 !important; padding:0 !important; background:transparent !important; box-shadow:none !important; }
+.hero-frame img { width:100%; aspect-ratio:1; object-fit:contain; background:transparent !important; filter:drop-shadow(0 25px 55px rgba(255,255,255,.08)); }
+.hero-note { display:none !important; }
+.hero-about { margin-top:48px; max-width:680px; padding-top:24px; border-top:1px solid #24242a; }
+.hero-about .about-grid { display:block; border:0; padding:0; }
+.hero-about .about-grid h2 { display:none; }
+.hero-about .prose { max-width:620px; color:#aaaab2; font-size:16px; }
+.hero-about .prose p { margin-bottom:14px; }
+.hero-about .highlight { color:#f2f2f2; background:none; font-weight:600; }
+#about { display:none !important; }
+.feature-card, .astro-row, .space-link-card, .project-row:hover, .achievement-row img { background:#050505 !important; }
+
+body::before, body::after { content:""; position:fixed; inset:0; pointer-events:none; z-index:-1; }
+body::before { opacity:.62; background-image:radial-gradient(circle at 7% 13%,rgba(255,255,255,.82) 0 1px,transparent 1.5px),radial-gradient(circle at 17% 68%,rgba(255,255,255,.5) 0 1px,transparent 1.6px),radial-gradient(circle at 29% 24%,rgba(255,255,255,.7) 0 1px,transparent 1.5px),radial-gradient(circle at 39% 82%,rgba(255,255,255,.38) 0 1px,transparent 1.7px),radial-gradient(circle at 51% 12%,rgba(255,255,255,.65) 0 1px,transparent 1.5px),radial-gradient(circle at 62% 59%,rgba(255,255,255,.45) 0 1px,transparent 1.6px),radial-gradient(circle at 73% 18%,rgba(255,255,255,.8) 0 1px,transparent 1.5px),radial-gradient(circle at 84% 76%,rgba(255,255,255,.55) 0 1px,transparent 1.6px),radial-gradient(circle at 94% 34%,rgba(255,255,255,.72) 0 1px,transparent 1.5px); }
+body::after { opacity:.28; transform:scale(1.7); background-image:radial-gradient(circle at 12% 42%,rgba(180,205,255,.8) 0 1px,transparent 1.7px),radial-gradient(circle at 46% 53%,rgba(255,220,180,.7) 0 1px,transparent 1.8px),radial-gradient(circle at 78% 31%,rgba(190,210,255,.7) 0 1px,transparent 1.7px),radial-gradient(circle at 91% 88%,rgba(255,255,255,.7) 0 1px,transparent 1.8px); }
+
+@media (max-width:900px) {
+  .hero { grid-template-columns:1fr !important; gap:34px !important; }
+  .hero-art { order:-1; justify-self:center !important; max-width:330px; }
+  .hero-about { margin-top:34px; }
+}
