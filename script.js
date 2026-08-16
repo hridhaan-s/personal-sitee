@@ -13,18 +13,28 @@ function updateActiveNav(page) {
 }
 
 function showPage(page, push = true) {
-  home.style.display = "none";
-  achievements.style.display = "none";
-  blog.style.display = "none";
+  if (!home) return;
 
-  if (page === "achievements") achievements.style.display = "block";
-  else if (page === "blog") blog.style.display = "block";
-  else home.style.display = "block";
+  home.style.display = "none";
+  if (achievements) achievements.style.display = "none";
+  if (blog) blog.style.display = "none";
+
+  if (page === "achievements" && achievements) {
+    achievements.style.display = "block";
+  } else if (page === "blog" && blog) {
+    blog.style.display = "block";
+  } else {
+    home.style.display = "block";
+    page = "home";
+  }
 
   updateActiveNav(page);
 
   if (push) {
-    history.pushState({}, "", page === "home" ? "/" : "/" + page);
+    const target = page === "home" ? "/" : `/${page}`;
+    if (location.pathname !== target) {
+      history.pushState({}, "", target);
+    }
   }
 
   document.title =
@@ -33,7 +43,6 @@ function showPage(page, push = true) {
     "Hridhaan Sahay — Portfolio";
 }
 
-// Nav routing
 document.querySelectorAll("[data-route]").forEach(el => {
   el.addEventListener("click", e => {
     e.preventDefault();
@@ -41,16 +50,13 @@ document.querySelectorAll("[data-route]").forEach(el => {
   });
 });
 
-// Browser back / forward
 window.addEventListener("popstate", () => {
-  const page = location.pathname.replace("/", "") || "home";
+  const page = location.pathname.split("/").filter(Boolean)[0] || "home";
   showPage(page, false);
 });
 
-// Initial load
-const initialPage = location.pathname.replace("/", "") || "home";
+const initialPage = location.pathname.split("/").filter(Boolean)[0] || "home";
 showPage(initialPage, false);
-
 
 /* ===============================
    BLOG READ MODE
@@ -58,29 +64,27 @@ showPage(initialPage, false);
 
 document.querySelectorAll("#page-blog .read-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-    document.querySelector(".blog-list").style.display = "none";
-    document.getElementById("post-1").classList.remove("hidden");
+    const list = document.querySelector(".blog-list");
+    const post = document.getElementById("post-1");
+    if (list) list.style.display = "none";
+    if (post) post.classList.remove("hidden");
   });
 });
 
-
 /* ===============================
-   SECTION SCROLL (FROM ANY PAGE)
+   SECTION SCROLL
 ================================ */
 
 document.querySelectorAll("[data-section]").forEach(link => {
   link.addEventListener("click", e => {
     e.preventDefault();
     const section = link.dataset.section;
-
     showPage("home");
-
     setTimeout(() => {
       document.getElementById(section)?.scrollIntoView({ behavior: "smooth" });
     }, 50);
   });
 });
-
 
 /* ===============================
    MOBILE NAV
@@ -89,7 +93,6 @@ document.querySelectorAll("[data-section]").forEach(link => {
 document.addEventListener("DOMContentLoaded", () => {
   const navToggle = document.querySelector(".nav-toggle");
   const navMobile = document.querySelector(".nav-mobile");
-
   if (!navToggle || !navMobile) return;
 
   navToggle.addEventListener("click", e => {
@@ -98,12 +101,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   navMobile.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", () => {
-      navMobile.classList.remove("open");
-    });
+    link.addEventListener("click", () => navMobile.classList.remove("open"));
   });
 });
-
 
 /* ===============================
    PROJECT CARD 3D TILT
@@ -118,20 +118,13 @@ document.querySelectorAll(".project-card").forEach(card => {
     const rotateX = (y - 0.5) * 18;
     const rotateY = (0.5 - x) * 18;
 
-    card.style.transform = `
-      perspective(800px)
-      rotateX(${rotateX}deg)
-      rotateY(${rotateY}deg)
-      scale(1.05)
-    `;
+    card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
   });
 
   card.addEventListener("mouseleave", () => {
-    card.style.transform =
-      "perspective(800px) rotateX(0) rotateY(0) scale(1)";
+    card.style.transform = "perspective(800px) rotateX(0) rotateY(0) scale(1)";
   });
 });
-
 
 /* ===============================
    HERO TYPING LOOP
@@ -151,6 +144,7 @@ let charIndex = 0;
 let deleting = false;
 
 function typeLoop() {
+  if (!textEl) return;
   const phrase = phrases[phraseIndex];
   textEl.textContent = phrase.slice(0, charIndex) || "\u00A0";
 
@@ -176,7 +170,6 @@ function typeLoop() {
 
 window.addEventListener("load", typeLoop);
 
-
 /* ===============================
    NETFLIX INTRO
 ================================ */
@@ -191,101 +184,59 @@ window.addEventListener("load", () => {
   }, 800);
 });
 
-
-
-
 /* ===============================
-   ROUGH NOTATION (ABOUT SECTION)
+   ROUGH NOTATION
 ================================ */
+
 document.addEventListener("DOMContentLoaded", () => {
-  const yellowEl = document.querySelector('#yellow-highlight');
-  const redEl = document.querySelector('#red-underline');
+  if (typeof RoughNotation === "undefined") return;
 
-  // 1. Create the Yellow Highlight (The "Marker" feel)
+  const yellowEl = document.querySelector("#yellow-highlight");
+  const redEls = document.querySelectorAll("#red-underline");
+  if (!yellowEl || !redEls.length) return;
+
   const yellowDraw = RoughNotation.annotate(yellowEl, {
-    type: 'highlight',
-    color: 'rgba(255, 240, 0, 0.6)', // Semi-transparent yellow
+    type: "highlight",
+    color: "rgba(255, 240, 0, 0.6)",
     padding: [2, 4],
     animationDuration: 1000,
     strokeWidth: 2
   });
 
-  // 2. Create the Red Underline (The "Pen" feel)
-  const redDraw = RoughNotation.annotate(redEl, {
-    type: 'underline',
-    color: '#ff4d4d', 
+  const redDraws = [...redEls].map(el => RoughNotation.annotate(el, {
+    type: "underline",
+    color: "#ff4d4d",
     padding: 3,
     strokeWidth: 2.5,
-    iterations: 3, // This makes the "moving/writing" effect stronger
+    iterations: 3,
     animationDuration: 800
-  });
+  }));
 
-  // 3. Trigger when visible on screen
-  const observer = new IntersectionObserver((entries) => {
+  const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        // Start drawing yellow after 0.5s
-        setTimeout(() => yellowDraw.show(), 500);
-        
-        // Start drawing red after 1.5s (sequential feel)
-        setTimeout(() => redDraw.show(), 1500);
-        
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-
-  observer.observe(yellowEl);
-});document.addEventListener("DOMContentLoaded", () => {
-  const yellowEl = document.querySelector('#yellow-highlight');
-  const redEl = document.querySelector('#red-underline');
-
-  // 1. Create the Yellow Highlight (The "Marker" feel)
-  const yellowDraw = RoughNotation.annotate(yellowEl, {
-    type: 'highlight',
-    color: 'rgba(255, 240, 0, 0.6)', // Semi-transparent yellow
-    padding: [2, 4],
-    animationDuration: 1000,
-    strokeWidth: 2
-  });
-
-  // 2. Create the Red Underline (The "Pen" feel)
-  const redDraw = RoughNotation.annotate(redEl, {
-    type: 'underline',
-    color: '#ff4d4d', 
-    padding: 3,
-    strokeWidth: 2.5,
-    iterations: 3, // This makes the "moving/writing" effect stronger
-    animationDuration: 800
-  });
-
-  // 3. Trigger when visible on screen
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        // Start drawing yellow after 0.5s
-        setTimeout(() => yellowDraw.show(), 500);
-        
-        // Start drawing red after 1.5s (sequential feel)
-        setTimeout(() => redDraw.show(), 1500);
-        
-        observer.unobserve(entry.target);
-      }
+      if (!entry.isIntersecting) return;
+      setTimeout(() => yellowDraw.show(), 500);
+      setTimeout(() => redDraws.forEach(draw => draw.show()), 1500);
+      observer.unobserve(entry.target);
     });
   }, { threshold: 0.5 });
 
   observer.observe(yellowEl);
 });
+
+/* ===============================
+   GUESTBOOK
+================================ */
+
 async function loadGuestbook() {
   const list = document.getElementById("entries");
-  if (!list) return; // IMPORTANT GUARD
+  if (!list) return;
 
   try {
-    const res = await fetch(
-      "https://api.github.com/repos/hridhaan-s/personal-sitee/issues?labels=approved&state=open"
-    );
-    const issues = await res.json();
+    const res = await fetch("https://api.github.com/repos/hridhaan-s/personal-sitee/issues?labels=approved&state=open");
+    if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
 
+    const issues = await res.json();
     list.innerHTML = "";
 
     if (!issues.length) {
@@ -298,22 +249,16 @@ async function loadGuestbook() {
 
     issues.forEach(issue => {
       const li = document.createElement("li");
-
       const author = document.createElement("strong");
-      author.textContent = "@" + issue.user.login;
+      author.textContent = "@" + (issue.user?.login || "visitor");
 
-      const cleanBody = issue.body
-        .replace(/###.*\n/g, "")
-        .trim();
-
+      const cleanBody = (issue.body || "").replace(/###.*\n/g, "").trim();
       const message = document.createElement("p");
-      message.textContent = cleanBody;
+      message.textContent = cleanBody || "(empty note)";
 
-      li.appendChild(author);
-      li.appendChild(message);
+      li.append(author, message);
       list.appendChild(li);
     });
-
   } catch (err) {
     console.error("Guestbook error:", err);
   }
@@ -321,24 +266,14 @@ async function loadGuestbook() {
 
 loadGuestbook();
 
+/* ===============================
+   TABS
+================================ */
 
-  function showTab(tabId) {
+function showTab(tabId, event) {
+  document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
 
-    document
-      .querySelectorAll('.tab-content')
-      .forEach(tab => {
-        tab.classList.remove('active')
-      })
-
-    document
-      .querySelectorAll('.tab-btn')
-      .forEach(btn => {
-        btn.classList.remove('active')
-      })
-
-    document
-      .getElementById(tabId)
-      .classList.add('active')
-
-    event.target.classList.add('active')
-  }
+  document.getElementById(tabId)?.classList.add("active");
+  event?.currentTarget?.classList.add("active");
+}
