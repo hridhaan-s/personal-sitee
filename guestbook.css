@@ -1,3 +1,5 @@
+@import url('/oled.css');
+
 /* ===============================
    GUESTBOOK — PREMIUM APPLE STYLE
 ================================ */
@@ -33,11 +35,7 @@ section.guestbook + footer, section.guestbook + .footer { margin-top:32px !impor
 .project-row { grid-template-columns:1fr 150px 32px !important; }
 .project-row:has(.project-cover) { grid-template-columns:150px 1fr 150px 32px !important; }
 
-/* Restore the clean editorial homepage hero. */
-.hero { min-height:calc(100vh - 72px) !important; grid-template-columns:1.1fr .9fr !important; gap:80px !important; align-items:center !important; padding-top:70px !important; }
-.hero h1 { margin:14px 0 22px !important; font-size:clamp(56px,8vw,108px) !important; line-height:.94 !important; letter-spacing:-.07em !important; }
-.hero-art { justify-self:end !important; width:min(420px,100%) !important; }
-.hero-frame { border:1px solid var(--line) !important; background:var(--surface) !important; padding:22px !important; box-shadow:18px 18px 0 color-mix(in srgb,var(--line) 45%,transparent) !important; }
+/* OLED hero overrides are in oled.css. */
 
 /* Space hero now follows the same restrained framed-art language instead of the oversized black orb. */
 .space-orbit-art { width:min(420px,100%) !important; aspect-ratio:1 !important; border-radius:0 !important; background:var(--surface) !important; border:1px solid var(--line) !important; box-shadow:18px 18px 0 color-mix(in srgb,var(--line) 45%,transparent) !important; overflow:hidden !important; }
@@ -45,8 +43,6 @@ section.guestbook + footer, section.guestbook + .footer { margin-top:32px !impor
 .space-orbit-art::after, .space-orbit-art .orbit, .space-orbit-art .planet, .space-orbit-art .star-field { display:none !important; }
 
 @media (max-width:900px) {
-  .hero { grid-template-columns:1fr !important; gap:48px !important; min-height:auto !important; padding:80px 0 70px !important; }
-  .hero-art, .space-orbit-art { justify-self:start !important; max-width:360px !important; }
   .project-row, .project-row:has(.project-cover) { grid-template-columns:1fr 30px !important; }
   .project-tag { display:none !important; }
   .project-cover { grid-column:1 !important; width:100% !important; height:170px !important; }
