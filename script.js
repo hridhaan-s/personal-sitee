@@ -1,5 +1,6 @@
 const home = document.getElementById("page-home");
 const achievements = document.getElementById("page-achievements");
+const space = document.getElementById("page-space");
 const blog = document.getElementById("page-blog");
 
 function updateActiveNav(page) {
@@ -8,16 +9,16 @@ function updateActiveNav(page) {
 
 function showPage(page, push = true) {
   if (!home) return;
-  [home, achievements, blog].forEach(el => { if (el) el.classList.add("hidden"); });
-  const target = page === "achievements" ? achievements : page === "blog" ? blog : home;
+  [home, achievements, space, blog].forEach(el => { if (el) el.classList.add("hidden"); });
+  const target = page === "achievements" ? achievements : page === "space" ? space : page === "blog" ? blog : home;
   if (target) target.classList.remove("hidden");
-  const safePage = target === achievements ? "achievements" : target === blog ? "blog" : "home";
+  const safePage = target === achievements ? "achievements" : target === space ? "space" : target === blog ? "blog" : "home";
   updateActiveNav(safePage);
   if (push) {
     const path = safePage === "home" ? "/" : `/${safePage}`;
     if (location.pathname !== path) history.pushState({}, "", path);
   }
-  document.title = safePage === "achievements" ? "Achievements — Hridhaan Sahay" : safePage === "blog" ? "Blog — Hridhaan Sahay" : "Hridhaan Sahay — Portfolio";
+  document.title = safePage === "achievements" ? "Achievements — Hridhaan Sahay" : safePage === "space" ? "Space — Hridhaan Sahay" : safePage === "blog" ? "Blog — Hridhaan Sahay" : "Hridhaan Sahay — Portfolio";
 }
 
 document.querySelectorAll("[data-route]").forEach(el => el.addEventListener("click", e => {
@@ -33,6 +34,11 @@ document.querySelectorAll("[data-section]").forEach(link => link.addEventListene
   const section = document.getElementById(link.dataset.section);
   showPage("home");
   setTimeout(() => section?.scrollIntoView({ behavior: "smooth", block: "start" }), 40);
+}));
+
+document.querySelectorAll("[data-space-scroll]").forEach(link => link.addEventListener("click", e => {
+  e.preventDefault();
+  document.getElementById("space-gallery")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }));
 
 const menuToggle = document.querySelector(".menu-toggle");
@@ -73,21 +79,11 @@ async function loadScrapbookProjects() {
     const visible = projects.filter(p => p && p.title && p.coverImage && p.slug);
     list.innerHTML = visible.map((p, i) => {
       const href = `https://scrapbook.hridhaan.me/project.html?slug=${encodeURIComponent(p.slug)}`;
-      const external = p.live || href;
       const type = p.type || "Project";
       const description = (p.description || "").split("\n")[0];
-      return `<a class="project-row" href="${href}" target="_blank" rel="noreferrer">
-        <div class="project-index">${String(i + 1).padStart(2, "0")}</div>
-        <img class="project-cover" src="${p.coverImage}" alt="${escapeHtml(p.title)}" loading="lazy">
-        <div class="project-main"><h3>${escapeHtml(p.title)}</h3><p>${escapeHtml(description)}</p></div>
-        <div class="project-tag">${escapeHtml(type)}</div><div class="project-arrow">↗</div>
-      </a>`;
+      return `<a class="project-row" href="${href}" target="_blank" rel="noreferrer"><div class="project-index">${String(i + 1).padStart(2, "0")}</div><img class="project-cover" src="${p.coverImage}" alt="${escapeHtml(p.title)}" loading="lazy"><div class="project-main"><h3>${escapeHtml(p.title)}</h3><p>${escapeHtml(description)}</p></div><div class="project-tag">${escapeHtml(type)}</div><div class="project-arrow">↗</div></a>`;
     }).join("");
-    document.querySelector("[data-project-count]")?.replaceChildren(document.createTextNode(`${visible.length} projects`));
-    void external;
-  } catch (err) {
-    console.error("Scrapbook project sync failed:", err);
-  }
+  } catch (err) { console.error("Scrapbook project sync failed:", err); }
 }
 
 function escapeHtml(value) {
@@ -102,19 +98,12 @@ async function loadBlog() {
     const res = await fetch("/blog/posts.json", { cache: "no-store" });
     if (!res.ok) throw new Error(`Blog data returned ${res.status}`);
     const posts = (await res.json()).filter(Boolean).sort((a,b) => new Date(b.date) - new Date(a.date));
-    wrap.innerHTML = posts.map(post => `
-      <article class="blog-card" data-slug="${escapeHtml(post.slug)}">
-        <div><span class="blog-meta">${escapeHtml(post.displayDate || post.date)} · ${escapeHtml(post.readTime || "5 min read")}</span><h3>${escapeHtml(post.title)}</h3><p>${escapeHtml(post.excerpt || "")}</p></div>
-        <button class="read-btn" type="button">Read →</button>
-      </article>
-    `).join("");
+    wrap.innerHTML = posts.map(post => `<article class="blog-card" data-slug="${escapeHtml(post.slug)}"><div><span class="blog-meta">${escapeHtml(post.displayDate || post.date)} · ${escapeHtml(post.readTime || "5 min read")}</span><h3>${escapeHtml(post.title)}</h3><p>${escapeHtml(post.excerpt || "")}</p></div><button class="read-btn" type="button">Read →</button></article>`).join("");
     const postsBySlug = Object.fromEntries(posts.map(p => [p.slug, p]));
     wrap.querySelectorAll(".read-btn").forEach(btn => btn.addEventListener("click", () => renderPost(postsBySlug[btn.closest(".blog-card").dataset.slug], wrap)));
     const requested = new URLSearchParams(location.search).get("post");
     if (requested && postsBySlug[requested]) renderPost(postsBySlug[requested], wrap);
-  } catch (err) {
-    console.error("Blog load failed:", err);
-  }
+  } catch (err) { console.error("Blog load failed:", err); }
 }
 
 function renderPost(post, wrap) {
@@ -150,19 +139,3 @@ async function loadGuestbook() {
   } catch (err) { console.error("Guestbook error:", err); }
 }
 loadGuestbook();
-
-if (typeof RoughNotation !== "undefined") {
-  const yellow = document.querySelector("#yellow-highlight");
-  const reds = document.querySelectorAll("#red-underline");
-  if (yellow) {
-    const highlight = RoughNotation.annotate(yellow, { type: "highlight", color: "rgba(255,240,0,.6)", padding: [2,4], animationDuration: 900, strokeWidth: 2 });
-    const underlines = [...reds].map(el => RoughNotation.annotate(el, { type: "underline", color: "#ff4d4d", padding: 3, strokeWidth: 2.5, iterations: 3, animationDuration: 700 }));
-    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      setTimeout(() => highlight.show(), 350);
-      setTimeout(() => underlines.forEach(u => u.show()), 1000);
-      observer.unobserve(entry.target);
-    }), { threshold: .35 });
-    observer.observe(yellow);
-  }
-}
