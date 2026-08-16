@@ -1,20 +1,20 @@
-/* Mahad-inspired clean portfolio hero */
-:root{--hero-ink:#dbe1de;--hero-muted:#b0b8b4}
-.site-shell{width:min(760px,calc(100% - 40px))}
-.intro{position:relative;display:block;padding:76px 0 58px;text-align:left}
+/* Mahad-style minimal hero, adapted for Hridhaan */
+:root{--hero-ink:#cfd6d2;--hero-muted:#b8c0bc;--hero-line:rgba(255,255,255,.12)}
+.site-shell{width:min(780px,calc(100% - 40px))}
+.intro{display:block;min-height:0;padding:0;margin:48px 0;text-align:left}
 .intro:before{display:none}
-.intro-content{max-width:none;margin:0}
+.intro-content{display:block;max-width:none;margin:0}
 .intro-content:before{display:none}
-.intro h1{margin:0 0 12px;color:var(--hero-ink);font-size:36px;line-height:1.2;letter-spacing:-.03em;font-weight:800}
-.intro h1 span{display:inline-block;font-size:1em;margin-left:3px;transform:none}
-.intro p{max-width:none;margin:0 0 12px;color:var(--hero-muted);font-size:17px;line-height:1.65}
-.intro p:first-of-type{font-size:17px;color:var(--hero-muted)}
-.intro p strong{color:var(--hero-ink);font-weight:800}
-.intro-links{display:none}
-.intro-photo{display:none!important}
-.wordmark{display:none!important}
-#about{display:none!important}
-.local-time strong{color:var(--hero-ink);font-weight:800}
-@media(max-width:800px){.site-shell{width:min(100% - 28px,760px)}.intro{padding:58px 0 44px}.intro h1{font-size:32px}.intro p,.intro p:first-of-type{font-size:16px;line-height:1.65}}
-@media(max-width:480px){.site-shell{width:calc(100% - 24px)}.intro{padding-top:42px}.intro h1{font-size:30px}.intro p,.intro p:first-of-type{font-size:15.5px}}
+.intro-content .about-content{display:flex;flex-direction:column;gap:8px;max-width:none;margin:0}
+#page-home .intro-content .about-content>p{margin:0;color:var(--hero-muted);font-size:16px;line-height:1.55;max-width:none}
+#page-home .intro-content .about-content>p:first-child{margin:0 0 8px;color:var(--hero-ink);font-size:30px;line-height:1.15;letter-spacing:-.02em;font-weight:800}
+#page-home .intro-content .about-content>p strong{color:inherit;font-weight:700}
+#page-home .intro-content .about-content>p a{color:inherit}
+#page-home .intro-content .about-content>.local-time{margin-top:0}
+#page-home .intro-content .about-content>.local-time strong{color:#d8dedb;font-weight:700}
+.intro h1,.intro>p,.intro-links{display:none!important}
+.intro-photo,.wordmark,#about{display:none!important}
+.social-row{margin-top:18px}
+@media(max-width:700px){.site-shell{width:min(100% - 28px,600px)}.intro{margin:40px 0}.intro-content .about-content{gap:8px}#page-home .intro-content .about-content>p{font-size:16px;line-height:1.58}#page-home .intro-content .about-content>p:first-child{font-size:28px}}
+@media(max-width:480px){.site-shell{width:calc(100% - 24px)}.intro{margin:34px 0}#page-home .intro-content .about-content>p{font-size:15.5px}#page-home .intro-content .about-content>p:first-child{font-size:27px}}
 @media(prefers-reduced-motion:reduce){.intro *{transition:none!important}}
