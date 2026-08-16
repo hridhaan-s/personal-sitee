@@ -57,8 +57,8 @@ body::after { opacity:.2; transform:scale(1.7); background-image:radial-gradient
 .brand { font-size:14px !important; }
 .desktop-nav { gap:19px !important; }
 .desktop-nav a { font-size:14px !important; }
-.desktop-nav a[href="#links"] { font-size:0 !important; }
-.desktop-nav a[href="#links"]::after { content:"Connect"; font-size:14px; }
+.desktop-nav a[href="#links"], .mobile-nav a[href="#links"] { font-size:0 !important; }
+.desktop-nav a[href="#links"]::after, .mobile-nav a[href="#links"]::after { content:"Connect"; font-size:14px; }
 
 .hero { display:block !important; min-height:0 !important; padding:72px 0 46px !important; }
 .hero-art { display:none !important; }
@@ -66,16 +66,16 @@ body::after { opacity:.2; transform:scale(1.7); background-image:radial-gradient
 .hero-copy .eyebrow { font-size:0 !important; margin:0 0 12px !important; color:var(--text) !important; }
 .hero-copy .eyebrow::after { content:"Hey, I'm Hridhaan! 👋"; font-size:34px; font-weight:700; line-height:1.15; letter-spacing:-.035em; color:#dce1df; }
 .hero h1 { display:none !important; }
-.hero-lead { max-width:760px !important; margin:0 !important; line-height:1.65 !important; letter-spacing:0 !important; color:#c3c9c7 !important; }
-.hero-lead { font-size:0 !important; }
+.hero-lead { max-width:760px !important; margin:0 !important; line-height:1.65 !important; letter-spacing:0 !important; color:#c3c9c7 !important; font-size:0 !important; }
 .hero-lead::after { content:"I'm a high-school student interested in cybersecurity, space, and technology. I like making things that are useful, learning how systems work, and going down the occasional rabbit hole just because it looks interesting."; font-size:18px; line-height:1.65; }
 .hero-typing-wrap { display:none !important; }
 .hero-links { margin-top:27px !important; gap:22px !important; }
 .text-link { font-size:15px !important; color:#b9c0bd !important; border-color:#6f7774 !important; }
 .text-link.muted { color:#9a9f9d !important; border-color:#303431 !important; }
 
-/* About starts naturally below the intro, not beside a giant image. */
-#about { width:100% !important; padding:42px 0 68px !important; }
+/* A quiet visual hand-off into the About section. */
+#about { width:100% !important; padding:92px 0 68px !important; position:relative !important; }
+#about::before { content:""; position:absolute; top:28px; left:0; right:0; height:34px; background:url('/hs-wordmark.svg') center/auto 34px no-repeat; opacity:.62; }
 #about .section-kicker { display:none !important; }
 #about .about-grid { display:block !important; border-top:1px solid #202321 !important; padding-top:34px !important; }
 #about .about-grid h2 { display:none !important; }
@@ -96,5 +96,6 @@ body::after { opacity:.2; transform:scale(1.7); background-image:radial-gradient
   .hero { padding:56px 0 38px !important; }
   .hero-copy .eyebrow::after { font-size:29px; }
   .hero-lead::after { font-size:17px; }
-  #about { padding-top:36px !important; }
+  #about { padding-top:82px !important; }
+  #about::before { top:24px; height:28px; background-size:auto 28px; }
 }
