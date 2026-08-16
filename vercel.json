@@ -1,6 +1,5 @@
 {
   "rewrites": [
-    { "source": "/achievements", "destination": "/" },
-    { "source": "/blog", "destination": "/" }
+    { "source": "/(.*)", "destination": "/" }
   ]
 }
