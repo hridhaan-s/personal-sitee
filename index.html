@@ -3,617 +3,194 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f6f2" />
   <title>Hridhaan Sahay</title>
-  <meta name="description" content="Hridhaan Sahay — Student builder interested in space, technology, competitive programming, and engineering. Portfolio showcasing projects, achievements, and technical writing.">
-
-<meta name="keywords" content="Hridhaan Sahay, student portfolio, space technology, competitive programming, web developer, BitBuzz">
-
-<meta name="author" content="Hridhaan Sahay">
-
-<meta name="robots" content="index, follow">
-<meta property="og:title" content="Hridhaan Sahay ">
-<meta property="og:description" content="Student exploring space, technology, and engineering through projects, problem-solving, and writing.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://hridhaan.me">
-<meta property="og:image" content="memoji.png">
-
-
-  <link rel="icon" href="memoji.png" />
-  <link rel="stylesheet" href="/style.css">
-<link rel="stylesheet" href="/guestbook.css">
-
+  <meta name="description" content="Hridhaan Sahay — Student builder interested in space, technology, competitive programming, and engineering. Portfolio showcasing projects, achievements, and technical writing." />
+  <meta name="keywords" content="Hridhaan Sahay, student portfolio, space technology, competitive programming, web developer, BitBuzz" />
+  <meta name="author" content="Hridhaan Sahay" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="Hridhaan Sahay" />
+  <meta property="og:description" content="Student exploring space, technology, and engineering through projects, problem-solving, and writing." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://hridhaan.me" />
+  <meta property="og:image" content="https://hridhaan.me/Memoji%202.png" />
+  <link rel="icon" href="/Memoji%202.png" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/guestbook.css" />
 </head>
-
 <body>
-  <div id="netflix-intro">
-  <div class="nf-panel nf-top">
-    <div class="nf-word">HRIDHAAN</div>
-  </div>
-  <div class="nf-panel nf-bottom">
-    <div class="nf-word">SAHAY</div>
-  </div>
-</div>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="/" data-route="home">Hridhaan Sahay</a>
+      <nav class="desktop-nav" aria-label="Primary navigation">
+        <a href="#about" data-section="about">About</a>
+        <a href="#projects" data-section="projects">Projects</a>
+        <a href="/achievements" data-route="achievements">Achievements</a>
+        <a href="#astrophotography" data-section="astrophotography">Astro</a>
+        <a href="/blog" data-route="blog">Blog</a>
+        <a href="#links" data-section="links">Links</a>
+      </nav>
+      <div class="header-actions">
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme">◐</button>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu">Menu</button>
+      </div>
+    </header>
 
+    <nav id="mobileNav" class="mobile-nav" aria-label="Mobile navigation">
+      <a href="/" data-route="home">Home</a>
+      <a href="#about" data-section="about">About</a>
+      <a href="#projects" data-section="projects">Projects</a>
+      <a href="/achievements" data-route="achievements">Achievements</a>
+      <a href="#astrophotography" data-section="astrophotography">Astrophotography</a>
+      <a href="/blog" data-route="blog">Blog</a>
+      <a href="#links" data-section="links">Links</a>
+    </nav>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-  <div class="nav-container">
-
-    <div class="nav-logo">Hridhaan Sahay</div>
-
-    <!-- DESKTOP NAV -->
-    <ul class="nav-links">
-      <li><a href="/" data-route="home">Home</a></li>
-      <li><a href="#about" data-section="about">About</a></li>
-      <li><a href="#projects" data-section="projects">Projects</a></li>
-      <li><a href="/achievements" data-route="achievements">Achievements</a></li>
-      <li><a href="#astrophotography" data-section="astrophotography">Astrophotography</a></li>
-      <li><a href="/blog" data-route="blog">Blog</a></li>
-      <li><a href="#links" data-section="links">Links</a></li>
-    </ul>
-
-    <!-- HAMBURGER -->
-    <button class="nav-toggle" aria-label="Menu">
-      ☰
-    </button>
-
-    
-    <!-- THEME -->
-    <button id="themeToggle" aria-label="Toggle theme">
-  <svg id="themeIcon" viewBox="0 0 24 24" width="22" height="22">
-    <path
-      d="M21 12.79A9 9 0 1111.21 3 
-         7 7 0 0021 12.79z"
-      fill="currentColor"
-    />
-  </svg>
-</button>
-
-  </div>
-
-  <!-- MOBILE NAV -->
-  <div class="nav-mobile">
-    <a href="/" data-route="home">Home</a>
-    <a href="#about" data-section="about">About</a>
-    <a href="#projects" data-section="projects">Projects</a>
-    <a href="/achievements" data-route="achievements">Achievements</a>
-    <a href="#astrophotography" data-section="astrophotography">Astrophotography</a>
-    <a href="/blog" data-route="blog">Blog</a>
-    <a href="#links" data-section="links">Links</a>
-  </div>
-</nav>
-
-  
- <main id="page-home">
-
-   <!-- HERO -->
-  <section class="hero reveal">
-    <div class="hero-image">
-      <img src="Memoji 2.png" alt="Hridhaan Sahay" />
-    </div>
-
-    <div class="hero-center">
-      <h1 class="hero-name" id="heroName">Hridhaan Sahay</h1>
-      <p class="tagline"><span id="typewriter"></span></p>
-
-      <p class="statement">
-        Building projects<br />
-        with curiosity,<br />
-        and a love for engineering.
-      </p><p class="typing-line">
-  <span id="typingText"></span><span class="typing-cursor">|</span>
-</p>
-
-
-    </div>
-  </section><section class="about" id="about">
-  <h2 class="section-title">About</h2>
-
-  <div class="content-wrapper">
-    <p>
-      Hello!
-    </p>
-    <p>
-      I'm Hridhaan Sahay, A high-school student interested in 
-      <span id="yellow-highlight">Space and Technology</span>. 
-      I explore both through coding, competitive programming, hackathons, research, astrophotography, building gadgets and projects.
-    </p>
-
-    <p>
-      As a student still learning and growing, I enjoy connecting with people who share similar passions.
-    </p>
-
-    <p>
-      I created 
-      <a href="https://bitbuzz.app" target="_blank" class="premium-link">
-        <span id="red-underline">Bitbuzz</span>
-      </a>, 
-      A platform that delivers innovation, space, and technology news without all the politics and noise.
-    </p>
-
-    <p>
-      I also share what I learn through my 
-      <a href="https://www.linkedin.com/in/hridhaan-sahay/" target="_blank" class="premium-link">  <span id="red-underline">Linkedin</span></a> 
-      and 
-      <a href="https://www.youtube.com/@bitbuzz-club" target="_blank" class="premium-link"> <span id="red-underline">Youtube</span></a>.
-    </p>
-
-    <p>
-      You can Mail me at:
- <a href="mailto:hi@Hridhaan.me" target="_blank" class="premium-link"> <span id="red-underline">hi@Hridhaan.me</span></a>. 
-  
-</p>
-  </div>
-</section>
-
-<script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
-
-<!-- LINKS -->
-<section class="links reveal" id="links">
-
-  <h2>Connect with me</h2>
-
-<p class="links-text">
-  Here are my social handles, feel free to connect and say hi
-  </p>
-</div>
-  <div class="icon-links">
-
-    <!-- GitHub -->
-    <a href="https://github.com/hridhaan-s" target="_blank" aria-label="GitHub">
-      <svg viewBox="0 0 24 24">
-        <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.1 3.29 9.42 7.86 10.95.57.1.78-.25.78-.55v-2c-3.2.7-3.88-1.38-3.88-1.38-.53-1.34-1.3-1.7-1.3-1.7-1.06-.73.08-.72.08-.72 1.17.08 1.79 1.2 1.79 1.2 1.04 1.78 2.73 1.27 3.4.97.1-.75.4-1.27.73-1.56-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.27 1.2-3.07-.12-.3-.52-1.52.12-3.17 0 0 .97-.31 3.18 1.17a11 11 0 0 1 5.8 0c2.2-1.48 3.17-1.17 3.17-1.17.64 1.65.24 2.87.12 3.17.75.8 1.2 1.82 1.2 3.07 0 4.41-2.69 5.37-5.25 5.66.41.35.77 1.04.77 2.1v3.11c0 .3.2.65.79.54A10.51 10.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z"/>
-      </svg>
-    </a>
-
-    <!-- LinkedIn -->
-    <a href="https://www.linkedin.com/in/hridhaan-sahay" target="_blank" aria-label="LinkedIn">
-      <svg viewBox="0 0 24 24">
-        <path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.82-2.05 3.75-2.05 4 0 4.74 2.63 4.74 6.05V21h-4v-5.25c0-1.25-.02-2.86-1.75-2.86-1.75 0-2.02 1.36-2.02 2.77V21H9z"/>
-      </svg>
-    </a>
-
-    <!-- YouTube -->
-    <a href="https://www.youtube.com/@Astro-2HR" target="_blank" aria-label="YouTube">
-      <svg viewBox="0 0 24 24">
-        <path d="M23.5 6.5s-.23-1.64-.95-2.36c-.91-.95-1.93-.96-2.4-1.02C16.77 2.75 12 2.75 12 2.75s-4.77 0-8.14.37c-.47.06-1.49.07-2.4 1.02-.72.72-.95 2.36-.95 2.36S0 8.43 0 10.36v1.28c0 1.93.23 3.86.23 3.86s.23 1.64.95 2.36c.91.95 2.1.92 2.63 1.02 1.91.18 8.19.37 8.19.37s4.77-.01 8.14-.38c.47-.06 1.49-.07 2.4-1.02.72-.72.95-2.36.95-2.36s.23-1.93.23-3.86v-1.28c0-1.93-.23-3.86-.23-3.86zM9.75 14.75v-6l6 3-6 3z"/>
-      </svg>
-    </a>
-
-<!-- Slack -->
-<a href="https://hackclub.enterprise.slack.com/team/U0A1984JZBM" target="_blank" aria-label="Slack">
-  <svg viewBox="0 0 32 32">
-    <path d="M16 6c5.1 0 7.247.576 8.336 1.665C25.425 8.754 26 10.9 26 16c0 5.1-.575 7.247-1.664 8.336C23.247 25.425 21.1 26 16 26s-7.247-.575-8.336-1.664C6.575 23.247 6 21.1 6 16s.575-7.247 1.664-8.335C8.753 6.576 10.9 6 16 6zm12 10C28 6 26 4 16 4S4 6 4 16s2 12 12 12 12-2 12-12z"/>
-    <path d="M13.867 8a1.605 1.605 0 0 0-1.48.988 1.594 1.594 0 0 0 .001 1.224 1.598 1.598 0 0 0 1.479.988h1.6V9.6a1.596 1.596 0 0 0-.988-1.478A1.604 1.604 0 0 0 13.867 8zm0 4.267H9.6a1.604 1.604 0 0 0-1.479.988 1.596 1.596 0 0 0 .347 1.742 1.601 1.601 0 0 0 1.132.47h4.267a1.605 1.605 0 0 0 1.478-.989A1.596 1.596 0 0 0 15 12.736a1.602 1.602 0 0 0-1.132-.47zM24 13.867a1.596 1.596 0 0 0-.987-1.478 1.605 1.605 0 0 0-1.745.347 1.597 1.597 0 0 0-.468 1.13v1.6h1.6a1.605 1.605 0 0 0 1.479-.988c.08-.194.121-.402.121-.611zm-4.267 0V9.6a1.594 1.594 0 0 0-.987-1.478 1.605 1.605 0 0 0-1.745.347 1.6 1.6 0 0 0-.468 1.131v4.267a1.596 1.596 0 0 0 .987 1.477 1.605 1.605 0 0 0 1.226 0 1.601 1.601 0 0 0 .987-1.477zM18.133 24a1.603 1.603 0 0 0 1.6-1.6 1.595 1.595 0 0 0-.987-1.478 1.605 1.605 0 0 0-.613-.122h-1.6v1.6a1.597 1.597 0 0 0 1.6 1.6zm0-4.267H22.4a1.605 1.605 0 0 0 1.479-.988 1.596 1.596 0 0 0-.347-1.742 1.6 1.6 0 0 0-1.132-.47h-4.267a1.605 1.605 0 0 0-1.478.989A1.596 1.596 0 0 0 17 19.264a1.602 1.602 0 0 0 1.132.47zM8 18.133a1.596 1.596 0 0 0 1.6 1.6 1.605 1.605 0 0 0 1.479-.988c.08-.194.121-.402.121-.612v-1.6H9.6a1.605 1.605 0 0 0-1.479.989c-.08.194-.121.402-.121.611zm4.267 0V22.4a1.595 1.595 0 0 0 .987 1.478 1.603 1.603 0 0 0 1.745-.347 1.6 1.6 0 0 0 .468-1.131v-4.266a1.597 1.597 0 0 0-1.6-1.6 1.603 1.603 0 0 0-1.6 1.6z"/>
-  </svg>
-</a>
-
-    
-  </div>
-</section>
-
-  
-  <!-- PROJECTS -->
-<section class="projects" id="projects">
-      <h2>Projects</h2>
-      <p class="projects-subtitle">Some things I've built across hardware, web, and experiments.</p>
-      <p class="projects-subtitle">
-        Most of my projects are on GitHub view them
-        <a href="https://github.com/hridhaan-s/" target="_blank" class="premium-link"><span id="red-underline">here</span></a>. 
-      </p>   
-
-      <div class="projects-grid">
-
-        <div class="project-card">
-          <span class="tag">Web · Platform</span>
-          <img src="https://www.hridhaan.me/Screenshot%202026-05-09%20172150.png" alt="BitBuzz" />
-          <h3>BitBuzz</h3>
-          <p>A global platform with 23,500+ users from 50+ countries, delivering news about innovation, space, and tech news without any bias or politics.</p>
-          <div class="project-links">
-            <a href="https://bitbuzz.app" target="_blank">Visit →</a>
+    <main id="page-home" class="page">
+      <section class="hero section reveal">
+        <div class="hero-copy">
+          <p class="eyebrow">Student • Space & Tech Enthusiast</p>
+          <h1>Hridhaan Sahay</h1>
+          <p class="hero-lead">Building projects<br />with curiosity,<br />and a love for engineering.</p>
+          <p class="hero-typing"><span id="typingText"></span><span class="cursor" aria-hidden="true">|</span></p>
+          <div class="hero-links">
+            <a class="text-link" href="#projects" data-section="projects">See my work ↓</a>
+            <a class="text-link muted" href="mailto:hi@Hridhaan.me">hi@Hridhaan.me</a>
           </div>
         </div>
-        
-<div class="project-card">
-          <span class="tag">Computer Vision  · AI</span>
-          <img src="https://cdn.hackclub.com/019f3e40-1bee-70d6-8cd8-a50ea0adf3c9/image.png" alt="BitBuzz" />
-          <h3>Xerxes</h3>
-          <p>A Researcher assistant powered by real-time client-side computer vision, featuring face-mesh posture tracking, proximity detection, focus monitoring, interval timers, Chrome notifications, and audio posture alerts.
-         
-      </p>
-          <div class="project-links">
-            <a href="https://scrapbook.hridhaan.me/project.html?slug=xerxes" target="_blank">Visit →</a>
+        <div class="hero-art">
+          <div class="hero-frame">
+            <img src="/Memoji%202.png" alt="Hridhaan Sahay" />
           </div>
+          <div class="hero-note">Curious by default.<br />Always building.</div>
         </div>
+      </section>
 
-        <div class="project-card">
-          <span class="tag">Social Impact</span>
-          <img src="https://cdn.hackclub.com/019e8f5f-664f-736e-a37a-9abb4321a2cc/screenshot_2026-06-04_024700.png" alt="Flag It" />
-          <h3>Flag It</h3>
-          <p>A community-driven cyber safety platform designed to help people report scams, fraud, and suspicious activity while raising awareness about cybercrime.</p>
-          <div class="project-links">
-            <a href="https://scrapbook.hridhaan.me/project.html?slug=flag-it" target="_blank">Explore →</a>
+      <section class="section narrow reveal" id="about">
+        <div class="section-kicker">01 — About</div>
+        <div class="about-grid">
+          <h2>About</h2>
+          <div class="prose">
+            <p>Hello!</p>
+            <p>I'm Hridhaan Sahay, A high-school student interested in <span class="highlight">Space and Technology</span>. I explore both through coding, competitive programming, hackathons, research, astrophotography, building gadgets and projects.</p>
+            <p>As a student still learning and growing, I enjoy connecting with people who share similar passions.</p>
+            <p>I created <a href="https://bitbuzz.app" target="_blank" rel="noreferrer">Bitbuzz</a>, A platform that delivers innovation, space, and technology news without all the politics and noise.</p>
+            <p>I also share what I learn through my <a href="https://www.linkedin.com/in/hridhaan-sahay/" target="_blank" rel="noreferrer">Linkedin</a> and <a href="https://www.youtube.com/@bitbuzz-club" target="_blank" rel="noreferrer">Youtube</a>.</p>
+            <p>You can Mail me at: <a href="mailto:hi@Hridhaan.me">hi@Hridhaan.me</a>.</p>
           </div>
         </div>
-        <div class="project-card">
-          <span class="tag">Social Impact</span>
-          <img src="https://cdn.hackclub.com/019e8f5f-664f-736e-a37a-9abb4321a2cc/screenshot_2026-06-04_024700.png" alt="Flag It" />
-          <h3>Flag It</h3>
-          <p>A community-driven cyber safety platform designed to help people report scams, fraud, and suspicious activity while raising awareness about cybercrime.</p>
-          <div class="project-links">
-            <a href="https://scrapbook.hridhaan.me/project.html?slug=flag-it" target="_blank">Explore →</a>
-          </div>
-        </div>
+      </section>
 
-        <div class="project-card">
-          <span class="tag">Education</span>
-          <img src="https://cdn.hackclub.com/019f0feb-342d-7bfe-acbb-e3208cb6b61c/screenshot_2026-06-26_164649.png" alt="BookBridge" />
-          <h3>BookBridge</h3>
-          <p>An educational resource sharing ecosystem built as a Class 12 IT Project, designed to bridge accessibility barriers to textbooks, peer study notes, and school references.</p>
-          <div class="project-links">
-            <a href="https://scrapbook.hridhaan.me/project.html?slug=bookbridge-class-12-it-project" target="_blank">Explore →</a>
+      <section class="section wide reveal" id="projects">
+        <div class="section-kicker">02 — Projects</div>
+        <div class="section-heading-row">
+          <div>
+            <h2>Projects</h2>
+            <p>Some things I've built across hardware, web, and experiments.</p>
+          </div>
+          <a class="text-link" href="https://github.com/hridhaan-s/" target="_blank" rel="noreferrer">GitHub ↗</a>
+        </div>
+        <div class="project-list">
+          <a class="project-row" href="https://bitbuzz.app" target="_blank" rel="noreferrer">
+            <div class="project-index">01</div><div class="project-main"><h3>BitBuzz</h3><p>A global platform with 23,500+ users from 50+ countries, delivering news about innovation, space, and tech news without any bias or politics.</p></div><div class="project-tag">Web · Platform</div><div class="project-arrow">↗</div>
+          </a>
+          <a class="project-row" href="https://scrapbook.hridhaan.me/project.html?slug=xerxes" target="_blank" rel="noreferrer">
+            <div class="project-index">02</div><div class="project-main"><h3>Xerxes</h3><p>A Researcher assistant powered by real-time client-side computer vision, featuring face-mesh posture tracking, proximity detection, focus monitoring, interval timers, Chrome notifications, and audio posture alerts.</p></div><div class="project-tag">Computer Vision · AI</div><div class="project-arrow">↗</div>
+          </a>
+          <a class="project-row" href="https://scrapbook.hridhaan.me/project.html?slug=flag-it" target="_blank" rel="noreferrer">
+            <div class="project-index">03</div><div class="project-main"><h3>Flag It</h3><p>A community-driven cyber safety platform designed to help people report scams, fraud, and suspicious activity while raising awareness about cybercrime.</p></div><div class="project-tag">Social Impact</div><div class="project-arrow">↗</div>
+          </a>
+          <a class="project-row" href="https://scrapbook.hridhaan.me/project.html?slug=bookbridge-class-12-it-project" target="_blank" rel="noreferrer">
+            <div class="project-index">04</div><div class="project-main"><h3>BookBridge</h3><p>An educational resource sharing ecosystem built as a Class 12 IT Project, designed to bridge accessibility barriers to textbooks, peer study notes, and school references.</p></div><div class="project-tag">Education</div><div class="project-arrow">↗</div>
+          </a>
+          <a class="project-row" href="https://scrapbook.hridhaan.me/project.html?slug=chanakya-ai" target="_blank" rel="noreferrer">
+            <div class="project-index">05</div><div class="project-main"><h3>Chanakya AI</h3><p>An AI chatbot built for BitBuzz, inspired by Chanakya's principles to provide strategic and wisdom-driven responses. Basically a FACT CHECK AI (Wikipedia Api Integrated).</p></div><div class="project-tag">AI · Chatbot</div><div class="project-arrow">↗</div>
+          </a>
+          <a class="project-row" href="https://scrapbook.hridhaan.me/project.html?slug=ciphercat" target="_blank" rel="noreferrer">
+            <div class="project-index">06</div><div class="project-main"><h3>CipherCat</h3><p>A Slack bot built for Hack Club that transforms messages into Morse code, decodes hidden transmissions, and delivers secret transmissions through CipherMail.</p></div><div class="project-tag">Bot · Automation</div><div class="project-arrow">↗</div>
+          </a>
+        </div>
+      </section>
+
+      <section class="section wide reveal">
+        <div class="feature-grid">
+          <a class="feature-card" href="https://scrapbook.hridhaan.me/" target="_blank" rel="noreferrer">
+            <span class="feature-label">Archive</span><h3>Hridhaan's Scrapbook</h3><p>The archive. Every project, every lesson, every mistake that is worth keeping.</p><span class="feature-arrow">Visit Scrapbook →</span>
+          </a>
+          <a class="feature-card" href="https://store.bitbuzz.club" target="_blank" rel="noreferrer">
+            <span class="feature-label">Store</span><h3>The BitBuzz Store</h3><p>Visit to get cool and awesome products!</p><span class="feature-arrow">Visit Store →</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="section wide reveal" id="astrophotography">
+        <div class="section-kicker">03 — Astrophotography</div>
+        <div class="section-heading-row">
+          <div><h2>Astrophotography</h2><p>Exploring the night sky through careful observation and long-exposure captures.</p></div>
+        </div>
+        <div class="astro-grid">
+          <a class="astro-row" href="https://drive.google.com/drive/folders/1uf6q7BSrwqgcLWF8dFDmJrwmYIB38zXm?usp=sharing" target="_blank" rel="noreferrer"><div><span class="astro-count">01</span><h3>Latest Captures</h3><p>A collection of my most memorable space observations.</p></div><span>View collection →</span></a>
+          <a class="astro-row" href="https://drive.google.com/file/d/1tnuOSDrebYF7utN5M0mX4lw_bhJXN2Xk/view?usp=sharing" target="_blank" rel="noreferrer"><div><span class="astro-count">02</span><h3>Fav Ones</h3><p>Recent and newly captured night-sky moments.</p></div><span>View collection →</span></a>
+        </div>
+      </section>
+
+      <section class="section narrow reveal" id="links">
+        <div class="section-kicker">04 — Connect</div>
+        <div class="about-grid">
+          <h2>Connect with me</h2>
+          <div>
+            <p class="lead-small">Here are my social handles, feel free to connect and say hi</p>
+            <div class="link-list">
+              <a href="https://github.com/hridhaan-s" target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
+              <a href="https://www.linkedin.com/in/hridhaan-sahay" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a>
+              <a href="https://www.youtube.com/@Astro-2HR" target="_blank" rel="noreferrer">YouTube <span>↗</span></a>
+              <a href="https://hackclub.enterprise.slack.com/team/U0A1984JZBM" target="_blank" rel="noreferrer">Slack <span>↗</span></a>
+              <a href="mailto:hi@Hridhaan.me">Email <span>↗</span></a>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div class="project-card">
-          <span class="tag">AI · Chatbot</span>
-          <img src="https://www.hridhaan.me/Screenshot%202026-05-09%20172557.png" alt="Chanakya AI" />
-          <h3>Chanakya AI</h3>
-          <p>An AI chatbot built for BitBuzz, inspired by Chanakya's principles to provide strategic and wisdom-driven responses. Basically a FACT CHECK AI (Wikipedia Api Integrated).</p>
-          <div class="project-links">
-            <a href="https://scrapbook.hridhaan.me/project.html?slug=chanakya-ai" target="_blank">Explore →</a>
+      <section class="guestbook-wrap reveal">
+        <div class="section-kicker">05 — Guestbook</div>
+        <section class="guestbook">
+          <div class="guestbook-card">
+            <a class="guestbook-cta" href="https://github.com/hridhaan-s/personal-sitee/issues/new?template=guestbook.yml" target="_blank" rel="noreferrer">Sign my guestbook →</a>
+            <h3 class="guestbook-title">Notes from visitors</h3>
+            <ul id="entries" class="guestbook-entries"><li class="placeholder">No approved notes yet.</li></ul>
           </div>
-        </div>
+        </section>
+      </section>
 
-        <div class="project-card">
-          <span class="tag">Bot · Automation</span>
-          <img src="https://cdn.hackclub.com/019efe71-6eee-7123-a523-a4468c9441b4/screenshot_2026-06-25_162538.png" alt="CipherCat" />
-          <h3>CipherCat</h3>
-          <p>A Slack bot built for Hack Club that transforms messages into Morse code, decodes hidden transmissions, and delivers secret transmissions through CipherMail.</p>
-          <div class="project-links">
-            <a href="https://scrapbook.hridhaan.me/project.html?slug=ciphercat" target="_blank">Explore →</a>
-          </div>
-        </div>
+      <footer class="site-footer">
+        <div>© 2026 Hridhaan Sahay</div>
+        <div class="footer-note">Built under the starry skies (In my Jaipur Vaccation lol) .</div>
+        <div class="footer-note">P.S Thanks for Scrolling till the End</div>
+      </footer>
+    </main>
 
+    <section id="page-achievements" class="page hidden">
+      <div class="subpage-head section">
+        <div class="section-kicker">06 — Achievements</div><h1>Recent Highlights</h1><p>A record of academic, leadership, and co-curricular milestones.</p>
+      </div>
+      <div class="achievement-list section wide">
+        <article class="achievement-row"><div><span class="project-tag">Technology & Initiative</span><h3>Lead — Bitbuzz Hackers</h3><p>Founder and leader of the school Hack Club (supported by Hack Club), promoting a culture of building, experimentation, and collaboration.</p></div></article>
+        <article class="achievement-row"><div><span class="project-tag">Skill Recognition</span><h3>NASA Spotlites — 1st Position</h3><p>Secured 1st position in <strong>NASA Spotlites</strong>, part of ExploraVision 2.0 — an interschool innovation competition involving <strong>40+ teams</strong>.</p></div><img src="/Screenshot%202025-12-20%20104432.png" alt="NASA Spotlites Certificate" /></article>
+        <article class="achievement-row"><div><span class="project-tag">Service & Impact</span><h3>Outstanding Community Service — Rotary International</h3><p>Awarded Outstanding Community Service recognition by Rotary International for contributions to blood donation drives, workshops, and community outreach initiatives.</p></div><img src="/rotary.jpg" alt="Rotary Certificate" /></article>
+        <article class="achievement-row"><div><span class="project-tag">Leadership</span><h3>School Student Council</h3><p>Appointed as ICT Captain (2025) and previously served as Health and Wellness Prefect (2023), contributing to student leadership and school initiatives.</p></div><img src="/Badge.jpg" alt="School Council Badge" /></article>
+        <article class="archive-row"><div><span class="project-tag">Archive</span><h3>Certificate Archive</h3><p>An archive of school-level certificates and records for reference.</p><a href="/archive.html" target="_blank">View certificate archive →</a></div></article>
       </div>
     </section>
-  </main>
-   <section class="achievements-cta">
-  <div class="cta-card">
-    <h3>Hridhaan's Scrapbook</h3>
 
-    <p>
-      The archive. Every project, every lesson, every mistake that is worth keeping.
-    </p>
-
-    <a
-      href="https://scrapbook.hridhaan.me/"
-      class="cta-btn"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Visit Scrapbook →
-    </a>
-
+    <section id="page-blog" class="page hidden">
+      <div class="subpage-head section"><div class="section-kicker">07 — Blog</div><h1>Blog</h1><p>The Learnings i gained during building stuff</p></div>
+      <div class="blog-wrap section narrow">
+        <article class="blog-card"><div><span class="blog-meta">December 2025 · 6 min read</span><h3>Building this Personal Portfolio Without Frameworks</h3><p>I thought this would be the best project to make before 2025 ends so I made it</p></div><button class="read-btn" type="button">Read →</button></article>
+        <article id="post-1" class="blog-post hidden"><h2>Building this Personal Portfolio Without Frameworks</h2><span class="blog-meta">December 2025 · 6 min read</span><button class="back-btn" type="button">← Back to Blog</button><p>I wanted a place where I could put everything I achieve, learn and so I made it without using React or any framework.</p><h4>The Stack</h4><p>HTML, CSS, & JAVA</p><h4>Domain and Hosting</h4><p>I used Vercel for hosting and Odoo for a Domain, tried to make it pretty responsive.</p></article>
+      </div>
+    </section>
   </div>
-</section>
 
-
-
-   
-  <!-- ASTROPHOTOGRAPHY -->
-  <section class="astro-apple" id="astrophotography">
-    <h2>Astrophotography</h2>
-    <p class="astro-desc">
-      Exploring the night sky through careful observation and long-exposure captures.
-    </p>
-
-    <div class="astro-apple-grid">
-
-      <a class="astro-apple-card"
-         href="https://drive.google.com/drive/folders/1uf6q7BSrwqgcLWF8dFDmJrwmYIB38zXm?usp=sharing"
-         target="_blank">
-        
-        <div class="astro-icon-apple">
-  <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
-    <circle cx="12" cy="12" r="2" fill="currentColor"/>
-    <ellipse cx="12" cy="12" rx="9" ry="4"
-             fill="none" stroke="currentColor" stroke-width="1.5"/>
-  </svg>
-</div>
-
-        <h3> Latest Captures </h3>
-        <p>A collection of my most memorable space observations.</p>
-        <span class="astro-cta">View collection →</span>
-      </a>
-
-      <a class="astro-apple-card"
-         href="https://drive.google.com/file/d/1tnuOSDrebYF7utN5M0mX4lw_bhJXN2Xk/view?usp=sharing"
-         target="_blank"><div class="astro-icon-apple">
-  <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
-    <!-- Telescope tube -->
-    <rect x="3" y="10" width="10" height="4" rx="1"
-          fill="currentColor"/>
-
-    <!-- Eyepiece -->
-    <rect x="13" y="9" width="5" height="6" rx="1"
-          fill="currentColor"/>
-
-    <!-- Tripod -->
-    <line x1="8" y1="14" x2="6" y2="20"
-          stroke="currentColor" stroke-width="1.5"/>
-    <line x1="14" y1="14" x2="16" y2="20"
-          stroke="currentColor" stroke-width="1.5"/>
-  </svg>
-</div>
-
-
-        <h3>Fav Ones</h3>
-        <p>Recent and newly captured night-sky moments.</p>
-        <span class="astro-cta">View collection →</span>
-      </a>
-
-    </div>
-  </section>
-
-   
-   <section class="achievements-cta">
-  <div class="cta-card">
-    <h3>Achievements & Leadership</h3>
-    <p>
-      A record of Academic & leadership milestones.
-    </p>
-    <button data-route="achievements" class="cta-btn">
-      View Achievements →
-    </button>
-  </div>
-</section>
-
-   <section class="achievements-cta">
-  <div class="cta-card">
-    <h3>The BitBuzz Store</h3>
-    <p>Visit to get cool and awesome products!</p>
-    <a href="https://store.bitbuzz.club" class="cta-btn">
-      Visit Store →
-    </a>
-  </div>
-   </section>
-   
-<section class="guestbook">
-  <div class="guestbook-card">
-    <a
-      class="guestbook-cta"
-      href="https://github.com/hridhaan-s/personal-sitee/issues/new?template=guestbook.yml"
-      target="_blank"
-    >
-      Sign my guestbook →
-    </a>
-
-    <h3 class="guestbook-title">Notes from visitors</h3>    
-    <ul id="entries" class="guestbook-entries">
-      <li class="placeholder">No approved notes yet.</li>
-    </ul>
-  </div>
-</section>
-
-
-   <div class="signature-footer">
- 
-
-  <img src="Copy of Copy of Untitled (8.7 x 4.9 cm).pdf (2).svg
-"
-       class="signature signature-light"
-       alt="Signature">
-</div>
-
-   
-
-  <footer class="footer">
-    <p>© 2026 <span>Hridhaan Sahay</span></p>
-    <p class="footer-note">Built under the starry skies (In my Jaipur Vaccation lol) .</p>
-        <p class="footer-note">Updated • May 2027, </p>
-  <a href="https://www.hitwebcounter.com/" target="_blank" rel="noopener" title="Check Hits">
-<img src="https://www.hitwebcounter.com/counter/counter.php?page=21500331&amp;style=0008&amp;nbdigits=6&amp;type=page" alt="Check Hits" decoding="async" style="border:0;max-width:100%;height:auto;" />
-</a>
-    <p>P.S Thanks for Scrolling till the End </p>
-  </footer>
-   
- </main>
-  
-<script>
-  // Dark mode toggle
-  document.getElementById("themeToggle").onclick = () =>
-    document.body.classList.toggle("dark");
-
-  // Typewriter effect
-  const isMobile = window.innerWidth <= 768;
-
-  if (isMobile) {
-    document.getElementById("heroName").textContent = "Hridhaan Sahay";
-  }
-  
-  const text = "Student • Space & Tech Enthusiast";
-  let i = 0;
-  function type() {
-    if (i < text.length) {
-      document.getElementById("typewriter").textContent += text.charAt(i);
-      i++;
-      setTimeout(type, 60);
-    }
-  }
-  type();
-
-  // Scroll reveal
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("show");
-      }
-    });
-  });
-
-  document.querySelectorAll(".reveal")
-    .forEach(el => observer.observe(el));
-
-</script>
-<section id="page-achievements" class="hidden">
-  <div class="achievements-wrap">
-
-    <!-- PAGE HEADER -->
-    <header class="achievements-hero">
-      <h1>Recent Highlights</h1>
-      <p>
-        A record of academic, leadership, and co-curricular milestones.
-      </p>
-    </header>
-
-    <!-- ACHIEVEMENT -->
-    <div class="achievement">
-      <div class="achievement-text">
-        <h3>Lead — Bitbuzz Hackers</h3>
-        <span class="tag">Technology & Initiative</span>
-        <p>
-          Founder and leader of the school Hack Club (supported by Hack Club),
-          promoting a culture of building, experimentation, and collaboration.
-        </p>
-      </div>
-    </div>
-
-    <!-- ACHIEVEMENT -->
-    <div class="achievement">
-      <div class="achievement-text">
-        <h3>NASA Spotlites — 1st Position</h3>
-        <span class="tag">Skill Recognition</span>
-        <p>
-          Secured 1st position in <strong>NASA Spotlites</strong>, part of
-          ExploraVision 2.0 — an interschool innovation competition involving
-          <strong>40+ teams</strong>.
-        </p>
-      </div>
-      <div class="achievement-proof">
-        <img src="Screenshot 2025-12-20 104432.png" alt="NASA Spotlites Certificate">
-      </div>
-    </div>
-
-    <!-- ACHIEVEMENT -->
-    <div class="achievement">
-      <div class="achievement-text">
-        <h3>Outstanding Community Service — Rotary International</h3>
-        <span class="tag">Service & Impact</span>
-        <p>
-          Awarded Outstanding Community Service recognition by Rotary
-          International for contributions to blood donation drives,
-          workshops, and community outreach initiatives.
-        </p>
-      </div>
-      <div class="achievement-proof">
-        <img src="rotary.jpg" alt="Rotary Certificate">
-      </div>
-    </div>
-
-    <!-- ACHIEVEMENT -->
-    <div class="achievement">
-      <div class="achievement-text">
-        <h2>School</h2>
-        <h3>School Student Council</h3>
-        <span class="tag">Leadership</span>
-        <p>
-          Appointed as ICT Captain (2025) and previously served as
-          Health and Wellness Prefect (2023), contributing to
-          student leadership and school initiatives.
-        </p>
-      </div>
-      <div class="ICT-Proof">
-        <img src="Badge.jpg" alt="School Council Badge">
-      </div>
-    </div>
-
-    <!-- ARCHIVE -->
-    <div class="achievement-archive">
-      <h4>Certificate Archive</h4>
-      <p>
-        An archive of school-level certificates and records for reference.
-      </p>
-        <a href="/archive.html" target="_blank">
-  View certificate archive →
-</a>
-    </div>
-  </div>
-  
-</section>
-  <section id="page-blog" class="hidden">
-  <div class="blog-wrap">
-
-    <header class="blog-hero">
-      <h1>Blog</h1>
-      <p>
-        The Learnings i gained during building stuff  
-      </p>
-    </header>
-
-    <div class="blog-list">
-
-      <!-- BLOG CARD -->
-      <article class="blog-card" data-post="post-1">
-        <h3>Building this Personal Portfolio Without Frameworks</h3>
-        <span class="blog-meta">December 2025 · 6 min read</span>
-        <p>
-          I thought this would be the best project to make before 2025 ends
-           so I made it
-        </p>
-        <button class="read-btn">Read →</button>
-      </article>
-    </div>
-
-    <!-- BLOG POST -->
-    <article id="post-1" class="blog-post hidden">
-      <h2>Building this Personal Portfolio Without Frameworks</h2>
-      <span class="blog-meta">December 2025 · 6 min read</span>
-
-      <button class="back-btn" onclick="window.location.href='https://hridhaan.bitbuzz.club/blog'">
-  ← Back to Blog
-</button>
-
-
-      <p>
-        I wanted a place where I could put everything I achieve, learn and so I made it without using React or any framework.
-        </p>
-
-      <h4>The Stack</h4>
-      <p>
-        HTML,
-        CSS,
-       & JAVA 
-      </p>
-
-      <h4>Domain and Hosting </h4>
-      <p>
-        I used Vercel for hosting and Odoo for a Domain,
-        tried to make it pretty responsive.
-      </p>
-
-    </article>
-
-  </div>
-</section>
-
-    
-<script src="script.js"></script>
-
-  <script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
-
-<script>
-const lenis = new Lenis({
-    duration: 1.2,
-    smoothWheel: true
-});
-
-function raf(time){
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-}
-
-requestAnimationFrame(raf);
-</script>
+  <script src="/script.js"></script>
 </body>
 </html>
