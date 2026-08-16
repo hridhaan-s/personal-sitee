@@ -75,6 +75,40 @@ mobileNav?.querySelectorAll("a").forEach((link) => {
   });
 });
 
+function promoteAboutToHero() {
+  const about = document.getElementById("about");
+  const intro = document.querySelector(".intro-content");
+  if (!about || !intro || intro.dataset.aboutMoved === "true") return;
+
+  const label = about.querySelector(".section-label");
+  const content = about.querySelector(".about-content");
+  const social = about.querySelector(".social-row");
+  const introLinks = intro.querySelector(".intro-links");
+  const introHeading = intro.querySelector("h1");
+
+  if (!label || !content) return;
+
+  introHeading?.remove();
+  intro.querySelectorAll(".intro-links").forEach((element) => element.remove());
+
+  label.style.marginBottom = "10px";
+  content.style.maxWidth = "680px";
+  content.style.fontSize = "17px";
+  content.style.lineHeight = "1.7";
+
+  intro.append(label, content);
+
+  if (social) {
+    social.style.marginTop = "10px";
+    intro.appendChild(social);
+  }
+
+  about.remove();
+  intro.dataset.aboutMoved = "true";
+}
+
+promoteAboutToHero();
+
 async function loadBlog() {
   const wrap = document.querySelector("#page-blog .blog-wrap");
   if (!wrap) return;
