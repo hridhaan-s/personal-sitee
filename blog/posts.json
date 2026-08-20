@@ -1,0 +1,17 @@
+[
+  {
+    "slug": "building-this-personal-portfolio-without-frameworks",
+    "title": "Building this Personal Portfolio Without Frameworks",
+    "date": "2025-12-20",
+    "displayDate": "December 2025",
+    "readTime": "6 min read",
+    "excerpt": "I thought this would be the best project to make before 2025 ends so I made it",
+    "sections": [
+      { "type": "paragraph", "text": "I wanted a place where I could put everything I achieve, learn and so I made it without using React or any framework." },
+      { "type": "heading", "text": "The Stack" },
+      { "type": "paragraph", "text": "HTML, CSS, & JAVA" },
+      { "type": "heading", "text": "Domain and Hosting" },
+      { "type": "paragraph", "text": "I used Vercel for hosting and Odoo for a Domain, tried to make it pretty responsive." }
+    ]
+  }
+]
