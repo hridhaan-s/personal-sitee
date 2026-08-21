@@ -33,7 +33,6 @@ function showPage(page, push = true) {
     "Hridhaan Sahay — Portfolio";
 }
 
-// Nav routing
 document.querySelectorAll("[data-route]").forEach(el => {
   el.addEventListener("click", e => {
     e.preventDefault();
@@ -41,16 +40,13 @@ document.querySelectorAll("[data-route]").forEach(el => {
   });
 });
 
-// Browser back / forward
 window.addEventListener("popstate", () => {
   const page = location.pathname.replace("/", "") || "home";
   showPage(page, false);
 });
 
-// Initial load
 const initialPage = location.pathname.replace("/", "") || "home";
 showPage(initialPage, false);
-
 
 /* ===============================
    BLOG READ MODE
@@ -63,24 +59,20 @@ document.querySelectorAll("#page-blog .read-btn").forEach(btn => {
   });
 });
 
-
 /* ===============================
-   SECTION SCROLL (FROM ANY PAGE)
+   SECTION SCROLL
 ================================ */
 
 document.querySelectorAll("[data-section]").forEach(link => {
   link.addEventListener("click", e => {
     e.preventDefault();
     const section = link.dataset.section;
-
     showPage("home");
-
     setTimeout(() => {
       document.getElementById(section)?.scrollIntoView({ behavior: "smooth" });
     }, 50);
   });
 });
-
 
 /* ===============================
    MOBILE NAV
@@ -89,7 +81,6 @@ document.querySelectorAll("[data-section]").forEach(link => {
 document.addEventListener("DOMContentLoaded", () => {
   const navToggle = document.querySelector(".nav-toggle");
   const navMobile = document.querySelector(".nav-mobile");
-
   if (!navToggle || !navMobile) return;
 
   navToggle.addEventListener("click", e => {
@@ -104,9 +95,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-
 /* ===============================
-   PROJECT CARD 3D TILT
+   PROJECT CARD 3D TILT + CLICK
 ================================ */
 
 document.querySelectorAll(".project-card").forEach(card => {
@@ -130,8 +120,19 @@ document.querySelectorAll(".project-card").forEach(card => {
     card.style.transform =
       "perspective(800px) rotateX(0) rotateY(0) scale(1)";
   });
-});
 
+  card.addEventListener("click", e => {
+    // Let the existing project link behave normally when clicked directly.
+    if (e.target.closest("a")) return;
+
+    const projectLink = card.querySelector(".project-links a");
+    if (!projectLink) return;
+
+    window.open(projectLink.href, "_blank", "noopener,noreferrer");
+  });
+
+  card.style.cursor = "pointer";
+});
 
 /* ===============================
    HERO TYPING LOOP
@@ -176,7 +177,6 @@ function typeLoop() {
 
 window.addEventListener("load", typeLoop);
 
-
 /* ===============================
    NETFLIX INTRO
 ================================ */
@@ -191,84 +191,36 @@ window.addEventListener("load", () => {
   }, 800);
 });
 
-
-
-
 /* ===============================
-   ROUGH NOTATION (ABOUT SECTION)
+   ROUGH NOTATION
 ================================ */
 document.addEventListener("DOMContentLoaded", () => {
   const yellowEl = document.querySelector('#yellow-highlight');
   const redEl = document.querySelector('#red-underline');
+  if (!yellowEl || !redEl || typeof RoughNotation === "undefined") return;
 
-  // 1. Create the Yellow Highlight (The "Marker" feel)
   const yellowDraw = RoughNotation.annotate(yellowEl, {
     type: 'highlight',
-    color: 'rgba(255, 240, 0, 0.6)', // Semi-transparent yellow
+    color: 'rgba(255, 240, 0, 0.6)',
     padding: [2, 4],
     animationDuration: 1000,
     strokeWidth: 2
   });
 
-  // 2. Create the Red Underline (The "Pen" feel)
   const redDraw = RoughNotation.annotate(redEl, {
     type: 'underline',
-    color: '#ff4d4d', 
+    color: '#ff4d4d',
     padding: 3,
     strokeWidth: 2.5,
-    iterations: 3, // This makes the "moving/writing" effect stronger
+    iterations: 3,
     animationDuration: 800
   });
 
-  // 3. Trigger when visible on screen
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        // Start drawing yellow after 0.5s
         setTimeout(() => yellowDraw.show(), 500);
-        
-        // Start drawing red after 1.5s (sequential feel)
         setTimeout(() => redDraw.show(), 1500);
-        
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-
-  observer.observe(yellowEl);
-});document.addEventListener("DOMContentLoaded", () => {
-  const yellowEl = document.querySelector('#yellow-highlight');
-  const redEl = document.querySelector('#red-underline');
-
-  // 1. Create the Yellow Highlight (The "Marker" feel)
-  const yellowDraw = RoughNotation.annotate(yellowEl, {
-    type: 'highlight',
-    color: 'rgba(255, 240, 0, 0.6)', // Semi-transparent yellow
-    padding: [2, 4],
-    animationDuration: 1000,
-    strokeWidth: 2
-  });
-
-  // 2. Create the Red Underline (The "Pen" feel)
-  const redDraw = RoughNotation.annotate(redEl, {
-    type: 'underline',
-    color: '#ff4d4d', 
-    padding: 3,
-    strokeWidth: 2.5,
-    iterations: 3, // This makes the "moving/writing" effect stronger
-    animationDuration: 800
-  });
-
-  // 3. Trigger when visible on screen
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        // Start drawing yellow after 0.5s
-        setTimeout(() => yellowDraw.show(), 500);
-        
-        // Start drawing red after 1.5s (sequential feel)
-        setTimeout(() => redDraw.show(), 1500);
-        
         observer.unobserve(entry.target);
       }
     });
@@ -276,9 +228,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   observer.observe(yellowEl);
 });
+
 async function loadGuestbook() {
   const list = document.getElementById("entries");
-  if (!list) return; // IMPORTANT GUARD
+  if (!list) return;
 
   try {
     const res = await fetch(
@@ -298,7 +251,6 @@ async function loadGuestbook() {
 
     issues.forEach(issue => {
       const li = document.createElement("li");
-
       const author = document.createElement("strong");
       author.textContent = "@" + issue.user.login;
 
@@ -313,7 +265,6 @@ async function loadGuestbook() {
       li.appendChild(message);
       list.appendChild(li);
     });
-
   } catch (err) {
     console.error("Guestbook error:", err);
   }
@@ -321,24 +272,15 @@ async function loadGuestbook() {
 
 loadGuestbook();
 
+function showTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.classList.remove('active');
+  });
 
-  function showTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
 
-    document
-      .querySelectorAll('.tab-content')
-      .forEach(tab => {
-        tab.classList.remove('active')
-      })
-
-    document
-      .querySelectorAll('.tab-btn')
-      .forEach(btn => {
-        btn.classList.remove('active')
-      })
-
-    document
-      .getElementById(tabId)
-      .classList.add('active')
-
-    event.target.classList.add('active')
-  }
+  document.getElementById(tabId).classList.add('active');
+  event.target.classList.add('active');
+}
