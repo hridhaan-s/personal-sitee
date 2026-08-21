@@ -41,23 +41,109 @@ document.querySelectorAll("[data-route]").forEach(el => {
 });
 
 window.addEventListener("popstate", () => {
-  const page = location.pathname.replace("/", "") || "home";
-  showPage(page, false);
+  const path = location.pathname.replace(/^\/+|\/+$/g, "");
+  if (path === "achievements") showPage("achievements", false);
+  else if (path === "blog" || path.startsWith("blog/")) showPage("blog", false);
+  else showPage("home", false);
+  if (path.startsWith("blog/")) loadMarkdownPost(path.slice(5));
 });
 
-const initialPage = location.pathname.replace("/", "") || "home";
-showPage(initialPage, false);
+const initialPath = location.pathname.replace(/^\/+|\/+$/g, "");
+if (initialPath === "achievements") showPage("achievements", false);
+else if (initialPath === "blog" || initialPath.startsWith("blog/")) showPage("blog", false);
+else showPage("home", false);
 
 /* ===============================
-   BLOG READ MODE
+   MARKDOWN BLOG
 ================================ */
 
-document.querySelectorAll("#page-blog .read-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelector(".blog-list").style.display = "none";
-    document.getElementById("post-1").classList.remove("hidden");
+async function getBlogPosts() {
+  const response = await fetch("/posts/index.json", { cache: "no-store" });
+  if (!response.ok) throw new Error("Could not load blog index");
+  return response.json();
+}
+
+function escapeHtml(value = "") {
+  return value.replace(/[&<>'"]/g, char => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
+  }[char]));
+}
+
+function loadMarkdownRenderer() {
+  return new Promise((resolve, reject) => {
+    if (window.marked) return resolve();
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/marked/marked.min.js";
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
   });
-});
+}
+
+function formatBlogDate(date) {
+  return new Date(`${date}T00:00:00`).toLocaleDateString("en-US", {
+    month: "long", year: "numeric"
+  });
+}
+
+async function renderBlogIndex() {
+  const list = document.querySelector("#page-blog .blog-list");
+  if (!list) return;
+
+  try {
+    const posts = await getBlogPosts();
+    list.innerHTML = posts.map(post => `
+      <article class="blog-card" data-post="${escapeHtml(post.slug)}">
+        <h3>${escapeHtml(post.title)}</h3>
+        <span class="blog-meta">${escapeHtml(formatBlogDate(post.date))} · ${escapeHtml(post.readTime)}</span>
+        <p>${escapeHtml(post.excerpt)}</p>
+        <a class="read-btn" href="/blog/${encodeURIComponent(post.slug)}">Read →</a>
+      </article>
+    `).join("") || '<p class="blog-empty">No posts published yet.</p>';
+  } catch (error) {
+    console.error("Blog index error:", error);
+    list.innerHTML = '<p class="blog-empty">Unable to load posts right now.</p>';
+  }
+}
+
+async function loadMarkdownPost(slug) {
+  if (!slug) return renderBlogIndex();
+
+  const wrap = document.querySelector("#page-blog .blog-wrap");
+  if (!wrap) return;
+
+  try {
+    const posts = await getBlogPosts();
+    const post = posts.find(item => item.slug === slug);
+    if (!post) {
+      wrap.innerHTML = '<article class="blog-post"><h2>Post not found</h2><p>The post you are looking for does not exist.</p><a class="back-btn" href="/blog">← Back to Blog</a></article>';
+      return;
+    }
+
+    await loadMarkdownRenderer();
+    const response = await fetch(`/posts/${encodeURIComponent(post.file)}`, { cache: "no-store" });
+    if (!response.ok) throw new Error("Could not load post");
+    let markdown = await response.text();
+    markdown = markdown.replace(/^---[\s\S]*?---\s*/, "");
+
+    wrap.innerHTML = `
+      <article class="blog-post">
+        <a class="back-btn" href="/blog">← Back to Blog</a>
+        <h2>${escapeHtml(post.title)}</h2>
+        <span class="blog-meta">${escapeHtml(formatBlogDate(post.date))} · ${escapeHtml(post.readTime)}</span>
+        <div class="blog-content">${marked.parse(markdown)}</div>
+      </article>
+    `;
+
+    document.title = `${post.title} — Hridhaan Sahay`;
+  } catch (error) {
+    console.error("Blog post error:", error);
+    wrap.innerHTML = '<article class="blog-post"><h2>Could not load this post</h2><a class="back-btn" href="/blog">← Back to Blog</a></article>';
+  }
+}
+
+if (initialPath === "blog") renderBlogIndex();
+if (initialPath.startsWith("blog/")) loadMarkdownPost(initialPath.slice(5));
 
 /* ===============================
    SECTION SCROLL
@@ -89,9 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   navMobile.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", () => {
-      navMobile.classList.remove("open");
-    });
+    link.addEventListener("click", () => navMobile.classList.remove("open"));
   });
 });
 
@@ -104,31 +188,19 @@ document.querySelectorAll(".project-card").forEach(card => {
     const rect = card.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width;
     const y = (e.clientY - rect.top) / rect.height;
-
     const rotateX = (y - 0.5) * 18;
     const rotateY = (0.5 - x) * 18;
-
-    card.style.transform = `
-      perspective(800px)
-      rotateX(${rotateX}deg)
-      rotateY(${rotateY}deg)
-      scale(1.05)
-    `;
+    card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
   });
 
   card.addEventListener("mouseleave", () => {
-    card.style.transform =
-      "perspective(800px) rotateX(0) rotateY(0) scale(1)";
+    card.style.transform = "perspective(800px) rotateX(0) rotateY(0) scale(1)";
   });
 
   card.addEventListener("click", e => {
-    // Let the existing project link behave normally when clicked directly.
     if (e.target.closest("a")) return;
-
     const projectLink = card.querySelector(".project-links a");
-    if (!projectLink) return;
-
-    window.open(projectLink.href, "_blank", "noopener,noreferrer");
+    if (projectLink) window.open(projectLink.href, "_blank", "noopener,noreferrer");
   });
 
   card.style.cursor = "pointer";
@@ -152,6 +224,7 @@ let charIndex = 0;
 let deleting = false;
 
 function typeLoop() {
+  if (!textEl) return;
   const phrase = phrases[phraseIndex];
   textEl.textContent = phrase.slice(0, charIndex) || "\u00A0";
 
@@ -171,7 +244,6 @@ function typeLoop() {
       return;
     }
   }
-
   setTimeout(typeLoop, deleting ? 40 : 80);
 }
 
@@ -184,7 +256,6 @@ window.addEventListener("load", typeLoop);
 window.addEventListener("load", () => {
   const intro = document.getElementById("netflix-intro");
   if (!intro) return;
-
   setTimeout(() => {
     intro.classList.add("active");
     setTimeout(() => intro.remove(), 1300);
@@ -194,26 +265,17 @@ window.addEventListener("load", () => {
 /* ===============================
    ROUGH NOTATION
 ================================ */
+
 document.addEventListener("DOMContentLoaded", () => {
   const yellowEl = document.querySelector('#yellow-highlight');
   const redEl = document.querySelector('#red-underline');
   if (!yellowEl || !redEl || typeof RoughNotation === "undefined") return;
 
   const yellowDraw = RoughNotation.annotate(yellowEl, {
-    type: 'highlight',
-    color: 'rgba(255, 240, 0, 0.6)',
-    padding: [2, 4],
-    animationDuration: 1000,
-    strokeWidth: 2
+    type: 'highlight', color: 'rgba(255, 240, 0, 0.6)', padding: [2, 4], animationDuration: 1000, strokeWidth: 2
   });
-
   const redDraw = RoughNotation.annotate(redEl, {
-    type: 'underline',
-    color: '#ff4d4d',
-    padding: 3,
-    strokeWidth: 2.5,
-    iterations: 3,
-    animationDuration: 800
+    type: 'underline', color: '#ff4d4d', padding: 3, strokeWidth: 2.5, iterations: 3, animationDuration: 800
   });
 
   const observer = new IntersectionObserver((entries) => {
@@ -225,20 +287,20 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }, { threshold: 0.5 });
-
   observer.observe(yellowEl);
 });
+
+/* ===============================
+   GUESTBOOK
+================================ */
 
 async function loadGuestbook() {
   const list = document.getElementById("entries");
   if (!list) return;
 
   try {
-    const res = await fetch(
-      "https://api.github.com/repos/hridhaan-s/personal-sitee/issues?labels=approved&state=open"
-    );
+    const res = await fetch("https://api.github.com/repos/hridhaan-s/personal-sitee/issues?labels=approved&state=open");
     const issues = await res.json();
-
     list.innerHTML = "";
 
     if (!issues.length) {
@@ -253,14 +315,9 @@ async function loadGuestbook() {
       const li = document.createElement("li");
       const author = document.createElement("strong");
       author.textContent = "@" + issue.user.login;
-
-      const cleanBody = issue.body
-        .replace(/###.*\n/g, "")
-        .trim();
-
+      const cleanBody = (issue.body || "").replace(/###.*\n/g, "").trim();
       const message = document.createElement("p");
       message.textContent = cleanBody;
-
       li.appendChild(author);
       li.appendChild(message);
       list.appendChild(li);
@@ -273,14 +330,8 @@ async function loadGuestbook() {
 loadGuestbook();
 
 function showTab(tabId) {
-  document.querySelectorAll('.tab-content').forEach(tab => {
-    tab.classList.remove('active');
-  });
-
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.classList.remove('active');
-  });
-
-  document.getElementById(tabId).classList.add('active');
-  event.target.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById(tabId)?.classList.add('active');
+  if (event?.target) event.target.classList.add('active');
 }
