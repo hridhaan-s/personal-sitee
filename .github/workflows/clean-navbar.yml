@@ -1,0 +1,52 @@
+name: Clean navbar
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  clean:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Remove Click here and Links from navbar
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          index = Path("index.html")
+          text = index.read_text()
+
+          text = text.replace('Scrapbook <span class="scrapbook-click">Click here</span>', 'Scrapbook')
+          text = text.replace('    <li><a href="#links" data-section="links">Links</a></li>\n', '')
+          text = text.replace('    <a href="#links" data-section="links">Links</a>\n', '')
+
+          index.write_text(text)
+
+          css = Path("style.css")
+          css_text = css.read_text()
+
+          start = css_text.find("/* SCRAPBOOK NAV */")
+          if start != -1:
+              css_text = css_text[:start].rstrip() + "\n"
+              css.write_text(css_text)
+          PY
+
+      - name: Commit changes and remove workflow
+        run: |
+          rm -f .github/workflows/clean-navbar.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html style.css .github/workflows/clean-navbar.yml
+          if git diff --cached --quiet; then
+            echo "No changes needed."
+            exit 0
+          fi
+          git commit -m "Clean up navbar"
+          git push
