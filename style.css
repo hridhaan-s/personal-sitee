@@ -487,7 +487,6 @@ body::before {
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
-  border-right: 2px solid var(--text);
   width: 0;
   animation:
     typing 2.8s steps(14, end) forwards,
@@ -1157,7 +1156,6 @@ a, button {
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
-  border-right: 2px solid var(--text);
   width: 0;
   animation:
     typing 2.8s steps(14, end) forwards,
