@@ -3,36 +3,208 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hridhaan Sahay</title>
-  <meta name="description" content="Hridhaan Sahay — Student builder interested in space, technology, competitive programming, and engineering. Portfolio showcasing projects, achievements, and technical writing.">
-  <meta name="keywords" content="Hridhaan Sahay, student portfolio, space technology, competitive programming, web developer, BitBuzz">
-  <meta name="author" content="Hridhaan Sahay">
-  <meta name="robots" content="index, follow">
-  <meta property="og:title" content="Hridhaan Sahay ">
-  <meta property="og:description" content="Student exploring space, technology, and engineering through projects, problem-solving, and writing.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://hridhaan.me">
-  <meta property="og:image" content="memoji.png">
-  <link rel="icon" href="memoji.png" />
-  <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="/guestbook.css">
+  <title>Hridhaan Sahay — Cybersecurity & Space</title>
+  <meta name="description" content="Hridhaan Sahay — student builder exploring cybersecurity, space, technology, and engineering through real projects, research, and astrophotography." />
+  <meta name="keywords" content="Hridhaan Sahay, cybersecurity, space, astrophotography, BitBuzz, student builder, technology" />
+  <meta name="author" content="Hridhaan Sahay" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="Hridhaan Sahay — Cybersecurity × Space" />
+  <meta property="og:description" content="A student builder working where cybersecurity, space, science, and software meet." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://hridhaan.me" />
+  <meta property="og:image" content="/memoji.png" />
+  <link rel="icon" href="/memoji.png" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/guestbook.css" />
 </head>
 <body>
-  <div id="netflix-intro"><div class="nf-panel nf-top"><div class="nf-word">HRIDHAAN</div></div><div class="nf-panel nf-bottom"><div class="nf-word">SAHAY</div></div></div>
-  <nav class="navbar"><div class="nav-container"><div class="nav-logo">Hridhaan Sahay</div><ul class="nav-links"><li><a href="/" data-route="home">Home</a></li><li><a href="#about" data-section="about">About</a></li><li><a href="#projects" data-section="projects">Projects</a></li><li><a href="/achievements" data-route="achievements">Achievements</a></li><li><a href="#astrophotography" data-section="astrophotography">Astrophotography</a></li><li><a href="/blog" data-route="blog">Blog</a></li><li><a href="https://scrapbook.hridhaan.me/index.html" target="_blank" rel="noopener noreferrer" class="scrapbook-nav-link">Scrapbook</a></li></ul><button class="nav-toggle" aria-label="Menu">☰</button><button id="themeToggle" aria-label="Toggle theme"><svg id="themeIcon" viewBox="0 0 24 24" width="22" height="22"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor" /></svg></button></div><div class="nav-mobile"><a href="/" data-route="home">Home</a><a href="#about" data-section="about">About</a><a href="#projects" data-section="projects">Projects</a><a href="/achievements" data-route="achievements">Achievements</a><a href="#astrophotography" data-section="astrophotography">Astrophotography</a><a href="/blog" data-route="blog">Blog</a><a href="https://scrapbook.hridhaan.me/index.html" target="_blank" rel="noopener noreferrer" class="scrapbook-nav-link">Scrapbook</a></div></nav>
+  <canvas id="starCanvas" aria-hidden="true"></canvas>
+
+  <div id="netflix-intro" aria-hidden="true">
+    <div class="nf-panel nf-top"><div class="nf-word">HRIDHAAN</div></div>
+    <div class="nf-panel nf-bottom"><div class="nf-word">SAHAY</div></div>
+  </div>
+
+  <nav class="navbar" aria-label="Primary navigation">
+    <div class="nav-container">
+      <a class="nav-logo" href="/" aria-label="Hridhaan Sahay home">Hridhaan Sahay<span class="nav-dot">.</span></a>
+      <ul class="nav-links">
+        <li><a href="/" data-route="home">Home</a></li>
+        <li><a href="#domains" data-section="domains">Focus</a></li>
+        <li><a href="#projects" data-section="projects">Projects</a></li>
+        <li><a href="/achievements" data-route="achievements">Achievements</a></li>
+        <li><a href="#astrophotography" data-section="astrophotography">Astro</a></li>
+        <li><a href="/blog" data-route="blog">Writing</a></li>
+        <li><a href="https://scrapbook.hridhaan.me/" target="_blank" rel="noopener noreferrer">Scrapbook</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false">☰</button>
+        <button id="themeToggle" type="button" aria-label="Toggle theme">
+          <svg id="themeIcon" viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"></svg>
+        </button>
+      </div>
+    </div>
+    <div class="nav-mobile">
+      <a href="/" data-route="home">Home</a>
+      <a href="#domains" data-section="domains">Focus</a>
+      <a href="#projects" data-section="projects">Projects</a>
+      <a href="/achievements" data-route="achievements">Achievements</a>
+      <a href="#astrophotography" data-section="astrophotography">Astro</a>
+      <a href="/blog" data-route="blog">Writing</a>
+      <a href="https://scrapbook.hridhaan.me/" target="_blank" rel="noopener noreferrer">Scrapbook</a>
+    </div>
+  </nav>
+
   <main id="page-home">
-    <section class="hero reveal"><div class="hero-image"><img src="Memoji 2.png" alt="Hridhaan Sahay" /></div><div class="hero-center"><h1 class="hero-name" id="heroName">Hridhaan Sahay</h1><p class="tagline"><span id="typewriter"></span></p><p class="statement">Building projects<br />with curiosity,<br />and a love for engineering.</p><p class="typing-line"><span id="typingText"></span><span class="typing-cursor">|</span></p></div></section>
-    <section class="about" id="about"><h2 class="section-title">About</h2><div class="content-wrapper"><p>Hello!</p><p>I'm Hridhaan Sahay, A high-school student interested in <span id="yellow-highlight">Space and Technology</span>. I explore both through coding, competitive programming, hackathons, research, astrophotography, building gadgets and projects.</p><p>As a student still learning and growing, I enjoy connecting with people who share similar passions.</p><p>I created <a href="https://bitbuzz.app" target="_blank" class="premium-link"><span id="red-underline">Bitbuzz</span></a>, A platform that delivers innovation, space, and technology news without all the politics and noise.</p><p>I also share what I learn through my <a href="https://www.linkedin.com/in/hridhaan-sahay/" target="_blank" class="premium-link"><span id="red-underline">Linkedin</span></a> and <a href="https://www.youtube.com/@bitbuzz-club" target="_blank" class="premium-link"><span id="red-underline">Youtube</span></a>.</p><p>You can Mail me at: <a href="mailto:hi@Hridhaan.me" target="_blank" class="premium-link"><span id="red-underline">hi@Hridhaan.me</span></a>.</p></div></section>
-    <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
-    <section class="links reveal" id="links"><h2>Connect with me</h2><p class="links-text">Here are my social handles, feel free to connect and say hi</p><div class="icon-links"><a href="https://github.com/hridhaan-s" target="_blank" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.1 3.29 9.42 7.86 10.95.57.1.78-.25.78-.55v-2c-3.2.7-3.88-1.38-3.88-1.38-.53-1.34-1.3-1.7-1.3-1.7-1.06-.73.08-.72.08-.72 1.17.08 1.79 1.2 1.79 1.2 1.04 1.78 2.73 1.27 3.4.97.1-.75.4-1.27.73-1.56-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.27 1.2-3.07-.12-.3-.52-1.52.12-3.17 0 0 .97-.31 3.18 1.17a11 11 0 0 1 5.8 0c2.2-1.48 3.17-1.17 3.17-1.17.64 1.65.24 2.87.12 3.17.75.8 1.2 1.82 1.2 3.07 0 4.41-2.69 5.37-5.25 5.66.41.35.77 1.04.77 2.1v3.11c0 .3.2.65.79.54A10.51 10.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z"/></svg></a><a href="https://www.linkedin.com/in/hridhaan-sahay" target="_blank" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.82-2.05 3.75-2.05 4 0 4.74 2.63 4.74 6.05V21h-4v-5.25c0-1.25-.02-2.86-1.75-2.86-1.75 0-2.02 1.36-2.02 2.77V21H9z"/></svg></a><a href="https://www.youtube.com/@Astro-2HR" target="_blank" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.5 6.5s-.23-1.64-.95-2.36c-.91-.95-1.93-.96-2.4-1.02C16.77 2.75 12 2.75 12 2.75s-4.77 0-8.14.37c-.47.06-1.49.07-2.4 1.02-.72.72-.95 2.36-.95 2.36S0 8.43 0 10.36v1.28c0 1.93.23 3.86.23 3.86s.23 1.64.95 2.36c.91.95 2.1.92 2.63 1.02 1.91.18 8.19.37 8.19.37s4.77-.01 8.14-.38c.47-.06 1.49-.07 2.4-1.02.72-.72.95-2.36.95-3.86v-1.28c0-1.93-.23-3.86-.23-3.86zM9.75 14.75v-6l6 3-6 3z"/></svg></a></div></section>
-    <section class="projects" id="projects"><h2>Projects</h2><p class="projects-subtitle">Some things I've built across hardware, web, and experiments.</p><p class="projects-subtitle">Most of my projects are on GitHub view them <a href="https://github.com/hridhaan-s/" target="_blank" class="premium-link"><span id="red-underline">here</span></a>.</p><div class="projects-grid"><div class="project-card"><span class="tag">Web · Platform</span><img src="https://www.hridhaan.me/Screenshot%202026-05-09%20172150.png" alt="BitBuzz"/><h3>BitBuzz</h3><p>A global platform with 23,500+ users from 50+ countries, delivering news about innovation, space, and tech news without any bias or politics.</p><div class="project-links"><a href="https://bitbuzz.app" target="_blank">Visit →</a></div></div><div class="project-card"><span class="tag">Computer Vision · AI</span><img src="https://cdn.hackclub.com/019f3e40-1bee-70d6-8cd8-a50ea0adf3c9/image.png" alt="Xerxes"/><h3>Xerxes</h3><p>A Researcher assistant powered by real-time client-side computer vision, featuring face-mesh posture tracking, proximity detection, focus monitoring, interval timers, Chrome notifications, and audio posture alerts.</p><div class="project-links"><a href="https://scrapbook.hridhaan.me/project.html?slug=xerxes" target="_blank">Visit →</a></div></div><div class="project-card"><span class="tag">Social Impact</span><img src="https://cdn.hackclub.com/019e8f5f-664f-736e-a37a-9abb4321a2cc/screenshot_2026-06-04_024700.png" alt="Flag It"/><h3>Flag It</h3><p>A community-driven cyber safety platform designed to help people report scams, fraud, and suspicious activity while raising awareness about cybercrime.</p><div class="project-links"><a href="https://scrapbook.hridhaan.me/project.html?slug=flag-it" target="_blank">Explore →</a></div></div><div class="project-card"><span class="tag">Education</span><img src="https://cdn.hackclub.com/019f0feb-342d-7bfe-acbb-e3208cb6b61c/screenshot_2026-06-26_164649.png" alt="BookBridge"/><h3>BookBridge</h3><p>An educational resource sharing ecosystem built as a Class 12 IT Project, designed to bridge accessibility barriers to textbooks, peer study notes, and school references.</p><div class="project-links"><a href="https://scrapbook.hridhaan.me/project.html?slug=bookbridge-class-12-it-project" target="_blank">Explore →</a></div></div><div class="project-card"><span class="tag">AI · Chatbot</span><img src="https://www.hridhaan.me/Screenshot%202026-05-09%20172557.png" alt="Chanakya AI"/><h3>Chanakya AI</h3><p>An AI chatbot built for BitBuzz, inspired by Chanakya's principles to provide strategic and wisdom-driven responses. Basically a FACT CHECK AI (Wikipedia Api Integrated).</p><div class="project-links"><a href="https://scrapbook.hridhaan.me/project.html?slug=chanakya-ai" target="_blank">Explore →</a></div></div><div class="project-card"><span class="tag">Bot · Automation</span><img src="https://cdn.hackclub.com/019efe71-6eee-7123-a523-a4468c9441b4/screenshot_2026-06-25_162538.png" alt="CipherCat"/><h3>CipherCat</h3><p>A Slack bot built for Hack Club that transforms messages into Morse code, decodes hidden transmissions, and delivers secret transmissions through CipherMail.</p><div class="project-links"><a href="https://scrapbook.hridhaan.me/project.html?slug=ciphercat" target="_blank">Explore →</a></div></div></div></section>
+    <section class="hero reveal">
+      <div class="hero-copy">
+        <div class="eyebrow">STUDENT BUILDER · INDIA · 2026</div>
+        <h1 class="hero-name" id="heroName">Hridhaan Sahay</h1>
+        <p class="hero-kicker"><span id="typewriter"></span></p>
+        <p class="hero-statement">I build at the intersection of <strong>cybersecurity</strong>, <strong>space</strong>, science, and software.</p>
+        <p class="typing-line"><span id="typingText"></span><span class="typing-cursor">▌</span></p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#projects">Explore the work <span>↘</span></a>
+          <a class="button button-quiet" href="mailto:hi@Hridhaan.me">Say hello</a>
+        </div>
+        <div class="hero-metrics" aria-label="Portfolio highlights">
+          <div><strong>01</strong><span>Founder · BitBuzz</span></div>
+          <div><strong>02</strong><span>Cyber safety projects</span></div>
+          <div><strong>03</strong><span>Astrophotography</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="orbit-card orbit-card-main">
+          <span class="orbit-label">CURRENT ORBIT</span>
+          <div class="orbit-core"><img src="/Memoji%202.png" alt="Hridhaan Sahay" /></div>
+          <span class="orbit-caption">Curiosity / 01</span>
+        </div>
+        <div class="hero-chip chip-cyber"><span class="chip-icon">⌁</span> CYBERSECURITY</div>
+        <div class="hero-chip chip-space"><span class="chip-icon">✦</span> SPACE</div>
+      </div>
+    </section>
+
+    <section class="manifesto reveal" id="about">
+      <div class="section-index">01 — PROFILE</div>
+      <div class="manifesto-grid">
+        <h2>I don't want to just use technology. <em>I want to understand it, question it, and build with it.</em></h2>
+        <div class="content-wrapper">
+          <p>I'm Hridhaan Sahay, a high-school student obsessed with how systems work — from secure digital infrastructure to the physics and scale of space.</p>
+          <p>I built <a href="https://bitbuzz.app" target="_blank" rel="noopener noreferrer">BitBuzz</a> to make science and technology easier to discover without the noise, and I keep building smaller experiments around cyber safety, AI, automation, and engineering.</p>
+          <p>Outside code, I look up. Astrophotography gives me a different kind of debugging: patience, observation, and thousands of tiny signals becoming one image.</p>
+          <p class="muted">Based in India · learning in public · building quietly.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="domains reveal" id="domains">
+      <div class="section-heading-row">
+        <div>
+          <div class="section-index">02 — FOCUS</div>
+          <h2>Four lanes. One direction.</h2>
+        </div>
+        <p>Inspired by the category-first thinking behind BitBuzz.</p>
+      </div>
+      <div class="category-grid">
+        <article class="category-card category-space">
+          <span class="category-number">01</span>
+          <span class="category-symbol">✦</span>
+          <h3>Space</h3>
+          <p>Astrophotography, space science, observation, and the engineering systems that keep missions alive.</p>
+          <span class="category-line">ORBIT →</span>
+        </article>
+        <article class="category-card category-cyber">
+          <span class="category-number">02</span>
+          <span class="category-symbol">⌁</span>
+          <h3>Cybersecurity</h3>
+          <p>Cyber safety, scams, privacy, secure thinking, and tools that help people navigate hostile digital environments.</p>
+          <span class="category-line">DEFEND →</span>
+        </article>
+        <article class="category-card category-tech">
+          <span class="category-number">03</span>
+          <span class="category-symbol">▣</span>
+          <h3>Technology</h3>
+          <p>Web products, AI experiments, automation, interfaces, and the systems underneath them.</p>
+          <span class="category-line">BUILD →</span>
+        </article>
+        <article class="category-card category-innovation">
+          <span class="category-number">04</span>
+          <span class="category-symbol">◇</span>
+          <h3>Innovation</h3>
+          <p>Turning weird questions into prototypes, practical experiments, and things people can actually use.</p>
+          <span class="category-line">EXPLORE →</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="projects reveal" id="projects">
+      <div class="section-heading-row">
+        <div>
+          <div class="section-index">03 — SELECTED WORK</div>
+          <h2>Built, shipped, learned.</h2>
+        </div>
+        <a class="text-link" href="https://github.com/hridhaan-s" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      </div>
+      <div class="projects-grid">
+        <article class="project-card project-featured">
+          <div class="project-media"><img src="https://www.hridhaan.me/Screenshot%202026-05-09%20172150.png" alt="BitBuzz interface" loading="lazy" /></div>
+          <div class="project-body"><span class="project-type">PLATFORM · SCIENCE MEDIA</span><h3>BitBuzz</h3><p>A student-run platform focused on innovation, space, cybersecurity, and technology — built to help people stop eating noise and start discovering signal.</p><div class="project-links"><a href="https://bitbuzz.app" target="_blank" rel="noopener noreferrer">Open BitBuzz →</a></div></div>
+        </article>
+        <article class="project-card">
+          <div class="project-media"><img src="https://cdn.hackclub.com/019e8f5f-664f-736e-a37a-9abb4321a2cc/screenshot_2026-06-04_024700.png" alt="Flag It interface" loading="lazy" /></div>
+          <div class="project-body"><span class="project-type">CYBERSECURITY · SAFETY</span><h3>Flag It</h3><p>A cyber-safety platform for reporting scams, fraud, and suspicious activity while turning incidents into awareness.</p><div class="project-links"><a href="https://scrapbook.hridhaan.me/project.html?slug=flag-it" target="_blank" rel="noopener noreferrer">Explore →</a></div></div>
+        </article>
+        <article class="project-card">
+          <div class="project-media"><img src="https://cdn.hackclub.com/019efe71-6eee-7123-a523-a4468c9441b4/screenshot_2026-06-25_162538.png" alt="CipherCat interface" loading="lazy" /></div>
+          <div class="project-body"><span class="project-type">SECURITY · AUTOMATION</span><h3>CipherCat</h3><p>A Slack bot for encoding and decoding Morse transmissions and experimenting with secure, playful communication.</p><div class="project-links"><a href="https://scrapbook.hridhaan.me/project.html?slug=ciphercat" target="_blank" rel="noopener noreferrer">Explore →</a></div></div>
+        </article>
+        <article class="project-card">
+          <div class="project-media"><img src="https://cdn.hackclub.com/019f3e40-1bee-70d6-8cd8-a50ea0adf3c9/image.png" alt="Xerxes computer vision project" loading="lazy" /></div>
+          <div class="project-body"><span class="project-type">AI · COMPUTER VISION</span><h3>Xerxes</h3><p>A real-time research assistant using client-side computer vision for posture, proximity, focus, and productivity signals.</p><div class="project-links"><a href="https://scrapbook.hridhaan.me/project.html?slug=xerxes" target="_blank" rel="noopener noreferrer">Explore →</a></div></div>
+        </article>
+        <article class="project-card">
+          <div class="project-media"><img src="https://cdn.hackclub.com/019f0feb-342d-7bfe-acbb-e3208cb6b61c/screenshot_2026-06-26_164649.png" alt="BookBridge project" loading="lazy" /></div>
+          <div class="project-body"><span class="project-type">EDTECH · OPEN ACCESS</span><h3>BookBridge</h3><p>A Class 12 IT project focused on improving access to textbooks, peer notes, and school references.</p><div class="project-links"><a href="https://scrapbook.hridhaan.me/project.html?slug=bookbridge-class-12-it-project" target="_blank" rel="noopener noreferrer">Explore →</a></div></div>
+        </article>
+        <article class="project-card">
+          <div class="project-media"><img src="https://www.hridhaan.me/Screenshot%202026-05-09%20172557.png" alt="Chanakya AI interface" loading="lazy" /></div>
+          <div class="project-body"><span class="project-type">AI · FACT CHECKING</span><h3>Chanakya AI</h3><p>An experimental fact-checking assistant for BitBuzz, using a Wikipedia-backed approach to make information easier to verify.</p><div class="project-links"><a href="https://scrapbook.hridhaan.me/project.html?slug=chanakya-ai" target="_blank" rel="noopener noreferrer">Explore →</a></div></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="split-cta reveal">
+      <div class="cta-card cta-scrapbook"><div class="section-index">04 — ARCHIVE</div><h3>The Scrapbook</h3><p>Every project, experiment, mistake, and lesson worth keeping.</p><a class="button button-primary" href="https://scrapbook.hridhaan.me/" target="_blank" rel="noopener noreferrer">Open archive →</a></div>
+      <div class="cta-card cta-achievements"><div class="section-index">05 — RECORD</div><h3>Achievements</h3><p>Academic milestones, leadership, competitions, and work beyond code.</p><a class="button button-quiet" href="/achievements" data-route="achievements">View achievements →</a></div>
+    </section>
   </main>
-  <section class="achievements-cta"><div class="cta-card"><h3>Hridhaan's Scrapbook</h3><p>The archive. Every project, every lesson, every mistake that is worth keeping.</p><a href="https://scrapbook.hridhaan.me/" class="cta-btn" target="_blank" rel="noopener noreferrer">Visit Scrapbook →</a></div></section>
-  <section class="astro-apple" id="astrophotography"><h2>Astrophotography</h2><p class="astro-desc">Exploring the night sky through careful observation and long-exposure captures.</p><div class="astro-apple-grid"><a class="astro-apple-card" href="https://drive.google.com/drive/folders/1uf6q7BSrwqgcLWF8dFDmJrwmYIB38zXm?usp=sharing" target="_blank"><div class="astro-icon-apple"><svg viewBox="0 0 24 24" width="26" height="26"><circle cx="12" cy="12" r="2" fill="currentColor"/><ellipse cx="12" cy="12" rx="9" ry="4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div><h3>Latest Captures</h3><p>A collection of my most memorable space observations.</p><span class="astro-cta">View collection →</span></a><a class="astro-apple-card" href="https://drive.google.com/file/d/1tnuOSDrebYF7utN5M0mX4lw_bhJXN2Xk/view?usp=sharing" target="_blank"><div class="astro-icon-apple"><svg viewBox="0 0 24 24" width="26" height="26"><rect x="3" y="10" width="10" height="4" rx="1" fill="currentColor"/><rect x="13" y="9" width="5" height="6" rx="1" fill="currentColor"/><line x1="8" y1="14" x2="6" y2="20" stroke="currentColor" stroke-width="1.5"/><line x1="14" y1="14" x2="16" y2="20" stroke="currentColor" stroke-width="1.5"/></svg></div><h3>Fav Ones</h3><p>Recent and newly captured night-sky moments.</p><span class="astro-cta">View collection →</span></a></div></section>
-  <section class="achievements-cta"><div class="cta-card"><h3>Achievements & Leadership</h3><p>A record of Academic & leadership milestones.</p><button data-route="achievements" class="cta-btn">View Achievements →</button></div></section><section class="achievements-cta"><div class="cta-card"><h3>The BitBuzz Store</h3><p>Visit to get cool and awesome products!</p><a href="https://store.bitbuzz.club" class="cta-btn">Visit Store →</a></div></section>
-  <section class="guestbook"><div class="guestbook-card"><a class="guestbook-cta" href="https://github.com/hridhaan-s/personal-sitee/issues/new?template=guestbook.yml" target="_blank">Sign my guestbook →</a><h3 class="guestbook-title">Notes from visitors</h3><ul id="entries" class="guestbook-entries"><li class="placeholder">No approved notes yet.</li></ul></div></section>
-  <div class="signature-footer"><img src="Copy of Copy of Untitled (8.7 x 4.9 cm).pdf (2).svg" class="signature signature-light" alt="Signature"></div>
-  <footer class="footer"><p>© 2026 <span>Hridhaan Sahay</span></p><p class="footer-note">Built under the starry skies (In my Jaipur Vaccation lol) .</p><p class="footer-note">Updated • May 2026, </p><a href="https://www.hitwebcounter.com/" target="_blank" rel="noopener" title="Check Hits"><img src="https://www.hitwebcounter.com/counter/counter.php?page=21500331&amp;style=0008&amp;nbdigits=6&amp;type=page" alt="Check Hits" decoding="async" style="border:0;max-width:100%;height:auto;" /></a><p>P.S Thanks for Scrolling till the End </p></footer>
-  <script src="script.js"></script><script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script><script>const lenis=new Lenis({duration:1.2,smoothWheel:true});function raf(time){lenis.raf(time);requestAnimationFrame(raf)}requestAnimationFrame(raf);</script>
+
+  <section class="astro-apple reveal" id="astrophotography">
+    <div class="section-index">06 — ASTROPHOTOGRAPHY</div>
+    <h2>Look up.</h2>
+    <p class="astro-desc">A quieter side of the portfolio: observing the night sky, capturing light, and learning to be patient with the signal.</p>
+    <div class="astro-apple-grid">
+      <a class="astro-apple-card" href="https://drive.google.com/drive/folders/1uf6q7BSrwqgcLWF8dFDmJrwmYIB38zXm?usp=sharing" target="_blank" rel="noopener noreferrer"><div class="astro-icon-apple">✦</div><h3>Latest Captures</h3><p>The most recent space observations and images.</p><span class="astro-cta">View collection →</span></a>
+      <a class="astro-apple-card" href="https://drive.google.com/file/d/1tnuOSDrebYF7utN5M0mX4lw_bhJXN2Xk/view?usp=sharing" target="_blank" rel="noopener noreferrer"><div class="astro-icon-apple">◌</div><h3>Fav Ones</h3><p>A small collection of the frames I keep coming back to.</p><span class="astro-cta">View collection →</span></a>
+    </div>
+  </section>
+
+  <section class="connect reveal" id="links">
+    <div class="section-index">07 — CONTACT</div>
+    <h2>Build something interesting.</h2>
+    <p>GitHub, LinkedIn, YouTube, or just email. The internet is smaller than it looks.</p>
+    <div class="icon-links">
+      <a href="https://github.com/hridhaan-s" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><span>GH</span></a>
+      <a href="https://www.linkedin.com/in/hridhaan-sahay" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><span>in</span></a>
+      <a href="https://www.youtube.com/@Astro-2HR" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><span>YT</span></a>
+      <a href="mailto:hi@Hridhaan.me" aria-label="Email"><span>✉</span></a>
+    </div>
+  </section>
+
+  <footer class="footer"><div>© 2026 Hridhaan Sahay</div><div class="footer-note">Cybersecurity × Space × Technology × Curiosity</div></footer>
+
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js" defer></script>
+  <script src="/script.js" defer></script>
+  <script src="/style.js" defer></script>
 </body>
 </html>
