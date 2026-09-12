@@ -1,5 +1,4 @@
 /* Classic V3 HTML/CSS/JS portfolio behavior restored. */
-
 const home=document.getElementById("page-home"),achievements=document.getElementById("page-achievements"),blog=document.getElementById("page-blog");
 function updateActiveNav(page){document.querySelectorAll(".nav-links a").forEach(a=>a.classList.toggle("active",a.dataset.route===page));}
 function showPage(page,push=true){if(home)home.style.display="none";if(achievements)achievements.style.display="none";if(blog)blog.style.display="none";if(page==="achievements"&&achievements)achievements.style.display="block";else if(page==="blog"&&blog)blog.style.display="block";else if(home)home.style.display="block";updateActiveNav(page);if(push)history.pushState({},"",page==="home"?"/":"/"+page);document.title=page==="achievements"?"Achievements — Hridhaan Sahay":page==="blog"?"Blog — Hridhaan Sahay":"Hridhaan Sahay — Portfolio";}
