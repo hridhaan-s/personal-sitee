@@ -203,6 +203,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const yellowEl = document.querySelector('#yellow-highlight');
   const redEl = document.querySelector('#red-underline');
 
+  // Content-only update: keep the existing UI/annotation behavior intact.
+  if (yellowEl) yellowEl.textContent = "Cybersecurity and Technology";
+
   // 1. Create the Yellow Highlight (The "Marker" feel)
   const yellowDraw = RoughNotation.annotate(yellowEl, {
     type: 'highlight',
