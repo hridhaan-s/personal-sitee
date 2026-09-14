@@ -139,10 +139,12 @@ document.querySelectorAll(".project-card").forEach(card => {
 
 const phrases = [
   "I like exploring space.",
+  "I like cybersecurity.",
   "I like writing clean code.",
   "I like building cool projects.",
   "I like competitive programming.",
-  "I like learning something new."
+  "I like learning something new.",
+  "I like to build stuff at Hack Club."
 ];
 
 const textEl = document.getElementById("typingText");
@@ -275,8 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.5 });
 
   observer.observe(yellowEl);
-});
-async function loadGuestbook() {
+});async function loadGuestbook() {
   const list = document.getElementById("entries");
   if (!list) return; // IMPORTANT GUARD
 
