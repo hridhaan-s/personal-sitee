@@ -370,46 +370,40 @@ document.addEventListener("DOMContentLoaded", () => {
         <h3>YSWS Contractor — Hack Club</h3>
         <p><strong>2023–Present · Remote</strong></p>
         <p>Contracted with Hack Club to engineer and operate YSWS programmes for teens, working with staff, reviewers, co-organizers, and student developers globally.</p>
-        <p>• Managed reviewers, co-organizers, and programme operations with Hack Club staff in Vermont.<br>
-        • Engineered and hosted YSWS programmes for teens.<br>
-        • Collaborated with student developers from around the world.<br>
-        • Worked on programme management during gap-year engagements.<br>
-        • Connected my school's Cyber Club with the global Hack Club network for collaboration, resources, and support.</p>
+        <p><strong>Programme Operations</strong><br>
+        Managed reviewers and co-organizers, worked with Hack Club staff in Vermont, engineered and hosted YSWS programmes, and supported programme management during gap-year engagements.</p>
+        <p><strong>Community</strong><br>
+        Collaborated with student developers worldwide and connected my school's Cyber Club with Hack Club's global network for collaboration, resources, and support.</p>
         <p><strong>Programmes:</strong> 3am.hackclub.com · arcade.hackclub.com</p>
       </article>
 
       <article class="astro-apple-card">
-        <h3>Hack Club — Open Source Contributor</h3>
-        <p><strong>2026</strong></p>
-        <p>Contributed code and UI improvements across Hack Club's open-source ecosystem.</p>
-        <p><strong>YSWS Platform</strong> — Improved navigation, hero, project cards, responsive design, and shipped new features. <strong>3 PRs merged into production</strong>, impacting a platform with 100K+ monthly visitors.</p>
-        <p><strong>Hack Club Help Center</strong> — Frontend and UI/UX improvements with a merged pull request.</p>
-        <p><strong>Hack Club Keeb YSWS</strong> — Built the rewards shop for users to redeem rewards, with UI/UX improvements and a merged pull request.</p>
+        <h3>Hack Club — Open Source</h3>
+        <p><strong>2026 · Contributor</strong></p>
+        <p>Contributed code, frontend work, and UI/UX improvements across Hack Club's open-source ecosystem.</p>
+        <p><strong>YSWS Platform</strong><br>
+        Improved navigation, hero section, project cards, responsive design, and shipped new features. <strong>3 PRs merged into production</strong>, impacting a platform with 100K+ monthly visitors.</p>
+        <p><strong>Help Center</strong><br>
+        Frontend and UI/UX improvements with a merged pull request.</p>
+        <p><strong>Keeb YSWS</strong><br>
+        Built the rewards shop for users to redeem rewards, with UI/UX improvements and a merged pull request.</p>
       </article>
 
       <article class="astro-apple-card">
         <h3>Founder — BitBuzz</h3>
         <p><strong>2023–Present · Noida</strong></p>
         <p>Founded and built BitBuzz, a youth-focused digital platform covering technology, space, innovation, and science.</p>
-        <p>• Built and operated the platform from the ground up.<br>
-        • Focused on science and technology content without political coverage.<br>
-        • Reached <strong>50,500+ visitors across 50+ countries</strong>.<br>
-        • Worked across product development, web engineering, content, and operations.</p>
+        <p>Built and operated the platform from the ground up, working across product development, web engineering, content, and operations.</p>
+        <p><strong>50,500+ visitors · 50+ countries</strong></p>
       </article>
 
       <article class="astro-apple-card">
-        <h3>Hack Club Lead — Twilara</h3>
-        <p><strong>School Innovation Club</strong></p>
-        <p>Led my school's Hack Club-supported innovation club, helping students connect with technology, programming, and the wider Hack Club community.</p>
-        <p>• Led student activities and initiatives.<br>
-        • Connected the school community with Hack Club.<br>
-        • Facilitated collaboration and access to resources.<br>
-        • Helped bridge the school's cybersecurity community with Hack Club's global network.</p>
-      </article>
-
-      <article class="astro-apple-card">
-        <h3>Hackathons & Community</h3>
-        <p>Regularly participate in hackathons and student developer communities, building projects and collaborating with other developers.</p>
+        <h3>Leadership & Community</h3>
+        <p><strong>Twilara · Hackathons</strong></p>
+        <p><strong>Hack Club Lead — Twilara</strong><br>
+        Led my school's Hack Club-supported innovation club and helped students connect with programming, technology, and the wider Hack Club community.</p>
+        <p><strong>Hackathons</strong><br>
+        Regularly participate in hackathons and student developer communities, building projects and collaborating with other developers.</p>
       </article>
     </div>
 
@@ -418,7 +412,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <h3>Education</h3>
         <p><strong>Shri Ram Global School</strong></p>
         <p>High School Diploma — PCM + Information Technology + Physical Education<br>2022–2027</p>
-        <p>ICT Captain — School Student Council<br>
+        <p><strong>Leadership & Activities</strong><br>
+        ICT Captain — School Student Council<br>
         Club Leader — Twilara Innovation Club<br>
         Health & Wellness Prefect — 2023–24<br>
         Editor — School Newsletter<br>
