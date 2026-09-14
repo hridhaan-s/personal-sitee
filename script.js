@@ -346,3 +346,121 @@ loadGuestbook();
 
     event.target.classList.add('active')
   }
+
+
+/* ===============================
+   EXPERIENCE + EDUCATION
+================================ */
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("experience")) return;
+
+  const projectsSection = document.getElementById("projects");
+  if (!projectsSection) return;
+
+  const experienceSection = document.createElement("section");
+  experienceSection.className = "astro-apple";
+  experienceSection.id = "experience";
+  experienceSection.innerHTML = `
+    <h2>Experience</h2>
+    <p class="astro-desc">Building, leading, and collaborating across student developer communities.</p>
+
+    <div class="astro-apple-grid">
+      <article class="astro-apple-card">
+        <h3>YSWS Contractor — Hack Club</h3>
+        <p><strong>2023–Present · Remote</strong></p>
+        <p>Contracted with Hack Club to engineer and operate YSWS programmes for teens, working with staff, reviewers, co-organizers, and student developers globally.</p>
+        <p>• Managed reviewers, co-organizers, and programme operations with Hack Club staff in Vermont.<br>
+        • Engineered and hosted YSWS programmes for teens.<br>
+        • Collaborated with student developers from around the world.<br>
+        • Worked on programme management during gap-year engagements.<br>
+        • Connected my school's Cyber Club with the global Hack Club network for collaboration, resources, and support.</p>
+        <p><strong>Programmes:</strong> 3am.hackclub.com · arcade.hackclub.com</p>
+      </article>
+
+      <article class="astro-apple-card">
+        <h3>Hack Club — Open Source Contributor</h3>
+        <p><strong>2026</strong></p>
+        <p>Contributed code and UI improvements across Hack Club's open-source ecosystem.</p>
+        <p><strong>YSWS Platform</strong> — Improved navigation, hero, project cards, responsive design, and shipped new features. <strong>3 PRs merged into production</strong>, impacting a platform with 100K+ monthly visitors.</p>
+        <p><strong>Hack Club Help Center</strong> — Frontend and UI/UX improvements with a merged pull request.</p>
+        <p><strong>Hack Club Keeb YSWS</strong> — Built the rewards shop for users to redeem rewards, with UI/UX improvements and a merged pull request.</p>
+      </article>
+
+      <article class="astro-apple-card">
+        <h3>Founder — BitBuzz</h3>
+        <p><strong>2023–Present · Noida</strong></p>
+        <p>Founded and built BitBuzz, a youth-focused digital platform covering technology, space, innovation, and science.</p>
+        <p>• Built and operated the platform from the ground up.<br>
+        • Focused on science and technology content without political coverage.<br>
+        • Reached <strong>50,500+ visitors across 50+ countries</strong>.<br>
+        • Worked across product development, web engineering, content, and operations.</p>
+      </article>
+
+      <article class="astro-apple-card">
+        <h3>Hack Club Lead — Twilara</h3>
+        <p><strong>School Innovation Club</strong></p>
+        <p>Led my school's Hack Club-supported innovation club, helping students connect with technology, programming, and the wider Hack Club community.</p>
+        <p>• Led student activities and initiatives.<br>
+        • Connected the school community with Hack Club.<br>
+        • Facilitated collaboration and access to resources.<br>
+        • Helped bridge the school's cybersecurity community with Hack Club's global network.</p>
+      </article>
+
+      <article class="astro-apple-card">
+        <h3>Hackathons & Community</h3>
+        <p>Regularly participate in hackathons and student developer communities, building projects and collaborating with other developers.</p>
+      </article>
+    </div>
+
+    <div class="astro-apple-grid" style="margin-top: 28px;">
+      <article class="astro-apple-card">
+        <h3>Education</h3>
+        <p><strong>Shri Ram Global School</strong></p>
+        <p>High School Diploma — PCM + Information Technology + Physical Education<br>2022–2027</p>
+        <p>ICT Captain — School Student Council<br>
+        Club Leader — Twilara Innovation Club<br>
+        Health & Wellness Prefect — 2023–24<br>
+        Editor — School Newsletter<br>
+        Member — Interactive Club<br>
+        Class Monitor — Grades 9 & 10</p>
+        <p>Multiple awards across chess, programming, and design.</p>
+      </article>
+    </div>
+  `;
+
+  projectsSection.parentNode.insertBefore(experienceSection, projectsSection);
+
+  const navItems = document.querySelectorAll(".nav-links, .nav-mobile");
+  navItems.forEach(nav => {
+    if (nav.querySelector('[data-section="experience"]')) return;
+    const link = document.createElement("a");
+    link.href = "#experience";
+    link.dataset.section = "experience";
+    link.textContent = "Experience";
+
+    if (nav.classList.contains("nav-links")) {
+      const projectsLink = nav.querySelector('[data-section="projects"]');
+      const li = document.createElement("li");
+      li.appendChild(link);
+      if (projectsLink && projectsLink.parentElement) {
+        projectsLink.parentElement.insertAdjacentElement("beforebegin", li);
+      } else {
+        nav.appendChild(li);
+      }
+    } else {
+      const projectsLink = nav.querySelector('[data-section="projects"]');
+      if (projectsLink) projectsLink.insertAdjacentElement("beforebegin", link);
+      else nav.appendChild(link);
+    }
+
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      showPage("home");
+      setTimeout(() => {
+        document.getElementById("experience")?.scrollIntoView({ behavior: "smooth" });
+      }, 50);
+      if (nav.classList.contains("nav-mobile")) nav.classList.remove("open");
+    });
+  });
+});
