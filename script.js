@@ -459,3 +459,32 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+
+/* ===============================
+   BITBUZZ HOVER PREVIEW
+================================ */
+
+document.addEventListener("DOMContentLoaded", () => {
+  const bitBuzzCard = document.querySelector("#projects .project-card");
+  if (!bitBuzzCard) return;
+
+  const image = bitBuzzCard.querySelector("img");
+  if (!image) return;
+
+  const coverImage = "https://cdn.hackclub.com/01a0a42f-c3df-7add-bf53-caf6df1ffe26/image.png";
+  const hoverGif = "https://cdn.hackclub.com/01a0a42e-7d2d-78e7-bdcf-3ffb79fb1cbd/ezgif-8b9e47da08458cd5.gif";
+
+  // Keep the static image as the normal cover.
+  image.src = coverImage;
+
+  // Replace the same image with the GIF while the card is hovered.
+  bitBuzzCard.addEventListener("mouseenter", () => {
+    image.src = hoverGif;
+  });
+
+  // Immediately restore the cover when the pointer leaves.
+  bitBuzzCard.addEventListener("mouseleave", () => {
+    image.src = coverImage;
+  });
+});
