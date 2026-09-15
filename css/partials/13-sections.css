@@ -1,0 +1,659 @@
+/* ==========================================================
+   13-sections.css
+   Redesigned surfaces: project cards (clickable + hover
+   preview), scrapbook banner, astrophotography, CTA tiles,
+   certificate archive, footer commit badge.
+
+   Loaded last, so it intentionally overrides the older
+   .projects / .astro-apple / .achievements-cta rules.
+   Part of css/main.css — load order matters, do not reorder.
+   ========================================================== */
+
+/* ==========================================================
+   PROJECTS
+   ========================================================== */
+
+.projects {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 110px 20px 0;
+  text-align: center;
+}
+
+.projects h2 {
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.projects .projects-subtitle {
+  margin-top: 10px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  opacity: 0.6;
+}
+
+.projects .projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 22px;
+  margin-top: 48px;
+  text-align: left;
+}
+
+/* --- card ------------------------------------------------ */
+
+.projects-grid .project-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+  background: var(--card);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 22px;
+  color: inherit;
+  text-decoration: none;
+  transform-style: preserve-3d;
+  transition: box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.dark .projects-grid .project-card {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.projects-grid .project-card:hover {
+  box-shadow: 0 26px 54px rgba(0, 0, 0, 0.14);
+  border-color: rgba(201, 162, 77, 0.42);
+}
+
+.dark .projects-grid .project-card:hover {
+  box-shadow: 0 26px 54px rgba(0, 0, 0, 0.5);
+}
+
+.projects-grid .project-card:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* --- media (cover + hover preview) ----------------------- */
+
+.pc-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark .pc-media {
+  background: rgba(255, 255, 255, 0.04);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.projects-grid .project-card .pc-cover,
+.pc-preview {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  margin: 0;
+  border-radius: 0;
+}
+
+.pc-cover {
+  transition: transform 0.6s ease, opacity 0.35s ease;
+}
+
+.pc-preview {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.project-card:hover .pc-cover {
+  transform: scale(1.04);
+}
+
+/* Only fade the cover out once the preview is actually ready,
+   so a slow connection never shows an empty box. */
+.project-card.is-previewing .pc-preview {
+  opacity: 1;
+}
+
+.project-card.is-previewing .pc-cover {
+  opacity: 0;
+}
+
+/* Small "live preview" hint, only on cards that have one */
+.pc-media:has(.pc-preview)::after {
+  content: "Hover to preview";
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  border-radius: 999px;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.project-card:hover .pc-media:has(.pc-preview)::after {
+  opacity: 0;
+}
+
+/* --- body ------------------------------------------------ */
+
+.pc-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 22px 24px 24px;
+}
+
+.projects-grid .project-card .tag {
+  align-self: flex-start;
+  margin: 0 0 12px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  background: rgba(201, 162, 77, 0.14);
+  color: var(--gold);
+}
+
+.projects-grid .project-card h3 {
+  font-size: 19px;
+  font-weight: 650;
+  margin: 0;
+}
+
+.projects-grid .project-card p {
+  margin: 10px 0 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  opacity: 0.75;
+}
+
+.pc-cta {
+  margin-top: auto;
+  padding-top: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+
+/* ==========================================================
+   SHARED: arrow nudge
+   ========================================================== */
+
+.banner-arrow {
+  display: inline-block;
+  margin-left: 6px;
+  transition: transform 0.3s ease;
+}
+
+.banner-card:hover .banner-arrow,
+.astro-card:hover .banner-arrow,
+.tile:hover .banner-arrow,
+.archive-card:hover .banner-arrow {
+  transform: translateX(4px);
+}
+
+
+/* ==========================================================
+   SCRAPBOOK BANNER
+   ========================================================== */
+
+.banner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 44px 20px 0;
+}
+
+.banner-card {
+  display: grid;
+  grid-template-columns: 58px 1fr auto;
+  align-items: center;
+  gap: 22px;
+  padding: 26px 30px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 22px;
+  border: 1px solid rgba(201, 162, 77, 0.3);
+  background:
+    linear-gradient(120deg, rgba(201, 162, 77, 0.10), rgba(201, 162, 77, 0) 58%),
+    var(--card);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.banner-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 46px rgba(0, 0, 0, 0.10);
+  border-color: rgba(201, 162, 77, 0.6);
+}
+
+.dark .banner-card:hover {
+  box-shadow: 0 22px 46px rgba(0, 0, 0, 0.45);
+}
+
+.banner-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: rgba(201, 162, 77, 0.14);
+  color: var(--gold);
+}
+
+.banner-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.banner-body {
+  display: block;
+}
+
+.banner-title {
+  display: block;
+  font-size: 19px;
+  font-weight: 650;
+}
+
+.banner-text {
+  display: block;
+  margin-top: 5px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  opacity: 0.68;
+}
+
+.banner-cta {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+
+/* ==========================================================
+   ASTROPHOTOGRAPHY
+   ========================================================== */
+
+.astro {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 110px 20px 0;
+}
+
+.astro-head {
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+.astro-head h2 {
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.astro-sub {
+  margin-top: 10px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  opacity: 0.6;
+}
+
+.astro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.astro-card {
+  display: block;
+  padding: 30px;
+  border-radius: 22px;
+  text-decoration: none;
+  color: inherit;
+  background: var(--card);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.dark .astro-card {
+  border-color: rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(120% 90% at 85% 0%, rgba(120, 160, 220, 0.10), transparent 60%),
+    var(--card);
+}
+
+.astro-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.12);
+  border-color: rgba(201, 162, 77, 0.42);
+}
+
+.dark .astro-card:hover {
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+}
+
+.astro-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: rgba(201, 162, 77, 0.14);
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+
+.astro-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.astro-card h3 {
+  font-size: 19px;
+  font-weight: 650;
+  margin: 0;
+}
+
+.astro-card p {
+  margin: 9px 0 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  opacity: 0.7;
+}
+
+.astro-cta {
+  display: inline-block;
+  margin-top: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+
+/* ==========================================================
+   CTA TILES
+   ========================================================== */
+
+.tiles {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 44px 20px 0;
+}
+
+.tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  padding: 28px 30px;
+  border-radius: 22px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  background: var(--card);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.dark .tile {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.12);
+  border-color: rgba(201, 162, 77, 0.42);
+}
+
+.dark .tile:hover {
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+}
+
+.tile-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  background: rgba(201, 162, 77, 0.14);
+  color: var(--gold);
+  margin-bottom: 18px;
+}
+
+.tile-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.tile-title {
+  font-size: 18px;
+  font-weight: 650;
+}
+
+.tile-text {
+  margin-top: 6px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  opacity: 0.68;
+}
+
+.tile-cta {
+  margin-top: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+
+/* ==========================================================
+   CERTIFICATE ARCHIVE
+   ========================================================== */
+
+.archive-card {
+  display: grid;
+  grid-template-columns: 54px 1fr auto;
+  align-items: center;
+  gap: 20px;
+  margin-top: 40px;
+  padding: 24px 28px;
+  border-radius: 22px;
+  text-decoration: none;
+  color: inherit;
+  background: var(--card);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.dark .archive-card {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.archive-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.11);
+  border-color: rgba(201, 162, 77, 0.5);
+}
+
+.dark .archive-card:hover {
+  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.45);
+}
+
+.archive-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: rgba(201, 162, 77, 0.14);
+  color: var(--gold);
+}
+
+.archive-icon svg {
+  width: 25px;
+  height: 25px;
+}
+
+.archive-title {
+  display: block;
+  font-size: 18px;
+  font-weight: 650;
+}
+
+.archive-text {
+  display: block;
+  margin-top: 5px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  opacity: 0.68;
+}
+
+.archive-cta {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+
+/* ==========================================================
+   FOOTER — LATEST COMMIT BADGE
+   ========================================================== */
+
+.commit-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-decoration: none;
+  color: inherit;
+  opacity: 0.75;
+  background: rgba(0, 0, 0, 0.045);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  transition: opacity 0.25s ease, border-color 0.25s ease;
+}
+
+.dark .commit-badge {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.09);
+}
+
+.commit-badge:hover {
+  opacity: 1;
+  border-color: rgba(201, 162, 77, 0.5);
+}
+
+.commit-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3fb950;
+  box-shadow: 0 0 0 3px rgba(63, 185, 80, 0.16);
+  flex-shrink: 0;
+}
+
+.commit-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.commit-sha {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px;
+  color: var(--gold);
+}
+
+.commit-time {
+  opacity: 0.6;
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 720px) {
+  .projects,
+  .astro {
+    padding-top: 76px;
+  }
+
+  .projects h2,
+  .astro-head h2 {
+    font-size: 32px;
+  }
+
+  .projects .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .banner-card,
+  .archive-card {
+    grid-template-columns: 48px 1fr;
+    gap: 16px;
+    padding: 22px;
+  }
+
+  .banner-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 15px;
+  }
+
+  .archive-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .banner-cta,
+  .archive-cta {
+    grid-column: 1 / -1;
+  }
+
+  /* Touch devices can't hover — show the preview hint as a plain label */
+  .pc-media:has(.pc-preview)::after {
+    content: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-cover,
+  .pc-preview,
+  .banner-card,
+  .astro-card,
+  .tile,
+  .archive-card,
+  .banner-arrow {
+    transition: none;
+  }
+
+  .project-card:hover .pc-cover {
+    transform: none;
+  }
+}

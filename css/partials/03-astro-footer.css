@@ -1,0 +1,277 @@
+/* ==========================================================
+   03-astro-footer.css
+   Part of css/main.css — load order matters, do not reorder.
+   ========================================================== */
+
+/* ===============================
+   ASTROPHOTOGRAPHY – APPLE STYLE
+================================ */
+
+.astro-apple {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+  text-align: center;
+}
+
+.astro-apple h2 {
+  font-size: 2rem;
+  margin-bottom: 0.6rem;
+}
+
+.astro-desc {
+  font-size: 1rem;
+  opacity: 0.75;
+  margin-bottom: 3.5rem;
+}
+
+.astro-apple-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+.astro-apple-card {
+  background: var(--card);
+  border-radius: 22px;
+  padding: 32px;
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark .astro-apple-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.astro-apple-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+}
+
+.astro-icon-apple {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.dark .astro-icon-apple {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.astro-icon-apple span {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text);
+  opacity: 0.85;
+}
+
+.astro-apple-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.astro-apple-card p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.astro-cta {
+  display: inline-block;
+  margin-top: 18px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #6b7cff;
+}
+
+
+/* FORCE GOLD ICON TINT (FINAL OVERRIDE) */
+.icon-links a svg {
+  fill: var(--gold) !important;
+}
+
+.dark .icon-links a svg {
+  fill: var(--gold) !important;
+}
+
+/* FORCE GOLD ICON TINT (FINAL OVERRIDE) */
+.icon-links a svg {
+  fill: var(--gold) !important;
+}
+
+.dark .icon-links a svg {
+  fill: var(--gold) !important;
+}
+
+
+/* ===============================
+   FOOTER – FINAL FIX
+================================ */
+
+.footer {
+  margin-top: 6rem;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+  background: transparent;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.footer span {
+  color: #111;
+  font-weight: 500;
+}
+
+.footer-note {
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+/* Dark mode footer */
+.dark .footer {
+  color: #aaa;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dark .footer span {
+  color: #fff;
+}
+
+
+/* ===============================
+   HERO NAME TYPE EFFECT (CSS)
+================================ */
+
+.hero-name {
+  font-size: 64px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid var(--text);
+  width: 0;
+  animation:
+    typing 2.8s steps(14, end) forwards,
+    blink 0.8s step-end infinite;
+
+}
+
+/* Stop cursor after typing */
+.hero-name.finished {
+  border-right: none;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 14ch; } /* length of "Hridhaan Sahay" */
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+/* ===============================
+   HERO MOBILE FIX
+================================ */
+
+@media (max-width: 600px) {
+  .hero-name {
+    font-size: 42px;
+    white-space: normal;
+    width: auto;
+    text-align: center;
+  }
+
+  .hero-name::after {
+    display: none;
+  }
+}
+
+/* ===============================
+   HERO MOBILE LAYOUT FIX
+================================ */
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 120px 24px 80px;
+  }
+
+  .hero-image img {
+    width: 260px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .hero-center {
+    position: static;
+    transform: none;
+    margin-top: 32px;
+    text-align: center;
+  }
+
+  .hero-name {
+    font-size: 40px;
+    line-height: 1.15;
+    white-space: normal;
+  }
+
+  .tagline,
+  .statement {
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-name {
+    white-space: normal;
+    width: auto;
+    font-size: 40px;
+    text-align: center;
+  }
+
+  .hero-name::after {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-center {
+    max-width: 100%;
+  }
+
+  .hero-image img {
+    width: 260px;
+  }
+}
+
+/* ===============================
+   GLOBAL ROCKET CURSOR
+================================ */
+
+html, body {
+  cursor: url("/assets/img/rocket.png") 16 16, auto;
+}
+
+a, button {
+  cursor: pointer;
+}
+
+      </div> <!-- project-card -->
+    </div> <!-- projects-grid -->

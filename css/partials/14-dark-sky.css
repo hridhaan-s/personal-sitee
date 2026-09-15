@@ -1,0 +1,170 @@
+/* ==========================================================
+   14-dark-sky.css
+   The dark-mode night sky, rebuilt.
+
+   Two bugs were fixed here:
+
+   1. The older partials stacked five competing
+      body.dark::before rules. The one that won used
+      `radial-gradient(1px 1px at X% Y%, #fff 1px, transparent 1px)`
+      — the colour stop sits exactly at the gradient's own
+      radius, so every star collapsed to a sub-pixel ghost.
+      Dark mode had no visible stars at all.
+
+   2. Drift is animated with `transform`, never
+      `background-position`. Moving background-position repaints
+      the entire fixed layer on every frame, which with this many
+      gradients pegs the CPU. transform is composited on the GPU
+      and costs nothing to move.
+
+   This is the single source of truth for the night sky.
+   Part of css/main.css — load order matters, do not reorder.
+   ========================================================== */
+
+/* Deep space behind everything, so it is not a flat grey slab. */
+body.dark {
+  background:
+    radial-gradient(120% 80% at 50% -10%, #151d33 0%, transparent 60%),
+    radial-gradient(100% 70% at 85% 110%, #121728 0%, transparent 58%),
+    #07080d;
+  background-attachment: fixed;
+}
+
+/* ---------- near stars: brightest, slowest drift ---------- */
+body.dark::before {
+  content: "";
+  position: fixed;
+  top: -750px;
+  left: -750px;
+  right: -750px;
+  bottom: -750px;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.92;
+  will-change: transform;
+
+  background-image:
+    radial-gradient(circle at 316.7px 391.8px, rgba(255,255,255,0.79) 0 1.74px, transparent 2.44px),
+    radial-gradient(circle at 355.5px 411.2px, rgba(255,255,255,0.8) 0 1.15px, transparent 1.85px),
+    radial-gradient(circle at 440.9px 555.1px, rgba(255,255,255,0.73) 0 1.08px, transparent 1.78px),
+    radial-gradient(circle at 63.5px 566.8px, rgba(255,255,255,0.64) 0 1.55px, transparent 2.25px),
+    radial-gradient(circle at 687.5px 675.3px, rgba(255,255,255,0.84) 0 1.52px, transparent 2.22px),
+    radial-gradient(circle at 110.2px 10.5px, rgba(255,255,255,0.64) 0 1.42px, transparent 2.12px),
+    radial-gradient(circle at 133.1px 169.4px, rgba(255,255,255,0.79) 0 1.02px, transparent 1.72px),
+    radial-gradient(circle at 308.4px 589.7px, rgba(255,255,255,0.85) 0 1.42px, transparent 2.12px),
+    radial-gradient(circle at 349.8px 463.7px, rgba(255,255,255,0.72) 0 1.37px, transparent 2.07px),
+    radial-gradient(circle at 698.4px 697.0px, rgba(255,255,255,0.87) 0 1.67px, transparent 2.37px),
+    radial-gradient(circle at 220.7px 160.8px, rgba(255,255,255,0.65) 0 1.23px, transparent 1.93px),
+    radial-gradient(circle at 536.4px 280.3px, rgba(255,255,255,0.76) 0 1.68px, transparent 2.38px),
+    radial-gradient(circle at 670.6px 593.1px, rgba(255,255,255,0.7) 0 1.0px, transparent 1.70px),
+    radial-gradient(circle at 637.2px 329.0px, rgba(255,255,255,0.76) 0 1.78px, transparent 2.48px),
+    radial-gradient(circle at 51.1px 440.6px, rgba(255,255,255,0.72) 0 1.62px, transparent 2.32px),
+    radial-gradient(circle at 61.0px 232.8px, rgba(255,255,255,0.89) 0 1.77px, transparent 2.47px),
+    radial-gradient(circle at 82.6px 172.5px, rgba(255,255,255,0.64) 0 1.08px, transparent 1.78px),
+    radial-gradient(circle at 557.9px 124.4px, rgba(255,255,255,0.78) 0 1.45px, transparent 2.15px),
+    radial-gradient(circle at 133.5px 512.3px, rgba(255,255,255,0.85) 0 1.1px, transparent 1.80px),
+    radial-gradient(circle at 81.6px 294.5px, rgba(255,255,255,0.72) 0 1.17px, transparent 1.87px),
+    radial-gradient(circle at 679.7px 562.4px, rgba(255,255,255,0.94) 0 1.24px, transparent 1.94px),
+    radial-gradient(circle at 147.5px 276.0px, rgba(255,255,255,0.85) 0 1.68px, transparent 2.38px),
+    radial-gradient(circle at 70.2px 692.5px, rgba(255,255,255,0.71) 0 1.17px, transparent 1.87px),
+    radial-gradient(circle at 540.9px 230.3px, rgba(255,255,255,0.65) 0 1.24px, transparent 1.94px);
+  background-size: 700px 700px;
+  background-repeat: repeat;
+
+  animation: sky-drift-near 320s linear infinite;
+}
+
+/* ---------- mid stars, with a slow twinkle ---------- */
+body.dark::after {
+  content: "";
+  position: fixed;
+  top: -750px;
+  left: -750px;
+  right: -750px;
+  bottom: -750px;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.7;
+  will-change: transform, opacity;
+
+  background-image:
+    radial-gradient(circle at 41.5px 268.1px, rgba(255,255,255,0.47) 0 0.81px, transparent 1.51px),
+    radial-gradient(circle at 171.0px 208.5px, rgba(255,255,255,0.44) 0 1.13px, transparent 1.83px),
+    radial-gradient(circle at 264.3px 398.6px, rgba(255,255,255,0.34) 0 0.78px, transparent 1.48px),
+    radial-gradient(circle at 417.9px 376.2px, rgba(255,255,255,0.35) 0 0.81px, transparent 1.51px),
+    radial-gradient(circle at 340.1px 432.6px, rgba(255,255,255,0.57) 0 0.79px, transparent 1.49px),
+    radial-gradient(circle at 405.8px 277.6px, rgba(255,255,255,0.33) 0 0.89px, transparent 1.59px),
+    radial-gradient(circle at 17.8px 442.8px, rgba(255,255,255,0.5) 0 0.81px, transparent 1.51px),
+    radial-gradient(circle at 118.2px 378.9px, rgba(255,255,255,0.38) 0 0.97px, transparent 1.67px),
+    radial-gradient(circle at 80.7px 331.4px, rgba(255,255,255,0.36) 0 0.73px, transparent 1.43px),
+    radial-gradient(circle at 257.3px 392.1px, rgba(255,255,255,0.38) 0 0.98px, transparent 1.68px),
+    radial-gradient(circle at 422.0px 93.8px, rgba(255,255,255,0.38) 0 0.71px, transparent 1.41px),
+    radial-gradient(circle at 205.0px 27.8px, rgba(255,255,255,0.4) 0 0.78px, transparent 1.48px),
+    radial-gradient(circle at 263.2px 60.5px, rgba(255,255,255,0.55) 0 0.86px, transparent 1.56px),
+    radial-gradient(circle at 451.0px 302.2px, rgba(255,255,255,0.46) 0 1.01px, transparent 1.71px),
+    radial-gradient(circle at 64.6px 16.1px, rgba(255,255,255,0.55) 0 0.71px, transparent 1.41px),
+    radial-gradient(circle at 322.4px 442.9px, rgba(255,255,255,0.48) 0 0.71px, transparent 1.41px),
+    radial-gradient(circle at 221.8px 336.0px, rgba(255,255,255,0.58) 0 0.84px, transparent 1.54px),
+    radial-gradient(circle at 34.6px 251.2px, rgba(255,255,255,0.55) 0 1.03px, transparent 1.73px),
+    radial-gradient(circle at 339.1px 323.7px, rgba(255,255,255,0.56) 0 1.06px, transparent 1.76px),
+    radial-gradient(circle at 161.8px 315.2px, rgba(255,255,255,0.54) 0 1.11px, transparent 1.81px),
+    radial-gradient(circle at 191.9px 363.6px, rgba(255,255,255,0.46) 0 1.09px, transparent 1.79px),
+    radial-gradient(circle at 287.5px 175.9px, rgba(255,255,255,0.47) 0 0.96px, transparent 1.66px),
+    radial-gradient(circle at 36.9px 294.1px, rgba(255,255,255,0.55) 0 1.15px, transparent 1.85px),
+    radial-gradient(circle at 335.0px 178.7px, rgba(255,255,255,0.46) 0 1.03px, transparent 1.73px),
+    radial-gradient(circle at 202.6px 385.7px, rgba(255,255,255,0.51) 0 0.74px, transparent 1.44px),
+    radial-gradient(circle at 13.7px 276.6px, rgba(255,255,255,0.36) 0 0.92px, transparent 1.62px),
+    radial-gradient(circle at 321.2px 228.7px, rgba(255,255,255,0.56) 0 0.98px, transparent 1.68px),
+    radial-gradient(circle at 117.7px 5.2px, rgba(255,255,255,0.49) 0 0.84px, transparent 1.54px),
+    radial-gradient(circle at 93.2px 78.0px, rgba(255,255,255,0.48) 0 1.11px, transparent 1.81px),
+    radial-gradient(circle at 203.3px 410.2px, rgba(255,255,255,0.49) 0 0.85px, transparent 1.55px);
+  background-size: 460px 460px;
+  background-repeat: repeat;
+
+  animation:
+    sky-drift-far 520s linear infinite,
+    sky-twinkle 11s ease-in-out infinite;
+}
+
+/* Translating by exactly one tile makes the loop seamless. */
+@keyframes sky-drift-near {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(700px, 700px, 0); }
+}
+
+@keyframes sky-drift-far {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-460px, 460px, 0); }
+}
+
+@keyframes sky-twinkle {
+  0%, 100% { opacity: 0.7; }
+  50%      { opacity: 0.42; }
+}
+
+/* Light mode keeps its dot grid — make sure nothing here leaks. */
+body:not(.dark)::after {
+  content: none;
+}
+
+/* Cards need to sit on something solid against the sky. */
+.dark .xp-item,
+.dark .edu-card,
+.dark .tile,
+.dark .astro-card,
+.dark .archive-card,
+.dark .projects-grid .project-card,
+.dark .banner-card {
+  background-color: rgba(19, 21, 29, 0.86);
+}
+
+.dark .edu-card.is-secondary {
+  background-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.dark::before,
+  body.dark::after {
+    animation: none;
+  }
+}

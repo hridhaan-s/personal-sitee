@@ -1,0 +1,158 @@
+/* ==========================================================
+   01-base.css
+   Part of css/main.css — load order matters, do not reorder.
+   ========================================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #fafafa;
+  --text: #111;
+  --card: #fff;
+  --gold: #c9a24d;
+}
+
+.dark {
+  --bg: #0e0e0e;
+  --text: #f5f5f5;
+  --card: #161616;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, Inter, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.4s, color 0.4s;
+}
+
+/* ===============================
+   BACKGROUNDS
+================================ */
+
+/* Light mode → DOT GRID */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(#cfcfcf 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Dark mode → STARS */
+.dark::before {
+  background-image:
+    radial-gradient(white 1px, transparent 1px),
+    radial-gradient(white 1px, transparent 1px),
+    radial-gradient(white 1px, transparent 1px);
+  background-size: 120px 120px, 200px 200px, 300px 300px;
+  background-position: 0 0, 50px 80px, 120px 160px;
+  opacity: 0.45;
+}
+
+/* ===============================
+   NAVBAR
+================================ */
+/* ===============================
+   NAVBAR FIX
+================================ */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 64px;
+  background: rgba(250, 250, 250, 0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  z-index: 100;
+}
+
+.dark .navbar {
+  background: rgba(14,14,14,0.9);
+}
+
+.nav-container {
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 28px;
+}
+
+.nav-links li {
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ===============================
+   HERO
+================================ */
+.hero {
+  padding: 6rem 0 3rem;
+  padding: 140px 80px 80px;
+  position: relative;
+}
+
+.hero-image img {
+  width: 360px;
+  border-radius: 24px;
+}
+
+.floating {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+/* ===============================
+   HERO LAYOUT FIX (DESKTOP + MOBILE)
+================================ */
+.hero {  
+  display: flex;
+  align-items: center;
+  gap: 64px;
+}
+
+
+.hero-center {
+  position: static;
+  transform: none;
+  max-width: 520px;
+}
+.hero-center h1 { font-size: 64px; }
+.tagline { color: gray; margin: 12px 0 24px; }
+
+/* ===============================
+   SECTIONS
+================================ */
+.projects, .about, .links {
+  padding: 120px 80px;
+}

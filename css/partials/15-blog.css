@@ -1,0 +1,419 @@
+/* ==========================================================
+   15-blog.css
+   Blog index + post reading view.
+
+   Typography: UI stays on the system sans, but post bodies
+   switch to a system serif. No webfont is downloaded, so the
+   reading experience improves at zero performance cost.
+   Part of css/main.css — load order matters, do not reorder.
+   ========================================================== */
+
+:root {
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Charter,
+    "Source Serif 4", Georgia, "Times New Roman", serif;
+}
+
+#page-blog .blog-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 130px 20px 120px;
+}
+
+
+/* ==========================================================
+   INDEX
+   ========================================================== */
+
+#page-blog .blog-hero {
+  margin-bottom: 56px;
+}
+
+.blog-kicker {
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+
+#page-blog .blog-hero h1 {
+  font-family: var(--serif);
+  font-size: 46px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+.blog-intro {
+  margin-top: 14px;
+  font-size: 17px;
+  line-height: 1.65;
+  opacity: 0.6;
+  max-width: 34em;
+}
+
+#page-blog .blog-list {
+  display: grid;
+  gap: 4px;
+}
+
+#page-blog .blog-card {
+  display: block;
+  padding: 26px 24px;
+  margin: 0;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+#page-blog .blog-card:hover,
+#page-blog .blog-card:focus-visible {
+  background: var(--card);
+  transform: translateX(3px);
+  outline: none;
+}
+
+.dark #page-blog .blog-card:hover,
+.dark #page-blog .blog-card:focus-visible {
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.blog-card-meta,
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  opacity: 0.5;
+}
+
+.blog-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.blog-card-title {
+  font-family: var(--serif);
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 10px 0 0;
+}
+
+.blog-card-excerpt {
+  margin-top: 9px;
+  font-size: 15.5px;
+  line-height: 1.65;
+  opacity: 0.68;
+  max-width: 40em;
+}
+
+.blog-card-cta {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+#page-blog .blog-card:hover .banner-arrow {
+  transform: translateX(4px);
+}
+
+
+/* ==========================================================
+   POST
+   ========================================================== */
+
+.post {
+  position: relative;
+}
+
+.post.hidden {
+  display: none;
+}
+
+/* Reading progress, pinned under the navbar */
+.post-progress {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: transparent;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.post-progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--gold);
+  transition: width 0.1s linear;
+}
+
+.post-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 15px 8px 12px;
+  margin-bottom: 34px;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 550;
+  color: inherit;
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 999px;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 0.25s ease, border-color 0.25s ease;
+}
+
+.dark .post-back {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.post-back:hover {
+  opacity: 1;
+  border-color: rgba(201, 162, 77, 0.55);
+}
+
+.post-back-arrow {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+.post-back:hover .post-back-arrow {
+  transform: translateX(-3px);
+}
+
+.post-head {
+  padding-bottom: 30px;
+  margin-bottom: 38px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.dark .post-head {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.post-title {
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  margin: 14px 0 0;
+}
+
+.post-standfirst {
+  margin-top: 16px;
+  font-family: var(--serif);
+  font-size: 19px;
+  font-style: italic;
+  line-height: 1.6;
+  opacity: 0.62;
+}
+
+
+/* ---------- body copy ------------------------------------ */
+
+.post-body {
+  font-family: var(--serif);
+  font-size: 18.5px;
+  line-height: 1.78;
+  letter-spacing: 0.003em;
+}
+
+.post-body p {
+  margin: 0 0 1.35em;
+  opacity: 0.88;
+}
+
+/* Drop cap on the opening paragraph */
+.post-body > p:first-of-type::first-letter {
+  float: left;
+  font-size: 3.5em;
+  line-height: 0.82;
+  padding: 0.06em 0.09em 0 0;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.post-body h3 {
+  font-family: var(--serif);
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 2.1em 0 0.6em;
+}
+
+.post-body h4 {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin: 1.9em 0 0.5em;
+}
+
+.post-body ul,
+.post-body ol {
+  margin: 0 0 1.35em 1.2em;
+  padding: 0;
+}
+
+.post-body li {
+  margin-bottom: 0.5em;
+  opacity: 0.88;
+}
+
+.post-body a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(201, 162, 77, 0.6);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.25s ease;
+}
+
+.post-body a:hover {
+  text-decoration-color: var(--gold);
+}
+
+.post-body strong {
+  font-weight: 650;
+  opacity: 1;
+}
+
+.post-body code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.82em;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.055);
+}
+
+.dark .post-body code {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.post-body pre {
+  margin: 0 0 1.5em;
+  padding: 18px 20px;
+  overflow-x: auto;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.055);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.dark .post-body pre {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.post-body pre code {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+}
+
+.post-body blockquote {
+  margin: 0 0 1.5em;
+  padding: 2px 0 2px 22px;
+  border-left: 2px solid var(--gold);
+  font-style: italic;
+  opacity: 0.78;
+}
+
+.post-body img {
+  width: 100%;
+  border-radius: 16px;
+  margin: 0.5em 0 1.6em;
+}
+
+.post-body hr {
+  border: 0;
+  height: 1px;
+  margin: 2.4em 0;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.dark .post-body hr {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.post-foot {
+  margin-top: 54px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.dark .post-foot {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.post-foot .post-back {
+  margin-bottom: 0;
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 720px) {
+  #page-blog .blog-wrap {
+    padding: 100px 18px 90px;
+  }
+
+  #page-blog .blog-hero h1 {
+    font-size: 33px;
+  }
+
+  .post-title {
+    font-size: 29px;
+  }
+
+  .blog-card-title {
+    font-size: 21px;
+  }
+
+  .post-body {
+    font-size: 17.5px;
+    line-height: 1.75;
+  }
+
+  .post-body h3 {
+    font-size: 22px;
+  }
+
+  .post-standfirst {
+    font-size: 17px;
+  }
+
+  #page-blog .blog-card {
+    padding: 20px 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #page-blog .blog-card,
+  .post-progress span,
+  .post-back-arrow {
+    transition: none;
+  }
+
+  #page-blog .blog-card:hover {
+    transform: none;
+  }
+}

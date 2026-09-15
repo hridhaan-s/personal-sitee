@@ -1,0 +1,752 @@
+/* ==========================================================
+   07-pages.css
+   Part of css/main.css — load order matters, do not reorder.
+   ========================================================== */
+
+/* ===============================
+   ACHIEVEMENTS PAGE
+================================ */
+
+#page-achievements {
+  padding: 100px 20px 120px;
+}
+
+.achievements-wrap {
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* HERO */
+.achievements-hero {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.achievements-hero h1 {
+  font-size: 2.4rem;
+  margin-bottom: 12px;
+}
+
+.achievements-hero p {
+  max-width: 620px;
+  margin: auto;
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+/* ACHIEVEMENT CARD */
+.achievement {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 40px;
+  padding: 36px;
+  margin-bottom: 40px;
+
+  background: var(--card);
+  border-radius: 24px;
+
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.08);
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* TEXT */
+.achievement-text {
+  position: relative;
+}
+
+.achievement-text h2 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.5;
+  margin-bottom: 6px;
+}
+
+.achievement-text h3 {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.achievement-text p {
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+/* IMAGE / PROOF */
+.achievement-proof,
+.ICT-Proof {
+  display: flex;
+  align-items: center;
+}
+
+.achievement-proof img,
+.ICT-Proof img {
+  width: 100%;
+  border-radius: 18px;
+  object-fit: cover;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(255,255,255,0.25),
+      transparent 60%
+    );
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.18);
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.achievement-proof img:hover,
+.ICT-Proof img:hover {
+  transform: scale(1.03);
+  box-shadow:
+    0 24px 60px rgba(0,0,0,0.28);
+}
+
+/* TAG — FIXED POSITIONING */
+.achievement .tag {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+}
+
+/* ARCHIVE CARD */
+.achievement-archive {
+  margin-top: 90px;
+  padding: 48px;
+  text-align: center;
+  border-radius: 28px;
+
+  background: linear-gradient(
+    135deg,
+    rgba(201,162,77,0.12),
+    rgba(201,162,77,0.04)
+  );
+}
+
+.dark .achievement-archive {
+  background: linear-gradient(
+    135deg,
+    rgba(201,162,77,0.18),
+    rgba(201,162,77,0.06)
+  );
+}
+
+.achievement-archive h4 {
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+}
+
+.achievement-archive p {
+  opacity: 0.75;
+  margin-bottom: 20px;
+}
+
+.achievement-archive a {
+  text-decoration: none;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+/* ===============================
+   MOBILE
+================================ */
+@media (max-width: 768px) {
+  .achievement {
+    grid-template-columns: 1fr;
+    padding: 28px;
+  }
+
+  .achievement .tag {
+    top: 16px;
+    right: 16px;
+  }
+
+  .achievement-proof,
+  .ICT-Proof {
+    margin-top: 18px;
+  }
+}
+
+/* NAVBAR BASE */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--bg);
+}
+
+.nav-toggle {
+  display: none;
+  font-size: 1.4rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text);
+}
+
+/* MOBILE MENU */
+.nav-mobile {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  width: 100%;
+  background: var(--bg);
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  padding: 24px 20px;
+
+  transform: translateY(-120%);
+  transition: transform 0.3s ease;
+
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.nav-mobile a {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* ACTIVE STATE */
+.nav-mobile.open {
+  transform: translateY(0);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+}
+
+/* ===============================
+   STAR BACKGROUND (DARK MODE)
+================================ */
+
+/* Container */
+body.dark::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    radial-gradient(1px 1px at 10% 20%, #ffffffaa 50%, transparent 51%),
+    radial-gradient(1px 1px at 30% 80%, #ffffff99 50%, transparent 51%),
+    radial-gradient(1px 1px at 70% 30%, #ffffff88 50%, transparent 51%),
+    radial-gradient(1px 1px at 90% 60%, #ffffff77 50%, transparent 51%),
+    radial-gradient(1px 1px at 50% 50%, #ffffff66 50%, transparent 51%),
+    radial-gradient(1px 1px at 15% 65%, #ffffff55 50%, transparent 51%),
+    radial-gradient(1px 1px at 85% 15%, #ffffff44 50%, transparent 51%);
+
+  background-size: 200px 200px;
+  opacity: 0.7;
+}
+
+/* ===============================
+   MOBILE NAVIGATION
+================================ */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--bg);
+}
+
+.nav-toggle {
+  display: none;
+  font-size: 1.4rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text);
+}
+
+/* MOBILE MENU */
+.nav-mobile {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  width: 100%;
+  background: var(--bg);
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  padding: 24px 20px;
+
+  transform: translateY(-120%);
+  transition: transform 0.3s ease;
+
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.nav-mobile a {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+/* OPEN STATE */
+.nav-mobile.open {
+  transform: translateY(0);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+}
+/* ===============================
+   GLOBAL SPACING FIX (ALL SCREENS)
+================================ */
+
+/* Stop hero from hogging full screen */
+
+.hero {
+  
+  min-height: auto;
+  padding-top: 40px;
+  padding-bottom: 30px;
+}
+
+/* Tighten Find Me section */
+.links {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Pull Projects section up */
+.projects {
+  margin-top: 0;
+  padding-top: 40px;
+}
+
+/* ===============================
+   FINAL STAR BACKGROUND (DARK)
+   OVERRIDES EVERYTHING
+================================ */
+
+/* Kill any previous background */
+body.dark::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.8) 1px, transparent 1px),
+    radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.7) 1px, transparent 1px),
+    radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,0.6) 1px, transparent 1px),
+    radial-gradient(1px 1px at 90% 60%, rgba(255,255,255,0.5) 1px, transparent 1px),
+    radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,0.4) 1px, transparent 1px);
+
+  background-size:
+    120px 120px,
+    200px 200px,
+    260px 260px,
+    320px 320px,
+    400px 400px;
+
+  background-repeat: repeat;
+}
+
+/* Hack Club badge - inside project card style */
+.hackclub-badge {
+  width: 30px;
+  margin-bottom: 10px;
+  display: block;
+  opacity: 0.95;
+  transition: transform 0.2s ease;
+}
+
+.hackclub-badge:hover {
+  transform: scale(1.05);
+}
+
+.project-thumb {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  object-fit: cover;
+  aspect-ratio: 16/9;  /* Makes it same style as other project images */
+}
+
+.hackclub-badge {
+  width: 142px !important;      /* Forced size */
+  height: auto !important;
+  margin-bottom: 6px;
+  display: block;
+  opacity: 0.9;
+  transition: transform .2s ease;
+}
+
+.hackclub-badge:hover {
+  transform: scale(1.08);
+  opacity: 1;
+}
+
+.tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  background: linear-gradient(135deg, #ff3355, #ff6b81); /* brighter red/pink */
+  color: white;
+  
+  padding: 6px 12px;
+  font-size: 10.8px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+
+  border-radius: 999px;
+  z-index: 10;
+
+  box-shadow:
+    0 4px 12px rgba(255, 51, 85, 0.35),
+    inset 0 1px 1px rgba(255,255,255,0.25);
+
+  opacity: 1;                      /* makes them NOT faded */
+  backdrop-filter: blur(6px);
+  transition: transform .25s ease;
+}
+
+.tag:hover {
+  transform: scale(1.05);
+}
+
+/* shimer of gold*/
+.tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .55px;
+
+  border-radius: 999px;
+  z-index: 20;
+
+  color: #111;
+  background: rgba(255, 215, 100, .40);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border: 1.3px solid rgba(255, 215, 100,.75);
+
+  overflow: hidden;            /* IMPORTANT: contains shine */
+  position: relative;
+
+  box-shadow:
+      0 4px 18px rgba(255, 200, 80,0.35),
+      inset 0 1px 2px rgba(255,255,255,.5),
+      inset 0 -2px 4px rgba(160,120,40,.25);
+
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.tag::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 120%;
+  height: 100%;
+  background: linear-gradient(115deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,.55) 45%,
+      rgba(255,255,255,0) 90%
+  );
+  transform: skewX(-25deg);
+  animation: shine 4.2s ease-in-out infinite;
+  opacity: .85;
+}
+
+@keyframes shine {
+  0%   { left:-130%; }
+  45%  { left:110%; }  /* smooth glide across */
+  100% { left:110%; }
+}
+
+.tag:hover {
+  transform: scale(1.06);
+  box-shadow:
+      0 6px 26px rgba(255, 210, 90,.55),
+      inset 0 1px 3px rgba(255,255,255,.6),
+      inset 0 -2px 5px rgba(160,120,40,.30);
+}
+
+/*shimer 2 */
+.tag::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -130%;
+  width: 140%;
+  height: 100%;
+  background: linear-gradient(115deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,.75) 50%,
+      rgba(255,255,255,0) 100%
+  );
+  transform: skewX(-25deg);
+  animation: shine 4s ease-in-out infinite;
+  opacity: .9;
+}
+
+
+.project-card {
+  background: var(--card);
+  border-radius: 22px;
+  padding: 18px;
+  transition: transform .2s ease-out, box-shadow .25s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+  cursor: pointer;
+}
+
+.project-card:hover {
+  box-shadow:
+      0 25px 40px rgba(0,0,0,.14),
+      0 0 0 1px rgba(255,255,255,.15) inset;
+}
+
+.project-card {
+  transform-style: preserve-3d;
+  transition: transform .25s ease, box-shadow .32s ease;
+}
+
+.project-card:hover {
+  box-shadow: 0 28px 50px rgba(0,0,0,.35);
+}
+
+.back-btn {
+  background: var(--gold);
+  color: #000;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: .25s;
+  display:inline-block;
+  margin-top:20px;
+}
+
+.back-btn:hover{
+  opacity:0.85;
+  transform:translateY(-2px);
+}
+
+
+/* PROJECT IMAGE – PREMIUM FRAME */
+./* PROJECT IMAGE – PREMIUM FRAME */
+.project-card wider one img {
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+  background: linear-gradient(
+    180deg,
+    rgba(10,25,47,0.9),
+    rgba(10,25,47,0.6)
+  );
+  padding: 14px;
+  border-radius: 14px;
+}
+ {
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+  background: linear-gradient(
+    180deg,
+    rgba(10,25,47,0.9),
+    rgba(10,25,47,0.6)
+  );
+  padding: 14px;
+  border-radius: 14px;
+}
+
+.project-card wider one img {
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.04),
+    0 18px 40px rgba(0,0,0,0.45);
+}
+.project-card wider one:hover img {
+  transform: scale(1.02);
+  transition: transform 0.4s ease;
+}
+
+.project-card wider one {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.project-card wider one img {
+  flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+  .project-card wider one{
+    min-height: 420px;
+  }
+}
+
+
+/* FORCE PROJECT-CARD2 TO SHRINK */
+.project-card2 {
+  width: auto !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+
+  grid-column: auto !important;
+  align-self: stretch !important;
+  justify-self: stretch !important;
+
+  box-sizing: border-box !important;
+}
+
+.project-card2 * {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.project-card2 img {
+  display: block !important;
+  width: 100% !important;
+  height: 220px !important;
+
+  object-fit: contain !important;
+
+  margin: 0 auto !important;
+  flex-shrink: 0 !important;
+}
+
+.projects-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  align-items: stretch !important;
+}
+
+.project-card2 {
+  max-width: 360px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+/* ☢️ NUCLEAR RESET FOR PROJECT-CARD2 */
+.project-card2 {
+  all: unset !important;
+}
+
+.project-card2 {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: 14px;
+}
+
+.projects-grid > .project-card2 {
+  grid-column: auto !important;
+}
+
+/* Typing animation line */
+.typing-line {
+  margin-top: 12px;
+  font-size: 1rem;
+  color: #666;
+  font-weight: 400;
+}
+
+.cursor {
+  display: inline-block;
+  margin-left: 2px;
+    animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+  }
+}
+
+.typing-cursor {
+  display: inline-block;
+  margin-left: 2px;
+    animation: blink 1s steps(2, start) infinite;
+}
+
+
+.hero-name::after,
+.hero-name::before {
+  content: none !important;
+  animation: none !important;
+}
+
+/* We remove the fixed black background so it uses yours */
+#yellow-highlight, #red-underline {
+  display: inline-block;
+  position: relative;
+  font-weight: 600; /* Makes the highlight pop more */
+  color: inherit;   /* Keeps your existing text color */
+}
+
+/* Subtle fade-in for the text itself so the "writing" stands out */
+.about p {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInText 0.8s ease forwards;
+}
+
+@keyframes fadeInText {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

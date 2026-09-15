@@ -1,0 +1,68 @@
+/* ==========================================================
+   archive.css — styles specific to archive.html
+   Loaded after main.css.
+   ========================================================== */
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.archive-wrap {
+  max-width: 1000px;
+  margin: auto;
+  padding: 100px 20px 120px;
+}
+
+.archive-header {
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.archive-header h1 {
+  font-size: 2.4rem;
+  margin-bottom: 10px;
+}
+
+.archive-header p {
+  opacity: 0.7;
+  max-width: 620px;
+  margin: auto;
+}
+
+.archive-item {
+  margin-bottom: 70px;
+}
+
+.archive-item h2 {
+  font-size: 1.3rem;
+  margin-bottom: 14px;
+}
+
+.archive-note {
+  font-size: 0.9rem;
+  opacity: 0.6;
+  margin-bottom: 14px;
+}
+
+.pdf-frame {
+  width: 100%;
+  height: 520px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  background: var(--card);
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+@media (max-width: 768px) {
+  .pdf-frame {
+    height: 420px;
+  }
+}

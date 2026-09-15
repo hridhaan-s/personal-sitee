@@ -1,0 +1,183 @@
+/* ==========================================================
+   02-projects.css
+   Part of css/main.css — load order matters, do not reorder.
+   ========================================================== */
+
+/* ===============================
+   PROJECTS – ROTATING CARDS
+================================ */
+.projects {
+  margin-top: 5rem;
+}
+
+.projects h2 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.projects-subtitle {
+  text-align: center;
+  opacity: 0.8;
+  margin-bottom: 2.5rem;
+  font-size: 0.95rem;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+.project-card {
+  position: relative;
+  background: var(--card);
+  border-radius: 20px;
+  padding: 20px;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.project-card img {
+  width: 100%;
+  border-radius: 14px;
+  margin-bottom: 14px;
+}
+
+.project-card h3 {
+  margin-bottom: 6px;
+}
+
+.project-card p {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+.project-links {
+  margin-top: 12px;
+}
+
+.project-links a {
+  color: #9fb3ff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.project-links a:hover {
+  text-decoration: underline;
+}
+
+/* TAG BADGE */
+.tag {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: #e53935;
+  color: #ffffff;
+  font-size: 0.7rem;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+/* Mobile polish */
+@media (max-width: 480px) {
+  .project-card {
+    padding: 18px;
+  }
+
+  .tag {
+    font-size: 0.65rem;
+    padding: 4px 8px;
+  }
+}
+
+
+/* ===============================
+   ICON LINKS
+================================ */
+.icon-links {
+  display: flex;
+  gap: 32px;
+}
+
+.icon-links a svg {
+  width: 28px;
+  fill: var(--gold);
+  transition: transform 0.3s, filter 0.3s;
+}
+
+.icon-links a:hover svg {
+  transform: translateY(-4px) scale(1.05);
+  filter: drop-shadow(0 6px 14px rgba(201,162,77,0.7));
+}
+
+/* ===============================
+   REVEAL
+================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 0.8s ease;
+}
+.reveal.show {
+  opacity: 1;
+  transform: none;
+}
+
+/* ===============================
+   MOBILE
+================================ */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+
+  .hero-center {
+    position: static;
+    transform: none;
+    margin-top: 40px;
+    text-align: center;
+  }
+
+
+}
+.footer {
+  margin-top: 4rem;
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #9aa4c7;
+  border-top: 1px solid rgba(0, 0, 0, 1);
+}
+
+.footer span {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.footer-note {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+
+.about {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+.about h2 {
+  margin-bottom: 1rem;
+}
+
+.about p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+  opacity: 0.9;
+}

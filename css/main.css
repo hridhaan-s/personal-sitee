@@ -1,0 +1,26 @@
+/* ==========================================================
+   main.css — single entry point for the whole site.
+
+   Partials are imported in their ORIGINAL cascade order.
+   Later files intentionally override earlier ones, so
+   DO NOT reorder these lines.
+   ========================================================== */
+
+@import url("partials/01-base.css");                  /* variables, backgrounds, base hero + sections */
+@import url("partials/02-projects.css");              /* project cards, icon links, reveal, mobile */
+@import url("partials/03-astro-footer.css");          /* astrophotography, footer, hero type, cursor */
+@import url("partials/04-about-tools.css");           /* about links, tools + skills marquees */
+@import url("partials/05-navbar.css");                /* glass navbar, gold links, mobile nav */
+@import url("partials/06-starfield.css");             /* dark-mode starfield, shooting stars, nebula */
+@import url("partials/07-pages.css");                 /* achievements page, spacing, mobile nav */
+@import url("partials/08-intro-hero.css");            /* intro animation, hero-name + hero image */
+@import url("partials/09-guestbook-blog.css");       /* guestbook + blog (was dead code) */
+@import url("partials/10-career.css");                /* career / experience section */
+@import url("partials/11-overrides.css");             /* final grid + card tightening */
+
+@import url("partials/12-experience.css");           /* experience + education (redesigned) */
+@import url("partials/13-sections.css");             /* projects, banner, astro, tiles, archive */
+@import url("partials/14-dark-sky.css");             /* dark-mode starfield (single source of truth) */
+@import url("partials/15-blog.css");                 /* blog index + post reading view */
+
+@import url("guestbook.css");

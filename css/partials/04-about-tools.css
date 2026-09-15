@@ -1,0 +1,656 @@
+/* ==========================================================
+   04-about-tools.css
+   Part of css/main.css — load order matters, do not reorder.
+   ========================================================== */
+
+/* ===============================
+   ABOUT SECTION – LINKS
+================================ */
+
+.about a {
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(201, 162, 77, 0.35);
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.about a:hover {
+  opacity: 0.85;
+  border-bottom-color: rgba(201, 162, 77, 0.7);
+}
+
+
+/* ===============================
+   TOOLS SECTION – FINAL POLISH
+   (Add at bottom of CSS)
+================================ */
+
+/* Section spacing & anchoring */
+.tools-apple {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+  overflow: hidden;
+  text-align: left;
+}
+
+/* Quiet divider (Apple-style) */
+.tools-apple::before {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 0 auto 2rem;
+}
+
+.dark .tools-apple::before {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Title refinement */
+.tools-apple-title {
+  text-align: center;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  opacity: 0.55;
+  margin-bottom: 1.6rem;
+}
+
+/* Lanes container */
+.tools-lanes {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Individual lane */
+.tools-lane {
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+
+  /* Edge fade */
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 6%,
+    black 94%,
+    transparent
+  );
+}
+
+/* Moving track */
+.tools-track {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  width: max-content;
+
+  animation-name: toolsScroll;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Faster, premium speeds */
+.tools-lane.slow   .tools-track { animation-duration: 26s; }
+.tools-lane.medium .tools-track { animation-duration: 20s; }
+.tools-lane.fast   .tools-track { animation-duration: 14s; }
+
+/* Pause on hover */
+.tools-lane:hover .tools-track {
+  animation-play-state: paused;
+}
+
+/* Tool chips (slightly smaller, premium) */
+.tool-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(201, 162, 77, 0.28);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.4),
+    0 8px 24px rgba(0,0,0,0.08);
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dark .tool-chip {
+  background: rgba(18, 18, 18, 0.65);
+}
+
+/* SVG icons */
+.tool-chip svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.6;
+}
+
+/* Hover polish */
+.tool-chip:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.5),
+    0 14px 30px rgba(201, 162, 77, 0.22);
+}
+
+/* Animation */
+@keyframes toolsScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Mobile behavior */
+@media (max-width: 768px) {
+  .tools-track {
+    animation: none;
+    transform: none;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+
+  .tools-lane {
+    mask-image: none;
+  }
+}
+
+/* ===== TOOLS CENTER START OVERRIDE ===== */
+/* Paste this at the VERY END of your CSS */
+
+.tools-track {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  width: max-content;
+
+  transform: translateX(-25%);
+  animation: toolsScroll linear infinite;
+}
+
+@keyframes toolsScroll {
+  from {
+    transform: translateX(-25%);
+  }
+  to {
+    transform: translateX(-75%);
+  }
+}
+
+/* ===== TOOLS CENTER START OVERRIDE ===== */
+/* MUST BE LAST IN FILE */
+
+.tools-track {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  width: max-content;
+
+  /* start near visual center */
+  transform: translateX(-25%);
+  animation: toolsScroll 18s linear infinite;
+}
+
+@keyframes toolsScroll {
+  from {
+    transform: translateX(-25%);
+  }
+  to {
+    transform: translateX(-75%);
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Container */
+.scroll {
+  position: relative;
+  display: flex;
+  width: 700px;
+  overflow: hidden;
+  margin: 12px 0;
+
+  /* Edge fade (Apple-style polish) */
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #fff 20%,
+    #fff 80%,
+    transparent
+  );
+          mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #fff 20%,
+    #fff 80%,
+    transparent
+  );
+}
+
+/* Tracks */
+.scroll > div {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marquee var(--t) linear infinite;
+}
+
+/* Second duplicate track */
+.scroll > div:nth-child(2) {
+  animation: marquee2 var(--t) linear infinite;
+}
+
+/* Animations */
+@keyframes marquee {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes marquee2 {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-200%);
+  }
+}
+
+/* Items */
+.scroll span {
+  display: inline-flex;
+  align-items: center;
+  margin: 10px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+
+  background: #333;
+  color: #fff;
+  transition: background 0.3s, transform 0.3s;
+}
+
+/* Hover */
+.scroll span:hover {
+  background: #f52789;
+  transform: translateY(-2px);
+  cursor: pointer;
+}
+
+
+/* ===============================
+   SKILLS (APPLE-STYLE MARQUEE)
+   FINAL VERSION
+================================ */
+
+.tools-apple {
+  margin-top: 3rem;
+  padding: 3rem 0;
+  overflow: hidden;
+}
+
+.tools-apple-title {
+  text-align: center;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  opacity: 0.7;
+  margin-bottom: 1.6rem;
+}
+
+/* lanes */
+.tools-lanes {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* lane */
+.tools-lane {
+  overflow: hidden;
+  white-space: nowrap;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+}
+
+/* track */
+.tools-track {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+  animation: skillsScroll linear infinite;
+}
+
+/* speeds */
+.tools-lane.slow   .tools-track { animation-duration: 26s; }
+.tools-lane.medium .tools-track { animation-duration: 20s; }
+
+/* pause on hover */
+.tools-lane:hover .tools-track {
+  animation-play-state: paused;
+}
+
+/* chip */
+.tool-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  border-radius: 999px;
+  white-space: nowrap;
+
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(201, 162, 77, 0.28);
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dark .tool-chip {
+  background: rgba(18, 18, 18, 0.65);
+}
+
+/* icon */
+.tool-chip svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.6;
+}
+
+/* hover */
+.tool-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(201, 162, 77, 0.25);
+}
+
+/* animation */
+@keyframes skillsScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  .tools-track {
+    animation: none;
+    overflow-x: auto;
+  }
+
+  .tools-lane {
+    mask-image: none;
+  }
+}
+
+/* ===== SKILLS MARQUEE – TRUE INFINITE SCROLL ===== */
+
+.tools-track {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+
+  animation: skillsInfinite linear infinite;
+}
+
+/* speeds */
+.tools-lane.slow   .tools-track { animation-duration: 22s; }
+.tools-lane.medium .tools-track { animation-duration: 18s; }
+.tools-lane.fast   .tools-track { animation-duration: 14s; }
+
+/* 🔑 REAL INFINITE MARQUEE */
+@keyframes skillsInfinite {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* ===============================
+   SKILLS – TRUE INFINITE MARQUEE
+   NO DEAD SPACE
+================================ */
+
+.tools-lane {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+}
+
+.tools-track {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+  animation: marquee linear infinite;
+}
+
+/* second track starts immediately after first */
+.tools-track:nth-child(2) {
+  animation-delay: calc(var(--duration) / -2);
+}
+
+/* speeds per lane */
+.tools-lane.slow   { --duration: 26s; }
+.tools-lane.medium { --duration: 20s; }
+.tools-lane.fast   { --duration: 14s; }
+
+.tools-track {
+  animation-duration: var(--duration);
+}
+
+/* TRUE infinite motion */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* pause on hover */
+.tools-lane:hover .tools-track {
+  animation-play-state: paused;
+}
+
+/* mobile fallback */
+@media (max-width: 768px) {
+  .tools-track {
+    animation: none;
+  }
+
+  .tools-lane {
+    mask-image: none;
+  }
+}
+
+/* ===== SKILLS – TRUE CONTINUOUS MARQUEE ===== */
+
+.tools-lane {
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+}
+
+.tools-track {
+  display: flex;
+  gap: 14px;
+  min-width: 200vw;   /* 🔑 THIS IS THE MAGIC */
+  animation: marquee linear infinite;
+}
+
+/* speeds */
+.tools-lane.slow   .tools-track { animation-duration: 26s; }
+.tools-lane.medium .tools-track { animation-duration: 20s; }
+
+/* second track offset */
+.tools-track:nth-child(2) {
+  animation-delay: -13s;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* pause on hover */
+.tools-lane:hover .tools-track {
+  animation-play-state: paused;
+}
+
+/* DESKTOP TYPING */
+.hero-name {
+  font-size: 64px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid var(--text);
+  width: 0;
+  animation:
+    typing 2.8s steps(14, end) forwards,
+        blink 0.8s step-end infinite;
+    }
+
+/* Stop cursor */
+.hero-name.finished {
+  border-right: none;
+}
+
+/* MOBILE FIX */
+@media (max-width: 768px) {
+  .hero-name {
+    animation: none;        /* ❌ kill typing */
+    width: auto;            /* ❌ remove width limit */
+    white-space: normal;    /* ✅ allow wrap */
+    border-right: none;     /* ❌ cursor gone */
+    font-size: 40px;
+    line-height: 1.2;
+    text-align: center;
+  }
+}
+
+.tools-apple {
+  padding: 4rem 0;
+  overflow: hidden;
+}
+
+.tools-apple-title {
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.6;
+  margin-bottom: 1.5rem;
+}
+
+/* Lane */
+.tools-lane {
+  overflow: hidden;
+  white-space: nowrap;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+}
+
+/* Track */
+.tools-track {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+  animation: marquee linear infinite;
+}
+
+/* Speeds */
+.tools-lane.slow .tools-track   { animation-duration: 26s; }
+.tools-lane.medium .tools-track { animation-duration: 20s; }
+
+/* Pause on hover */
+.tools-lane:hover .tools-track {
+  animation-play-state: paused;
+}
+
+/* Chip */
+.tool-chip {
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(201,162,77,0.3);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+/* Dark */
+.dark .tool-chip {
+  background: rgba(18,18,18,0.6);
+}
+
+/* Animation */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Mobile fallback */
+@media (max-width: 768px) {
+  .tools-track {
+    animation: none;
+    overflow-x: auto;
+  }
+
+  .tools-lane {
+    mask-image: none;
+  }
+}

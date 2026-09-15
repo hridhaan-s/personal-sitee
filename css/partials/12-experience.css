@@ -1,0 +1,464 @@
+/* ==========================================================
+   12-experience.css
+   Experience + Education. Self-contained: every selector is
+   namespaced .xp-* / .edu-* so it cannot collide with the
+   older partials.
+   Part of css/main.css — load order matters, do not reorder.
+   ========================================================== */
+
+.xp {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 110px 20px 0;
+}
+
+.xp-head {
+  text-align: center;
+  margin-bottom: 52px;
+}
+
+.xp-head h2 {
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.xp-sub {
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 1.6;
+  opacity: 0.6;
+}
+
+
+/* ----------------------------------------------------------
+   TIMELINE LIST
+   ---------------------------------------------------------- */
+
+.xp-list {
+  list-style: none;
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+}
+
+.xp-item {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 22px;
+  padding: 28px 30px;
+  background: var(--card);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 22px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.dark .xp-item {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.xp-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.09);
+  border-color: rgba(201, 162, 77, 0.38);
+}
+
+.dark .xp-item:hover {
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.45);
+}
+
+
+/* ----------------------------------------------------------
+   LOGO
+   ---------------------------------------------------------- */
+
+.xp-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.dark .xp-logo {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.xp-logo img {
+  width: 74%;
+  height: 74%;
+  object-fit: contain;
+  display: block;
+}
+
+.xp-logo svg {
+  width: 26px;
+  height: 26px;
+  color: var(--gold);
+}
+
+/* Fallback badge shown if a logo image fails to load */
+.xp-logo .logo-fallback {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+
+
+/* ----------------------------------------------------------
+   BODY
+   ---------------------------------------------------------- */
+
+.xp-role {
+  font-size: 18px;
+  font-weight: 650;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.xp-org {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.xp-meta {
+  margin-top: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  opacity: 0.5;
+}
+
+.xp-desc {
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.65;
+  opacity: 0.82;
+}
+
+.xp-points {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 9px;
+}
+
+.xp-points li {
+  position: relative;
+  padding-left: 19px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  opacity: 0.78;
+}
+
+.xp-points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0.75;
+}
+
+.xp-points strong {
+  font-weight: 650;
+  opacity: 1;
+}
+
+.xp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.xp-chip {
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(201, 162, 77, 0.12);
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+.dark .xp-chip {
+  background: rgba(201, 162, 77, 0.16);
+}
+
+
+/* ==========================================================
+   EDUCATION
+   ========================================================== */
+
+.edu {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 78px 20px 0;
+}
+
+.edu-head {
+  text-align: center;
+  margin-bottom: 34px;
+}
+
+.edu-head h3 {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.edu-list {
+  list-style: none;
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Primary (current school) */
+.edu-card {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 22px;
+  padding: 30px;
+  background: var(--card);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 22px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.dark .edu-card {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.edu-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.09);
+  border-color: rgba(201, 162, 77, 0.38);
+}
+
+.dark .edu-card:hover {
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.45);
+}
+
+.edu-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.dark .edu-logo {
+  background: #fff;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.edu-logo img {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+  display: block;
+}
+
+.edu-logo .logo-fallback {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.edu-school {
+  font-size: 19px;
+  font-weight: 650;
+  margin: 0;
+}
+
+.edu-degree {
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 1.55;
+  opacity: 0.82;
+}
+
+.edu-meta {
+  margin-top: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  opacity: 0.5;
+}
+
+.edu-label {
+  margin-top: 18px;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.45;
+}
+
+.edu-note {
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0.68;
+}
+
+/* Secondary (earlier school) — deliberately quieter */
+.edu-card.is-secondary {
+  grid-template-columns: 48px 1fr;
+  gap: 18px;
+  padding: 20px 24px;
+  align-items: center;
+  background: transparent;
+  border-style: dashed;
+  border-color: rgba(0, 0, 0, 0.09);
+}
+
+.dark .edu-card.is-secondary {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.edu-card.is-secondary:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: rgba(201, 162, 77, 0.38);
+}
+
+.edu-card.is-secondary .edu-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+}
+
+.edu-card.is-secondary .edu-school {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.edu-card.is-secondary .edu-meta {
+  margin-top: 3px;
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 720px) {
+  .xp,
+  .edu {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .xp {
+    padding-top: 76px;
+  }
+
+  .xp-head h2 {
+    font-size: 32px;
+  }
+
+  .edu-head h3 {
+    font-size: 24px;
+  }
+
+  .xp-item,
+  .edu-card {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 24px 22px;
+  }
+
+  .edu-card.is-secondary {
+    grid-template-columns: 48px 1fr;
+    align-items: center;
+  }
+
+  .xp-role {
+    font-size: 17px;
+  }
+
+  .xp-desc,
+  .xp-points li {
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xp-item,
+  .edu-card {
+    transition: none;
+  }
+
+  .xp-item:hover,
+  .edu-card:hover {
+    transform: none;
+  }
+}
+
+
+/* ----------------------------------------------------------
+   HIGHLIGHTED CHIPS
+   For the handful of credentials that should be read first.
+   ---------------------------------------------------------- */
+
+.xp-chip.is-highlight {
+  position: relative;
+  padding-left: 26px;
+  font-weight: 650;
+  color: #6b4d12;
+  background: linear-gradient(120deg, rgba(201, 162, 77, 0.42), rgba(201, 162, 77, 0.24));
+  border: 1px solid rgba(201, 162, 77, 0.55);
+  box-shadow: 0 2px 10px rgba(201, 162, 77, 0.22);
+}
+
+.dark .xp-chip.is-highlight {
+  color: #f6e4bd;
+  background: linear-gradient(120deg, rgba(201, 162, 77, 0.34), rgba(201, 162, 77, 0.16));
+  border-color: rgba(201, 162, 77, 0.5);
+}
+
+/* little star marker */
+.xp-chip.is-highlight::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translateY(-50%);
+  background: currentColor;
+  clip-path: polygon(
+    50% 0%, 61% 35%, 98% 35%, 68% 57%,
+    79% 91%, 50% 70%, 21% 91%, 32% 57%,
+    2% 35%, 39% 35%
+  );
+  opacity: 0.85;
+}
+
+/* Chips that are real links */
+.xp-chip.is-link {
+  text-decoration: none;
+  transition: background 0.25s ease;
+}
+
+.xp-chip.is-link:hover {
+  background: rgba(201, 162, 77, 0.24);
+}
