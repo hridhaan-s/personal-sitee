@@ -1,4 +1,4 @@
-# personal-sitee
+# The Hridhaan Site
 
 Source for my personal site / portfolio — projects, achievements, astrophotography,
 blog and guestbook.
