@@ -116,6 +116,17 @@
   animation: none !important;
 }
 
+/* Updated hero identity: keep the existing typewriter JS untouched,
+   but present the current static tagline in the rendered hero. */
+.tagline #typewriter {
+  font-size: 0;
+}
+
+.tagline #typewriter::after {
+  content: "Student • Cybersecurity & Space Enthusiast";
+  font-size: 1rem;
+}
+
 #themeToggle {
   background: none;
   border: none;
