@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    { "source": "/archive", "destination": "/achievements", "permanent": true },
+    { "source": "/archive.html", "destination": "/achievements", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}
