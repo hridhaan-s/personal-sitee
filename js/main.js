@@ -179,6 +179,24 @@
     });
   }
 
+  // no pick of their own yet: keep following the device, live (e.g. when
+  // the OS flips to dark at sunset)
+  if (window.matchMedia) {
+    const sys = window.matchMedia("(prefers-color-scheme: light)");
+    const follow = function () {
+      let picked = null;
+      try { picked = localStorage.getItem("theme"); } catch (e) { /* private mode */ }
+      if (picked === "light" || picked === "dark") return;
+      const next = sys.matches ? "light" : "dark";
+      if (root.dataset.theme === next) return;
+      fadeColours();
+      root.dataset.theme = next;
+      document.dispatchEvent(new CustomEvent("themechange"));
+    };
+    if (sys.addEventListener) sys.addEventListener("change", follow);
+    else if (sys.addListener) sys.addListener(follow);
+  }
+
 
   /* ---------- 3. LIVE CLOCK (Greater Noida, IST) ---------- */
 
@@ -264,27 +282,72 @@
   }
 
 
-  /* ---------- 4. "I LIKE…" — click to see the next one ---------- */
+  /* ---------- 4. "I LIKE…" — types itself ----------
+     "I like" stays put; the bold part types out, rests, deletes, and the
+     next one types in. With reduced motion it just swaps every few
+     seconds. Pauses while the tab is hidden. */
 
   const LIKES = [
-    "I like exploring space.",
-    "I like cybersecurity.",
-    "I like writing clean code.",
-    "I like building cool projects.",
-    "I like competitive programming.",
-    "I like learning something new.",
-    "I like to build stuff at Hack Club."
+    "exploring space.",
+    "cybersecurity.",
+    "writing clean code.",
+    "building cool projects.",
+    "competitive programming.",
+    "learning something new.",
+    "to build stuff at Hack Club."
   ];
 
   function initLikes() {
     const text = document.getElementById("likeText");
-    const btn = document.getElementById("likeNext");
-    if (!text || !btn) return;
+    if (!text) return;
+    const line = text.parentNode;
     let i = 0;
-    btn.addEventListener("click", function () {
-      i = (i + 1) % LIKES.length;
-      text.textContent = LIKES[i];
-    });
+
+    if (reduceMotion) {
+      setInterval(function () {
+        if (document.hidden) return;
+        i = (i + 1) % LIKES.length;
+        text.textContent = LIKES[i];
+      }, 3000);
+      return;
+    }
+
+    // human-ish rhythm: a little jitter per key, a beat after punctuation
+    function keyDelay(ch) { return (ch === "." ? 0 : 45 + Math.random() * 55); }
+    function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+    function visible() {
+      return new Promise(function (r) {
+        if (!document.hidden) return r();
+        document.addEventListener("visibilitychange", function on() {
+          if (document.hidden) return;
+          document.removeEventListener("visibilitychange", on);
+          r();
+        });
+      });
+    }
+
+    async function loop() {
+      await wait(2600);                       // the first one is already on screen
+      for (;;) {
+        await visible();
+        line.classList.add("is-typing");
+        let cur = LIKES[i];
+        for (let n = cur.length; n >= 0; n--) {          // delete
+          text.textContent = cur.slice(0, n);
+          await wait(22);
+        }
+        i = (i + 1) % LIKES.length;
+        cur = LIKES[i];
+        await wait(260);
+        for (let n = 1; n <= cur.length; n++) {         // type
+          text.textContent = cur.slice(0, n);
+          await wait(keyDelay(cur[n - 1]));
+        }
+        line.classList.remove("is-typing");
+        await wait(2200);                     // let it be read
+      }
+    }
+    loop();
   }
 
 
@@ -309,11 +372,11 @@
 
       notes = [RoughNotation.annotate(mark, {
         type: "highlight", color: dark ? "rgba(242, 193, 78, .32)" : "rgba(255, 205, 60, .6)",
-        animationDuration: 900, multiline: true, animate: animate
+        animationDuration: 1300, iterations: 1, multiline: true, animate: animate
       })].concat(links.map(function (a) {
         return RoughNotation.annotate(a, {
           type: "underline", color: underline, padding: 1, strokeWidth: 1.6,
-          iterations: 1, animationDuration: 450, animate: animate
+          iterations: 1, animationDuration: 650, animate: animate
         });
       }));
     }
@@ -324,18 +387,38 @@
       notes.forEach(function (n) { n.show(); });
     }
 
-    const io = new IntersectionObserver(function (entries) {
-      if (!entries[0].isIntersecting) return;
-      io.disconnect();
+    // Nothing is drawn until the visitor starts scrolling. Then, while the
+    // intro is in view, the marks go on one at a time, each finishing
+    // before the next pen stroke starts, like someone marking up the page.
+    function draw() {
+      if (shown) return;
+      shown = true;
       build(!reduceMotion);
-      let delay = 400;
+      let delay = 150;
       notes.forEach(function (n, i) {
         setTimeout(function () { n.show(); }, delay);
-        delay += i === 0 ? 800 : 300;
+        delay += (i === 0 ? 1300 : 650) + 120;   // stroke time + lifting the pen
       });
-      shown = true;
-    }, { threshold: 0.6 });
-    io.observe(mark);
+    }
+
+    function whenInView() {
+      const io = new IntersectionObserver(function (entries) {
+        if (!entries[0].isIntersecting) return;
+        io.disconnect();
+        draw();
+      }, { threshold: 0.3 });
+      io.observe(mark);
+    }
+
+    const intent = ["scroll", "wheel", "touchmove", "keydown"];
+    function onIntent(e) {
+      if (e.type === "keydown" && !/^(ArrowDown|ArrowUp|PageDown|PageUp|Space| |End|Home)$/.test(e.key)) return;
+      if (e.type === "scroll" && window.scrollY < 2) return;
+      intent.forEach(function (ev) { window.removeEventListener(ev, onIntent); });
+      whenInView();
+    }
+    if (window.scrollY > 2) whenInView();          // already scrolling before this loaded
+    else intent.forEach(function (ev) { window.addEventListener(ev, onIntent, { passive: true }); });
 
     // Re-measure whenever the text could have moved: theme, page, webfont
     // swap, or a resize that reflows the paragraph.
@@ -1179,10 +1262,10 @@
 
   /* ---------- 14. SPLASH ----------
      First load of a session only (the <head> script decides, before
-     paint). HRIDHAAN / SAHAY decode out of random glyphs, a gold line
-     draws through the middle, then the sky splits open top and bottom.
-     ~1.4s; any click, key, scroll or touch skips to the split. Never
-     runs with reduced motion. */
+     paint). Pure black, HRIDHAAN over SAHAY, held for 4s; a hairline
+     cuts the middle and the screen splits top and bottom. Any click,
+     key, scroll or touch skips to the split. Never runs with reduced
+     motion. All the motion lives in CSS; this only sets the beats. */
 
   function playIntro(done) {
     const box = document.getElementById("splash");
@@ -1193,99 +1276,34 @@
     }
     try { sessionStorage.setItem("introSeen", "1"); } catch (e) { /* private mode */ }
 
-    // the starfield, painted once and shared by both halves so the sky
-    // lines up perfectly at the seam
-    try {
-      const c = document.createElement("canvas");
-      const w = window.innerWidth, h = window.innerHeight;
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
-      const x = c.getContext("2d");
-      x.scale(dpr, dpr);
-      const n = Math.round((w * h) / 2200);
-      for (let i = 0; i < n; i++) {
-        const t = Math.random();
-        x.fillStyle = (t < 0.08 ? "rgba(255,214,170," : t < 0.18 ? "rgba(190,208,255," : "rgba(255,255,255,") +
-          (0.25 + Math.random() * 0.65).toFixed(2) + ")";
-        x.beginPath();
-        x.arc(Math.random() * w, Math.random() * h, Math.random() < 0.06 ? 1.3 : Math.random() < 0.35 ? 0.85 : 0.5, 0, Math.PI * 2);
-        x.fill();
-      }
-      box.style.setProperty("--splash-stars", "url(" + c.toDataURL("image/png") + ")");
-    } catch (e) { /* plain night background is fine */ }
+    const HOLD = 4000;             // name on screen before the split
+    let started = false, opened = false, finished = false;
+    let cutTimer = 0, openTimer = 0;
 
-    const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&*<>/\\=+";
-    const cells = [];
-
-    // each letter scrambles, then locks in; the two words lock left to
-    // right on slightly different rhythms so they finish together
-    box.querySelectorAll(".splash-word").forEach(function (word, w) {
-      const letters = word.dataset.word.split("");
-      word.textContent = "";
-      letters.forEach(function (ch, i) {
-        const span = document.createElement("span");
-        span.className = "sc is-blank";
-        span.textContent = ch;
-        word.appendChild(span);
-        cells.push({
-          el: span,
-          ch: ch,
-          start: 40 + i * 18 + w * 40,
-          lock: w === 0 ? 150 + i * 48 : 210 + i * 66,
-          set: false
-        });
-      });
-    });
-
-    const t0 = performance.now();
-    let opened = false, finished = false, raf = 0, lastTick = 0;
-
-    function tick(now) {
-      const t = now - t0;
-      let pending = false;
-      if (now - lastTick >= 45) {
-        lastTick = now;
-        cells.forEach(function (c) {
-          if (c.set || t < c.start) { if (!c.set) pending = true; return; }
-          if (t >= c.lock) {
-            c.set = true;
-            c.el.textContent = c.ch;
-            c.el.className = "sc is-set";
-          } else {
-            c.el.classList.remove("is-blank");
-            c.el.textContent = GLYPHS[(Math.random() * GLYPHS.length) | 0];
-            pending = true;
-          }
-        });
-      } else {
-        pending = cells.some(function (c) { return !c.set; });
-      }
-      if (pending && !opened) raf = requestAnimationFrame(tick);
+    function start() {
+      if (started) return;
+      started = true;
+      root.classList.add("intro-go");
+      cutTimer = setTimeout(function () { root.classList.add("intro-cut"); }, HOLD - 550);
+      openTimer = setTimeout(open, HOLD);
     }
-    raf = requestAnimationFrame(tick);
 
     function open() {
       if (opened) return;
       opened = true;
-      cancelAnimationFrame(raf);
-      cells.forEach(function (c) {
-        if (c.set) return;                 // already locked: leave it alone
-        c.set = true;
-        c.el.textContent = c.ch;
-        c.el.className = "sc is-set";
-      });
-      root.classList.add("intro-out");
-      setTimeout(finish, 600);
+      clearTimeout(cutTimer);
+      clearTimeout(openTimer);
+      root.classList.add("intro-go", "intro-cut", "intro-out");
+      setTimeout(finish, 1000);
     }
 
     function finish() {
       if (finished) return;
       finished = true;
-      clearTimeout(autoOpen);
       ["click", "keydown", "wheel", "touchstart"].forEach(function (ev) {
         window.removeEventListener(ev, skip, true);
       });
-      root.classList.remove("intro-on", "intro-out");
+      root.classList.remove("intro-on", "intro-go", "intro-cut", "intro-out");
       box.remove();
       done();
     }
@@ -1295,8 +1313,15 @@
       window.addEventListener(ev, skip, { capture: true, passive: true });
     });
 
-    // locks finish ~0.5s, the line ~0.8s; a short beat, then split
-    const autoOpen = setTimeout(open, 860);
+    // the words are set in Figtree 800: wait for it (briefly) so they
+    // never swap fonts on screen
+    const fontWait = setTimeout(start, 600);
+    try {
+      document.fonts.load('800 64px "Figtree"').then(function () {
+        clearTimeout(fontWait);
+        requestAnimationFrame(start);
+      }, function () {});
+    } catch (e) { /* fonts API missing: the timeout starts it */ }
   }
 
 
@@ -1315,7 +1340,6 @@
 
   initClock();
   initMoon();
-  initLikes();
   initTerminal();
   initLightbox();
   initFlipbook();
@@ -1326,6 +1350,7 @@
   // play where people can see them
   playIntro(function () {
     initReveal();
+    initLikes();
     // rough-notation loads with defer just before this file; wait for the window
     if (document.readyState === "complete") initAnnotations();
     else window.addEventListener("load", initAnnotations);
