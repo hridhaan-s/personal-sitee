@@ -25,8 +25,12 @@
        paint so nothing flashes. The intro plays once per browser session. -->
   <script>
     (function () {
-      var d = document.documentElement, t = "dark";
-      try { t = localStorage.getItem("theme") || "dark"; } catch (e) {}
+      // theme: the visitor's own pick if they made one, else their device's
+      var d = document.documentElement, t = null;
+      try { t = localStorage.getItem("theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") {
+        t = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
       d.dataset.theme = t;
       var seen = true;
       try { seen = sessionStorage.getItem("introSeen") === "1"; } catch (e) {}
@@ -34,10 +38,12 @@
       if (!seen && !still) {
         d.classList.add("intro-on");
         // safety net: never leave the page hidden if the script below fails
-        setTimeout(function () { d.classList.remove("intro-on"); }, 3000);
+        setTimeout(function () { d.classList.remove("intro-on", "intro-go", "intro-cut", "intro-out"); }, 7000);
       }
     })();
   </script>
+  <!-- OLED black from the very first frame, even before site.css arrives -->
+  <style>html.intro-on:not(.intro-out) { background: #000; }</style>
 
   <link rel="icon" href="assets/img/memoji.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -50,12 +56,12 @@
 <body>
   <canvas id="starfield" class="starfield" aria-hidden="true"></canvas>
 
-  <!-- Splash (first load of a session only): HRIDHAAN / SAHAY decode out
-       of random glyphs over a starfield, a gold line draws through the
-       middle, then the sky splits open to reveal the page. -->
+  <!-- Splash (first load of a session only): HRIDHAAN over SAHAY on pure
+       black, held for 4s, then a hairline cuts the middle and the screen
+       splits open top and bottom. -->
   <div class="splash" id="splash" aria-hidden="true">
-    <div class="splash-half splash-top"><span class="splash-word" data-word="HRIDHAAN">HRIDHAAN</span></div>
-    <div class="splash-half splash-bottom"><span class="splash-word" data-word="SAHAY">SAHAY</span></div>
+    <div class="splash-half splash-top"><span class="splash-word">HRIDHAAN</span></div>
+    <div class="splash-half splash-bottom"><span class="splash-word">SAHAY</span></div>
     <span class="splash-line"></span>
   </div>
 
@@ -141,21 +147,14 @@
 
           <p class="statement">Building projects with curiosity, and a love for engineering.</p>
 
+          <!-- types itself out: I like <thing>, deletes, types the next -->
           <p class="likes">
-            <span id="likeText">I like exploring space.</span>
-            <button type="button" id="likeNext" class="text-btn">What else?</button>
+            I like <strong class="like-typed" id="likeText" aria-hidden="true">exploring space.</strong><span class="like-caret" aria-hidden="true"></span>
+            <span class="sr-only">I like exploring space, cybersecurity, writing clean code, building cool projects, competitive programming, learning something new, and building stuff at Hack Club.</span>
           </p>
 
           <p class="clock" id="clock" hidden>
             At the moment, it's <strong id="clockTime">--:--</strong> in Greater Noida, Delhi NCR (where I live).
-          </p>
-
-          <p class="moon" data-moon hidden>
-            <svg class="moon-icon" viewBox="0 0 20 20" width="15" height="15" aria-hidden="true">
-              <circle class="moon-dark" cx="10" cy="10" r="8.5" />
-              <path class="moon-lit" d="" />
-            </svg>
-            <span class="moon-text"></span>
           </p>
         </div>
       </section>
@@ -200,7 +199,7 @@
           </li>
 
           <li class="entry">
-            <div class="logo bb-logo"><img class="bb-mark" src="assets/logos/bitbuzz.svg" alt="BitBuzz" width="40" height="40" /><img class="bb-cover" src="assets/projects/bitbuzz-cover.jpg" alt="" width="1200" height="546" loading="lazy" decoding="async" /></div>
+            <div class="logo bb-logo"><img class="bb-mark" src="assets/logos/bitbuzz.svg" alt="BitBuzz" width="40" height="40" /></div>
             <div class="entry-body">
               <h3>Founder <span class="org">· BitBuzz</span></h3>
               <p class="meta">2023 – Present · Greater Noida, Delhi NCR</p>
