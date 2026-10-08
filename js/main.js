@@ -445,7 +445,7 @@
     if (postList) postList.hidden = true;
     if (blogHead) blogHead.hidden = true;
     post.hidden = false;
-    if (!noHistory) history.replaceState({ route: "blog" }, "", "/blog#" + id);
+    if (!noHistory) history.replaceState({ route: "blog" }, "", "/memo#" + id);
     window.scrollTo(0, 0);
   }
 
@@ -474,7 +474,7 @@
   document.querySelectorAll("[data-blog-back]").forEach(function (btn) {
     btn.addEventListener("click", function () {
       closePost();
-      history.replaceState({ route: "blog" }, "", "/blog");
+      history.replaceState({ route: "blog" }, "", "/memo");
       window.scrollTo(0, 0);
     });
   });
@@ -492,7 +492,7 @@
       box.innerHTML = d.posts.slice(0, 2).map(function (p) {
         const m = /^(\d{4})-(\d{2})/.exec(p.date || "");
         const when = m ? MONTHS[+m[2] - 1] + " " + m[1] : "";
-        return '<a class="card post-card" href="/blog/' + encodeURIComponent(p.slug) + '">' +
+        return '<a class="card post-card" href="/memo/' + encodeURIComponent(p.slug) + '">' +
           '<time datetime="' + esc(p.date) + '">' + when + " · " + p.readMins + " min read</time>" +
           "<h3>" + esc(p.title) + "</h3><p>" + esc(p.excerpt) + "</p></a>";
       }).join("");
@@ -1306,7 +1306,7 @@
 
   const startRoute = routeFromUrl();
   
-  if (location.pathname !== pathFor(startRoute) && !(startRoute === "blog" && location.pathname.replace(/\/+$/, "") === "/blog")) {
+  if (location.pathname !== pathFor(startRoute) && !(startRoute === "blog" && location.pathname.replace(/\/+$/, "") === "/memo")) {
     history.replaceState({ route: startRoute }, "", pathFor(startRoute) + (startRoute === "blog" ? location.hash : ""));
   }
   applyRoute(startRoute);

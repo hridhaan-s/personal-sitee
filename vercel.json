@@ -5,14 +5,15 @@
   "redirects": [
     { "source": "/archive", "destination": "/achievements", "permanent": true },
     { "source": "/archive.html", "destination": "/achievements", "permanent": true },
-    { "source": "/memo", "destination": "/blog", "permanent": false },
+    { "source": "/memo", "destination": "/memo", "permanent": true },
+    { "source": "/blog/", "destination": "/memo", "permanent": true },
     { "source": "/admin/", "destination": "/admin", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/blog/rss.xml", "destination": "/api/memo?rss=1" },
-    { "source": "/blog/feed", "destination": "/api/memo?rss=1" },
-    { "source": "/blog/:slug", "destination": "/api/memo?page=:slug" },
-    { "source": "/blog", "destination": "/api/memo?page=_index" },
+    { "source": "/memo/rss.xml", "destination": "/api/memo?rss=1" },
+    { "source": "/memo/feed", "destination": "/api/memo?rss=1" },
+    { "source": "/memo/:slug", "destination": "/api/memo?page=:slug" },
+    { "source": "/memo", "destination": "/api/memo?page=_index" },
     { "source": "/admin", "destination": "/admin.html" },
     { "source": "/(.*)", "destination": "/" }
   ],

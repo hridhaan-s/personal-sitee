@@ -115,7 +115,7 @@ async function branchHead() {
   } catch (e) {
     if (e.status !== 404 && e.status !== 409) throw e;
   }
-  const readme = Buffer.from("# Memo content\n\nPosts and media for hridhaan.me/blog, written by /admin. Don't edit by hand unless you mean it.\n").toString("base64");
+  const readme = Buffer.from("# Memo content\n\nPosts and media for hridhaan.me/memo, written by /admin. Don't edit by hand unless you mean it.\n").toString("base64");
   try {
     
     const tree = await gh("POST", "/repos/" + REPO + "/git/trees", {
@@ -322,7 +322,7 @@ async function renderPage(res, slug) {
     }
   }
 
-  const url = SITE + "/blog" + (slug ? "/" + slug : "");
+  const url = SITE + "/memo" + (slug ? "/" + slug : "");
   const head = [
     "<title>" + esc(title) + "</title>",
     '<meta name="description" content="' + esc(desc) + '">',
@@ -355,8 +355,8 @@ async function renderRSS(res) {
     const body = String(p && p.html || "").replace(/(src|href)="\/(?!\/)/g, '$1="' + SITE + "/");
     items.push(
       "<item><title>" + esc(m.title) + "</title>" +
-      "<link>" + SITE + "/blog/" + m.slug + "</link>" +
-      '<guid isPermaLink="true">' + SITE + "/blog/" + m.slug + "</guid>" +
+      "<link>" + SITE + "/memo/ + m.slug + "</link>" +
+      '<guid isPermaLink="true">' + SITE + "/memo/ + m.slug + "</guid>" +
       "<pubDate>" + new Date(m.date).toUTCString() + "</pubDate>" +
       m.tags.map(function (t) { return "<category>" + esc(t) + "</category>"; }).join("") +
       "<description>" + esc(m.excerpt) + "</description>" +
@@ -366,7 +366,7 @@ async function renderRSS(res) {
   const xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
     '<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom"><channel>' +
     "<title>Memo — Hridhaan Sahay</title><link>" + SITE + "/blog</link>" +
-    '<atom:link href="' + SITE + '/blog/rss.xml" rel="self" type="application/rss+xml"/>' +
+    '<atom:link href="' + SITE + '/memo/rss.xml" rel="self" type="application/rss+xml"/>' +
     "<description>Notes, logs and half-finished thoughts by Hridhaan Sahay.</description><language>en</language>" +
     items.join("") + "</channel></rss>";
   res.setHeader("Content-Type", "application/rss+xml; charset=utf-8");

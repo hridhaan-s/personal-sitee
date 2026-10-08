@@ -75,7 +75,7 @@
   }
 
   function slugFromPath() {
-    const m = /^\/blog\/([^/?#]+)\/?$/.exec(location.pathname);
+    const m = /^\/memo\/([^/?#]+)\/?$/.exec(location.pathname);
     return m && m[1] !== "rss.xml" ? decodeURIComponent(m[1]) : "";
   }
 
@@ -139,7 +139,7 @@
     const p = new URLSearchParams(location.search);
     Object.keys(changes).forEach(function (k) { if (changes[k]) p.set(k, changes[k]); else p.delete(k); });
     const s = p.toString();
-    history.replaceState(history.state, "", "/blog" + (s ? "?" + s : ""));
+    history.replaceState(history.state, "", "/memo" + (s ? "?" + s : ""));
   }
 
   function drawResults() {
@@ -178,7 +178,7 @@
   function row(p, q, pinned) {
     return "<li><time datetime=\"" + esc(p.date) + "\">" + (pinned ? longDate(p.date).replace(/, \d+$/, "") : shortDate(p.date)) + "</time><div>" +
       (pinned ? '<span class="pin" aria-label="Pinned">✦</span>' : "") +
-      '<a class="t" data-nav href="/blog/' + encodeURIComponent(p.slug) + '">' + highlight(q, p.title) + "</a>" +
+      '<a class="t" data-nav href="/memo/' + encodeURIComponent(p.slug) + '">' + highlight(q, p.title) + "</a>" +
       (q && p.excerpt ? '<span class="x">' + highlight(q, p.excerpt) + "</span>" : "") +
       "</div></li>";
   }
@@ -190,7 +190,7 @@
     stopPostExtras();
     const post = await getPost(slug);
     if (!post) {
-      main.innerHTML = '<a class="back" data-nav href="/blog">← All memos</a><div class="post-head"><h1>This memo doesn\'t exist.</h1></div><p class="muted">Maybe it was renamed, or it\'s still a draft. <a data-nav href="/blog">See everything else</a>.</p>';
+      main.innerHTML = '<a class="back" data-nav href="/memo">← All memos</a><div class="post-head"><h1>This memo doesn\'t exist.</h1></div><p class="muted">Maybe it was renamed, or it\'s still a draft. <a data-nav href="/memo">See everything else</a>.</p>';
       document.title = "Not found — Memo";
       return;
     }
@@ -204,7 +204,7 @@
     const edited = post.updated && post.updated.slice(0, 10) > post.date;
 
     main.innerHTML =
-      '<a class="back" data-nav href="/blog">← All memos</a>' +
+      '<a class="back" data-nav href="/memo">← All memos</a>' +
       '<article class="fade">' +
         '<header class="post-head"><h1>' + esc(post.title) + "</h1>" +
           '<div class="post-meta"><time datetime="' + esc(post.date) + '">' + longDate(post.date) + "</time>" +
@@ -221,8 +221,8 @@
           '<a class="pill" href="#top" id="totop">↑ Top</a>' +
         "</div>" +
         ((newer || older) ? '<nav class="pager" aria-label="More memos">' +
-          (older ? '<a data-nav href="/blog/' + encodeURIComponent(older.slug) + '"><small>← Older</small><span>' + esc(older.title) + "</span></a>" : "<span></span>") +
-          (newer ? '<a class="next" data-nav href="/blog/' + encodeURIComponent(newer.slug) + '"><small>Newer →</small><span>' + esc(newer.title) + "</span></a>" : "") +
+          (older ? '<a data-nav href="/memo/' + encodeURIComponent(older.slug) + '"><small>← Older</small><span>' + esc(older.title) + "</span></a>" : "<span></span>") +
+          (newer ? '<a class="next" data-nav href="/memo/' + encodeURIComponent(newer.slug) + '"><small>Newer →</small><span>' + esc(newer.title) + "</span></a>" : "") +
         "</nav>" : "") +
       "</article>";
 
@@ -230,7 +230,7 @@
     enhanceBody(document.getElementById("body"));
 
     document.getElementById("share").addEventListener("click", function () {
-      const url = location.origin + "/blog/" + post.slug;
+      const url = location.origin + "/memo/" + post.slug;
       if (navigator.share && matchMedia("(pointer: coarse)").matches) {
         navigator.share({ title: post.title, url: url }).catch(function () {});
       } else {
@@ -351,7 +351,7 @@
     
     if (!slugFromPath() && /^#post-/.test(location.hash)) {
       const legacy = { "post-frameworkless-portfolio": "building-this-portfolio-without-frameworks" }[location.hash.slice(1)];
-      if (legacy) history.replaceState(null, "", "/blog/" + legacy);
+      if (legacy) history.replaceState(null, "", "/memo/" + legacy);
     }
     const slug = slugFromPath();
     if (slug) await renderPost(slug); else await renderList();

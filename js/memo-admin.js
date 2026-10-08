@@ -183,14 +183,14 @@
     if (!confirmLeave()) return;
     state.current = { intro: true };
     showDoc(true);
-    titleEl.value = "Intro on /blog";
+    titleEl.value = "Intro on /memo";
     ed.innerHTML = state.settings.intro || "<p><br></p>";
     normalize();
     autosizeTitle();
     stats();
     setDirty(false);
     renderList();
-    setStatus("Editing the intro at the top of /blog");
+    setStatus("Editing the intro at the top of /memo");
     history.replaceState(null, "", "/admin#intro");
   }
 
@@ -261,11 +261,11 @@
   $("publishBtn").addEventListener("click", function () { save({ publish: true }); });
   $("previewBtn").addEventListener("click", function () {
     if (!state.current) return;
-    if (state.current.intro) { window.open("/blog", "_blank"); return; }
+    if (state.current.intro) { window.open("/memo", "_blank"); return; }
     if (!state.current.originalSlug) { toast("Save it once first."); return; }
     if ($("vis").value === "draft") { toast("Drafts aren't visible on the site. Make it unlisted to preview by link.", 3500); return; }
     if (state.dirty) toast("Showing the last saved version.");
-    window.open("/blog/" + state.current.originalSlug, "_blank");
+    window.open("/memo/" + state.current.originalSlug, "_blank");
   });
   $("deleteBtn").addEventListener("click", async function () {
     if (!state.current || state.current.intro) return;

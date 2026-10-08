@@ -42,10 +42,10 @@ http.createServer(async function (req, res) {
 
   if (p === "/api/memo") return runMemo(req, res, query);
   if (p === "/archive" || p === "/archive.html") { res.writeHead(308, { Location: "/achievements" }); return res.end(); }
-  if (p === "/blog/rss.xml" || p === "/blog/feed") return runMemo(req, res, { rss: "1" });
-  const m = /^\/blog\/([^/]+)\/?$/.exec(p);
+  if (p === "/memo/rss.xml" || p === "/memo/feed") return runMemo(req, res, { rss: "1" });
+  const m = /^\/memo\/([^/]+)\/?$/.exec(p);
   if (m) return runMemo(req, res, { page: m[1] });
-  if (p === "/blog" || p === "/blog/") return runMemo(req, res, { page: "_index" });
+  if (p === "/memo" || p === "/memo/") return runMemo(req, res, { page: "_index" });
 
   let file = p === "/admin" || p === "/admin/" ? "admin.html" : p.replace(/^\/+/, "");
   let full = path.join(ROOT, file);
