@@ -1,0 +1,18 @@
+{
+  "settings": {
+    "intro": "<p>Hey, you found my notebook.</p><p>I'm Hridhaan — a student in Greater Noida who builds things on the internet, runs <a href=\"https://bitbuzz.app\">BitBuzz</a>, does a bit of Hack Club, and points a telescope at the sky whenever it's clear. This is where the half-finished thoughts, build logs and things I learned the hard way end up.</p><p>Some memos are unlisted and only open with their own link. Pull up a chair.</p>"
+  },
+  "posts": [
+    {
+      "slug": "building-this-portfolio-without-frameworks",
+      "title": "Building this portfolio without frameworks",
+      "date": "2025-12-01",
+      "updated": "2025-12-01",
+      "tags": ["web", "build log"],
+      "visibility": "public",
+      "pinned": false,
+      "excerpt": "I wanted one place for everything I make and learn, so I built it before 2025 ended, with no React and no build step.",
+      "html": "<p><em>No React, no bundler, no node_modules. Just the three languages the browser already speaks.</em></p><p>I wanted a place where I could put everything I achieve and learn, so I made it without using React or any framework. Every tutorial pushes you toward a stack before you have a problem that needs one, and a personal site is not that problem.</p><h2>The stack</h2><p>HTML, CSS and JavaScript. That is the whole list. There is no build step, which means the file I edit is the file the browser runs, and debugging is just reading.</p><h2>Domain and hosting</h2><p>Vercel for hosting and Odoo for the domain. Vercel rewrites every route back to the root, which is what lets the small client-side router handle <code>/achievements</code> and <code>/blog</code> without separate HTML files.</p><h2>What I would tell past me</h2><p>Keep the CSS in ordered files from day one. A single stylesheet that only ever grows is fine until the day you need to find something in it, and then it is not fine at all.</p>"
+    }
+  ]
+}

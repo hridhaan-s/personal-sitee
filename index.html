@@ -92,7 +92,7 @@
         <a href="/projects" data-route="projects">Projects</a>
         <a href="/achievements" data-route="achievements">Achievements</a>
         <a href="/astrophotography" data-route="astrophotography">Astrophotography</a>
-        <a href="/blog" data-route="blog">Blog</a>
+        <a href="/blog">Blog</a>
         <a href="/links" data-route="links">Links</a>
       </nav>
     </header>
@@ -386,18 +386,20 @@
       </section>
 
 
-      <!-- Blog preview -->
+      <!-- Blog preview: the latest memos, filled in from /api/memo (Memo lives at /blog) -->
       <section class="block" id="writing">
         <div class="block-head">
           <h2>Blog</h2>
-          <a class="view-all" href="/blog" data-route="blog">View all →</a>
+          <a class="view-all" href="/blog">View all →</a>
         </div>
 
-        <a class="card post-card" href="/blog#post-frameworkless-portfolio" data-open-post="post-frameworkless-portfolio">
-          <time datetime="2025-12">December 2025</time>
-          <h3>Building this portfolio without frameworks</h3>
-          <p>I wanted one place for everything I make and learn, so I built it before 2025 ended, with no React and no build step.</p>
-        </a>
+        <div id="memoLatest">
+          <a class="card post-card" href="/blog/building-this-portfolio-without-frameworks">
+            <time datetime="2025-12">December 2025</time>
+            <h3>Building this portfolio without frameworks</h3>
+            <p>I wanted one place for everything I make and learn, so I built it before 2025 ended, with no React and no build step.</p>
+          </a>
+        </div>
       </section>
 
 

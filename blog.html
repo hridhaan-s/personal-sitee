@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Memo — Hridhaan Sahay</title>
+  <link rel="icon" href="/assets/img/memoji.png">
+  <link rel="alternate" type="application/rss+xml" title="Memo — Hridhaan Sahay" href="/blog/rss.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Caveat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/memo.css">
+  <script>
+    // theme before paint: saved choice, else the system's
+    try { var t = localStorage.getItem("memo-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="progress" id="progress" hidden></div>
+
+  <div class="wrap">
+    <header class="mast">
+      <div>
+        <h1><a href="/blog" data-nav>Memo<span class="dot">.</span></a></h1>
+        <nav aria-label="Memo">
+          <span>by <a href="/">Hridhaan Sahay</a></span>
+          <a href="/#guestbook">Guestbook</a>
+          <a href="/blog/rss.xml">RSS</a>
+        </nav>
+      </div>
+      <button class="icon-btn" id="theme" type="button" aria-label="Switch theme" title="Switch theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <noscript><p class="empty">Memo needs JavaScript to show the notes. Sorry about that.</p></noscript>
+    </main>
+
+    <footer class="foot">
+      <span>© <span id="yr"></span> Hridhaan Sahay · written in Greater Noida</span>
+      <span><a href="/">hridhaan.me</a> · <a href="/blog/rss.xml">RSS</a></span>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!--MEMO_DATA-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+  <script src="/js/memo.js"></script>
+</body>
+</html>

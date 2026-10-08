@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Memo Admin</title>
+  <link rel="icon" href="/assets/img/memoji.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Caveat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/memo.css">
+  <script>
+    try { var t = localStorage.getItem("memo-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <style>
+    /* ---------- admin shell ---------- */
+    body { font-size: 16px; }
+    [hidden] { display: none !important; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px;
+      border: 1px solid var(--line); background: var(--bg-2); color: var(--text); cursor: pointer; font-size: 14px; font-weight: 500;
+      text-decoration: none; white-space: nowrap; transition: border-color .15s, background .15s, transform .15s var(--ease);
+    }
+    .btn:hover { border-color: var(--line-2); color: var(--head); }
+    .btn:active { transform: scale(.97); }
+    .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+    .btn.primary:hover { filter: brightness(1.08); color: var(--accent-ink); }
+    .btn.ghost { background: transparent; }
+    .btn.danger:hover { border-color: #e5484d; color: #e5484d; }
+    .btn:disabled { opacity: .5; cursor: default; }
+    input, select, textarea { font: inherit; color: var(--head); }
+    .field {
+      height: 34px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg);
+      outline: none; font-size: 14px; min-width: 0;
+    }
+    .field:focus { border-color: var(--accent); }
+    label.l { font-size: 12px; color: var(--faint); display: block; margin-bottom: 4px; font-family: var(--mono); }
+
+    /* login */
+    .login { min-height: 100vh; display: grid; place-items: center; padding: 20px; }
+    .login form { width: 100%; max-width: 340px; padding: 28px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-2); box-shadow: var(--shadow); }
+    .login h1 { margin: 0 0 4px; font-size: 26px; color: var(--head); }
+    .login h1 span { color: var(--accent); }
+    .login p { margin: 0 0 20px; color: var(--muted); font-size: 14px; }
+    .login .field { width: 100%; height: 40px; margin-bottom: 12px; }
+    .login .btn { width: 100%; justify-content: center; height: 40px; }
+    .login .err { color: #e5484d; font-size: 14px; min-height: 20px; margin: 8px 0 0; }
+
+    /* app layout */
+    .app { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+    .side { border-right: 1px solid var(--line); background: var(--bg-2); display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; }
+    .side-top { padding: 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .side-top b { font-size: 20px; color: var(--head); }
+    .side-top b span { color: var(--accent); }
+    .side-top small { display: block; font: 11px var(--mono); color: var(--faint); }
+    .side .new { margin: 0 16px 10px; justify-content: center; }
+    .side .find { margin: 0 16px 10px; }
+    .side .filters { display: flex; gap: 4px; margin: 0 16px 8px; flex-wrap: wrap; }
+    .side .filters .chip { font-size: 11px; padding: 1px 8px; }
+    .plist { list-style: none; margin: 0; padding: 0 8px 16px; overflow-y: auto; flex: 1; }
+    .plist li button {
+      width: 100%; text-align: left; border: 0; background: none; padding: 9px 10px; border-radius: 8px; cursor: pointer;
+      display: block; color: var(--text);
+    }
+    .plist li button:hover { background: var(--bg-3); }
+    .plist li button.on { background: var(--bg-3); box-shadow: inset 2px 0 0 var(--accent); }
+    .plist .pt { display: block; font-weight: 500; font-size: 14px; color: var(--head); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .plist .pm { display: flex; gap: 6px; font: 11px var(--mono); color: var(--faint); margin-top: 2px; align-items: center; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+    .dot.public { background: var(--accent); }
+    .dot.unlisted { background: #e6c88f; }
+    .dot.draft { background: var(--faint); }
+    .side-foot { padding: 12px 16px; border-top: 1px solid var(--line); display: flex; gap: 6px; flex-wrap: wrap; }
+    .side-foot .btn { height: 30px; padding: 0 10px; font-size: 13px; }
+
+    .main { min-width: 0; display: flex; flex-direction: column; }
+    .bar {
+      position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 8px; padding: 10px 20px;
+      background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
+    }
+    .bar .status { font: 12px var(--mono); color: var(--faint); margin-right: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bar .status.dirty { color: #e6c88f; }
+    .bar .status.err { color: #e5484d; }
+    .menu-btn { display: none; }
+
+    .doc { max-width: calc(var(--col) + 40px); width: 100%; margin: 0 auto; padding: 28px 20px 160px; }
+    .title {
+      width: 100%; border: 0; background: none; outline: none; resize: none; overflow: hidden;
+      font: 700 36px/1.18 var(--sans); color: var(--head); letter-spacing: -.015em; padding: 0; margin: 0;
+    }
+    .title::placeholder { color: var(--faint); }
+    .metarow { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin: 16px 0 6px; }
+    .metarow > div { display: flex; flex-direction: column; }
+    .metarow .grow { flex: 1 1 180px; }
+    .switch { display: inline-flex; align-items: center; gap: 6px; height: 34px; font-size: 14px; color: var(--muted); cursor: pointer; user-select: none; }
+    .switch input { accent-color: var(--accent); width: 16px; height: 16px; }
+    .more { margin: 6px 0 0; font-size: 13px; color: var(--muted); }
+    .more summary { cursor: pointer; font-family: var(--mono); font-size: 12px; color: var(--faint); }
+    .more .grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
+    .more textarea.field { height: auto; padding: 8px 10px; resize: vertical; }
+    .slugrow { display: flex; align-items: center; gap: 0; }
+    .slugrow span { font: 13px var(--mono); color: var(--faint); padding-right: 4px; }
+    .slugrow .field { flex: 1; font-family: var(--mono); }
+
+    /* toolbar */
+    .tb {
+      position: sticky; top: 55px; z-index: 15; display: flex; flex-wrap: wrap; gap: 2px; align-items: center;
+      margin: 18px -8px 10px; padding: 6px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-2); box-shadow: var(--shadow);
+    }
+    .tb .sep { width: 1px; height: 20px; background: var(--line); margin: 0 4px; }
+    .tb button, .tb select {
+      height: 30px; min-width: 30px; padding: 0 7px; border: 0; border-radius: 6px; background: none; cursor: pointer;
+      color: var(--muted); font-size: 14px; display: inline-grid; place-items: center;
+    }
+    .tb select { padding: 0 4px; font-size: 13px; background: none; outline: none; }
+    .tb select option { background: var(--bg-2); color: var(--head); }
+    .tb button:hover, .tb select:hover { background: var(--bg-3); color: var(--head); }
+    .tb button.on { background: var(--mark); color: var(--head); }
+    .tb svg { width: 16px; height: 16px; }
+    .tb .sw { display: inline-block; width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--line-2); }
+
+    /* editor */
+    .editor { min-height: 55vh; outline: none; font-size: 18px; line-height: 1.65; caret-color: var(--accent); padding-bottom: 40px; }
+    .editor:empty::before, .editor > p:only-child:has(> br:only-child)::before {
+      content: "Write something. Paste a screenshot. Type / for blocks."; color: var(--faint); pointer-events: none; position: absolute;
+    }
+    .editor img { cursor: pointer; }
+    .editor img.sel { outline: 3px solid var(--accent); outline-offset: 2px; }
+    .editor img[data-uploading] { opacity: .45; filter: blur(1px); }
+    .editor ul[data-type="checklist"] li::before { cursor: pointer; }
+    .editor details { }
+    .editor .callout::before { cursor: pointer; }
+    .foot-stats { position: fixed; right: 16px; bottom: 14px; font: 12px var(--mono); color: var(--faint); background: var(--bg-2); border: 1px solid var(--line); padding: 4px 10px; border-radius: 999px; z-index: 10; }
+
+    /* popovers */
+    .pop {
+      position: absolute; z-index: 50; background: var(--bg-2); border: 1px solid var(--line-2); border-radius: 10px; box-shadow: var(--shadow);
+      padding: 6px; font-size: 14px;
+    }
+    .pop .row { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+    .pop button { border: 0; background: none; color: var(--text); cursor: pointer; border-radius: 6px; padding: 5px 8px; font-size: 13px; }
+    .pop button:hover, .pop button.on { background: var(--bg-3); color: var(--head); }
+    .pop .swatch { width: 24px; height: 24px; padding: 0; border-radius: 6px; border: 1px solid var(--line-2); }
+    .pop input.field { width: 260px; }
+    .pop .lbl { font: 11px var(--mono); color: var(--faint); padding: 4px 6px 2px; }
+    .slash { width: 250px; max-height: 320px; overflow-y: auto; padding: 4px; }
+    .slash button { display: flex; gap: 10px; align-items: center; width: 100%; text-align: left; padding: 7px 8px; }
+    .slash button i { font-style: normal; width: 26px; height: 26px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; color: var(--muted); flex: none; }
+    .slash button small { display: block; color: var(--faint); font-size: 11px; }
+
+    .drop-hint { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; background: rgba(10, 14, 12, .6); color: #fff; font-size: 20px; pointer-events: none; border: 3px dashed var(--accent); }
+
+    .modal-bg { position: fixed; inset: 0; z-index: 90; background: rgba(8, 10, 9, .6); display: grid; place-items: center; padding: 20px; }
+    .modal { width: 100%; max-width: 420px; background: var(--bg-2); border: 1px solid var(--line-2); border-radius: 14px; padding: 22px; box-shadow: var(--shadow); }
+    .modal h3 { margin: 0 0 8px; color: var(--head); font-size: 18px; }
+    .modal p { margin: 0 0 18px; color: var(--muted); font-size: 14px; }
+    .modal .actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+    .empty-state { text-align: center; padding: 18vh 20px; color: var(--muted); }
+    .empty-state h2 { color: var(--head); margin: 0 0 8px; }
+
+    @media (max-width: 860px) {
+      .app { grid-template-columns: 1fr; }
+      .side { position: fixed; inset: 0 auto 0 0; width: 86%; max-width: 320px; z-index: 60; transform: translateX(-100%); transition: transform .25s var(--ease); box-shadow: var(--shadow); }
+      .side.open { transform: none; }
+      .menu-btn { display: inline-flex; }
+      .bar { padding: 8px 12px; }
+      .bar .status { min-width: 0; flex: 1; }
+      .tb { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+      .tb::-webkit-scrollbar { display: none; }
+      .tb > * { flex: none; }
+      .bar .hide-sm { display: none; }
+      .doc { padding: 20px 16px 140px; }
+      .title { font-size: 28px; }
+      .tb { top: 51px; margin: 14px -4px 8px; }
+      .foot-stats { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== LOGIN ========== -->
+  <section class="login" id="login" hidden>
+    <form id="loginForm" autocomplete="on">
+      <h1>Memo<span>.</span></h1>
+      <p>Admin. If you're not Hridhaan, hi, and also no.</p>
+      <input class="field" type="password" id="pw" name="password" placeholder="Password" autocomplete="current-password" required autofocus aria-label="Password">
+      <button class="btn primary" type="submit" id="loginBtn">Log in</button>
+      <p class="err" id="loginErr" role="alert"></p>
+    </form>
+  </section>
+
+  <!-- ========== APP ========== -->
+  <div class="app" id="app" hidden>
+    <aside class="side" id="side" aria-label="Memos">
+      <div class="side-top">
+        <div><b>Memo<span>.</span></b><small id="repoName">admin</small></div>
+        <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch theme" title="Switch theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+      </div>
+      <button class="btn primary new" id="newBtn" type="button">+ New memo <span class="faint" style="color:inherit;opacity:.7;font-family:var(--mono);font-size:11px">Alt+N</span></button>
+      <input class="field find" id="find" type="search" placeholder="Search…" aria-label="Search memos">
+      <div class="filters" role="group" aria-label="Filter">
+        <button class="chip" type="button" data-f="all" aria-pressed="true">all</button>
+        <button class="chip" type="button" data-f="public" aria-pressed="false">public</button>
+        <button class="chip" type="button" data-f="unlisted" aria-pressed="false">unlisted</button>
+        <button class="chip" type="button" data-f="draft" aria-pressed="false">drafts</button>
+      </div>
+      <ul class="plist" id="plist"></ul>
+      <div class="side-foot">
+        <button class="btn" type="button" id="introBtn">Edit intro</button>
+        <a class="btn" href="/blog" target="_blank" rel="noopener">View blog ↗</a>
+        <button class="btn ghost" type="button" id="logoutBtn">Log out</button>
+      </div>
+    </aside>
+
+    <div class="main">
+      <div class="bar">
+        <button class="btn menu-btn" type="button" id="menuBtn" aria-label="Show memos">☰</button>
+        <span class="status" id="status">Ready</span>
+        <button class="btn ghost hide-sm" type="button" id="previewBtn" title="Open the published memo">Preview ↗</button>
+        <button class="btn danger ghost hide-sm" type="button" id="deleteBtn">Delete</button>
+        <button class="btn" type="button" id="saveBtn" title="Ctrl/⌘ + S">Save</button>
+        <button class="btn primary" type="button" id="publishBtn">Publish</button>
+      </div>
+
+      <div class="empty-state" id="emptyState">
+        <h2>Pick a memo or start a new one.</h2>
+        <p>Everything you save becomes a commit, so nothing is ever really lost.</p>
+      </div>
+
+      <div class="doc" id="doc" hidden>
+        <textarea class="title" id="title" rows="1" placeholder="Untitled memo" aria-label="Title"></textarea>
+
+        <div id="metaBox">
+          <div class="metarow">
+            <div><label class="l" for="date">date</label><input class="field" type="date" id="date"></div>
+            <div><label class="l" for="vis">visibility</label>
+              <select class="field" id="vis">
+                <option value="draft">Draft (only you)</option>
+                <option value="unlisted">Unlisted (link only)</option>
+                <option value="public">Public</option>
+              </select>
+            </div>
+            <div class="grow"><label class="l" for="tags">tags</label><input class="field" id="tags" placeholder="web, astro, build log"></div>
+            <label class="switch"><input type="checkbox" id="pinned"> Pin</label>
+          </div>
+          <details class="more">
+            <summary>link &amp; excerpt</summary>
+            <div class="grid">
+              <div><label class="l" for="slug">link</label><div class="slugrow"><span>hridhaan.me/blog/</span><input class="field" id="slug" placeholder="auto from title"></div></div>
+              <div><label class="l" for="excerpt">excerpt (search + link previews; blank = first lines)</label><textarea class="field" id="excerpt" rows="2"></textarea></div>
+            </div>
+          </details>
+        </div>
+
+        <div class="tb" id="tb" role="toolbar" aria-label="Formatting"></div>
+        <div class="editor prose" id="ed" contenteditable="true" spellcheck="true" aria-label="Memo body" role="textbox" aria-multiline="true"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot-stats" id="stats" hidden></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <input type="file" id="fileIn" accept="image/*" multiple hidden>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+  <script src="/js/memo-admin.js"></script>
+</body>
+</html>
