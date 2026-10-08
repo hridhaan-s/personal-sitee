@@ -701,7 +701,7 @@
   ed.addEventListener("paste", function (e) {
     const cd = e.clipboardData;
     if (!cd) return;
-    const files = Array.prototype.slice.call(cd.files || []).filter(function (f) { return /^image\
+    const files = Array.prototype.slice.call(cd.files || []).filter(function (f) { return /^image\//.test(f.type); });
     if (files.length) {
       e.preventDefault();
       files.forEach(insertImageFile);
@@ -748,7 +748,7 @@
   ed.addEventListener("dragleave", function (e) { if (!ed.contains(e.relatedTarget)) showDropHint(false); });
   ed.addEventListener("drop", function (e) {
     showDropHint(false);
-    const files = Array.prototype.slice.call(e.dataTransfer && e.dataTransfer.files || []).filter(function (f) { return /^image\
+    const files = Array.prototype.slice.call(e.dataTransfer && e.dataTransfer.files || []).filter(function (f) { return /^image\//.test(f.type); });
     if (!files.length) return;
     e.preventDefault();
     
