@@ -1,14 +1,7 @@
-/* ==========================================================
-   memo.css — Memo (hridhaan.me/blog) and the /admin editor.
-   The .prose rules are shared, so the editor is what-you-see-is-
-   what-gets-published.
-
-   1. Tokens   2. Base   3. Masthead   4. Index (intro, search, list)
-   5. Post     6. Prose  7. Code       8. Lightbox, progress, toast
-   ========================================================== */
 
 
-/* ---------- 1. TOKENS ---------- */
+
+
 
 :root {
   --col: 660px;
@@ -20,7 +13,7 @@
   --r: 8px;
 }
 
-/* Moss: green-grey night. */
+
 :root,
 :root[data-theme="dark"] {
   color-scheme: dark;
@@ -82,7 +75,7 @@
 }
 
 
-/* ---------- 2. BASE ---------- */
+
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 24px; }
@@ -111,7 +104,7 @@ img { max-width: 100%; }
 }
 
 
-/* ---------- 3. MASTHEAD ---------- */
+
 
 .mast { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
 .mast h1 { margin: 0; font-size: 30px; line-height: 1.1; font-weight: 700; color: var(--head); letter-spacing: -.01em; }
@@ -129,7 +122,7 @@ img { max-width: 100%; }
 .icon-btn svg { width: 16px; height: 16px; }
 
 
-/* ---------- 4. INDEX ---------- */
+
 
 .intro { margin: 32px 0 8px; }
 .intro p { margin: 0 0 1em; }
@@ -166,7 +159,7 @@ img { max-width: 100%; }
 .foot a { color: var(--muted); }
 
 
-/* ---------- 5. POST ---------- */
+
 
 .back { display: inline-block; margin-top: 28px; font-size: 15px; color: var(--muted); text-decoration: none; }
 .back:hover { color: var(--head); }
@@ -204,7 +197,7 @@ img { max-width: 100%; }
 .pager .next { text-align: right; grid-column: 2; }
 
 
-/* ---------- 6. PROSE (shared with the editor) ---------- */
+
 
 .prose { overflow-wrap: break-word; }
 .prose > :first-child { margin-top: 0; }
@@ -260,13 +253,13 @@ img { max-width: 100%; }
 .prose details { margin: 1.2em 0; padding: 10px 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--bg-2); }
 .prose details summary { cursor: pointer; color: var(--head); font-weight: 500; }
 
-/* fonts picked in the editor */
+
 .prose .f-serif, .prose [data-font="serif"] { font-family: var(--serif); }
 .prose .f-mono, .prose [data-font="mono"] { font-family: var(--mono); font-size: .92em; }
 .prose .f-hand, .prose [data-font="hand"] { font-family: var(--hand); font-size: 1.3em; line-height: 1.3; }
 
 
-/* ---------- 7. CODE ---------- */
+
 
 .prose code { font: .86em var(--mono); background: var(--bg-3); padding: 2px 5px; border-radius: 4px; color: var(--head); }
 .prose pre {
@@ -287,7 +280,7 @@ img { max-width: 100%; }
 .hljs-type, .hljs-class, .hljs-tag, .hljs-name, .hljs-variable { color: var(--h-ty); }
 
 
-/* ---------- 8. LIGHTBOX, PROGRESS, TOAST ---------- */
+
 
 .progress { position: fixed; top: 0; left: 0; height: 2px; width: 0; background: var(--accent); z-index: 40; transition: width .08s linear; }
 .lightbox { position: fixed; inset: 0; background: rgba(8, 10, 9, .9); display: grid; place-items: center; z-index: 60; cursor: zoom-out; padding: 24px; opacity: 0; transition: opacity .2s; }

@@ -1,11 +1,4 @@
-/* Local preview with Memo working: static files, the vercel.json rewrites,
-   and api/memo.js running against a local folder instead of GitHub.
 
-     node dev.mjs                 # http://localhost:8000, admin password "memo"
-     MEMO_PASSWORD=x node dev.mjs 5500
-
-   Posts and images go to ./.memo-local (git-ignored). serve.py still works
-   for the rest of the site, but it can't run the Memo API. */
 
 import http from "http";
 import fs from "fs";

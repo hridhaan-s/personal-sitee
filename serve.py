@@ -2,8 +2,8 @@
 as-is, every other path (/about, /astrophotography, /blog ...) gets
 index.html, and /archive redirects to /achievements.
 
-    python3 serve.py          # http://localhost:8000
-    python3 serve.py 5500     # pick a port
+    python3 serve.py
+    python3 serve.py 5500
 """
 import http.server, os, sys
 

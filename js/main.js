@@ -1,15 +1,4 @@
-/* ==========================================================
-   main.js — everything the site does, in reading order.
 
-     1. Router (views + fade)    7. Blog
-     2. Theme                    8. Guestbook, latest commit, logo fallback
-     3. Clock + Moon             9. Scroll reveal
-     4. "I like…"               10. sudo easter egg
-     5. Hand-drawn annotations  11. Starfield (astro page)
-     6. Archive toggles         12. Gallery lightbox
-                                13. Space Finds flipbook
-                                14. Name intro
-   ========================================================== */
 
 (function () {
   "use strict";
@@ -18,11 +7,7 @@
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 
-  /* ---------- 1. ROUTER ----------
-     Every nav item is its own view with a real URL. Home shows all the
-     home sections; /about, /experience, /projects and /links show only
-     their own; achievements, astrophotography and blog are separate pages.
-     Switching fades the view out, swaps, jumps to the top, fades in. */
+  
 
   const pages = {
     home: document.getElementById("page-home"),
@@ -42,7 +27,7 @@
     blog:             { page: "blog", title: "Blog" }
   };
 
-  // old URLs that should land somewhere sensible
+  
   const ALIASES = { archive: "achievements", "archive.html": "achievements", index: "home", "index.html": "home" };
 
   const view = document.getElementById("view");
@@ -50,7 +35,7 @@
     return el.tagName === "SECTION";
   }) : [];
 
-  const OUT_MS = 150;     // fade out
+  const OUT_MS = 150;     
   let currentRoute = null;
   let navToken = 0;
 
@@ -72,7 +57,7 @@
 
     Object.keys(pages).forEach(function (k) { if (pages[k]) pages[k].hidden = k !== v.page; });
 
-    // which home sections are visible in this view
+    
     let first = true;
     homeSections.forEach(function (sec) {
       const show = !v.sections || v.sections.indexOf(sec.id) !== -1;
@@ -88,7 +73,7 @@
       if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
     });
 
-    // night palette for the astro page
+    
     const night = Boolean(v.night);
     if (night !== (root.dataset.night === "on")) {
       fadeColours();
@@ -106,7 +91,7 @@
     document.dispatchEvent(new CustomEvent("pagechange", { detail: { route: route } }));
   }
 
-  // go(route, { push, after })
+  
   function go(route, opts) {
     opts = opts || {};
     if (!VIEWS[route]) route = "home";
@@ -128,7 +113,7 @@
       window.scrollTo(0, 0);
       if (opts.after) opts.after();
       if (view) {
-        void view.offsetWidth;            // commit the hidden state before fading in
+        void view.offsetWidth;            
         view.classList.remove("is-out");
       }
     }
@@ -164,28 +149,28 @@
   }
 
 
-  /* ---------- 2. THEME ---------- */
+  
 
   const toggle = document.getElementById("themeToggle");
   if (toggle) {
     toggle.addEventListener("click", function () {
       const next = root.dataset.theme === "dark" ? "light" : "dark";
-      // colours ease across for a moment, then the class comes off so
-      // normal hovers stay snappy
+      
+      
       fadeColours();
       root.dataset.theme = next;
-      try { localStorage.setItem("theme", next); } catch (e) { /* private mode */ }
+      try { localStorage.setItem("theme", next); } catch (e) {  }
       document.dispatchEvent(new CustomEvent("themechange"));
     });
   }
 
-  // no pick of their own yet: keep following the device, live (e.g. when
-  // the OS flips to dark at sunset)
+  
+  
   if (window.matchMedia) {
     const sys = window.matchMedia("(prefers-color-scheme: light)");
     const follow = function () {
       let picked = null;
-      try { picked = localStorage.getItem("theme"); } catch (e) { /* private mode */ }
+      try { picked = localStorage.getItem("theme"); } catch (e) {  }
       if (picked === "light" || picked === "dark") return;
       const next = sys.matches ? "light" : "dark";
       if (root.dataset.theme === next) return;
@@ -198,7 +183,7 @@
   }
 
 
-  /* ---------- 3. LIVE CLOCK (Greater Noida, IST) ---------- */
+  
 
   function initClock() {
     const line = document.getElementById("clock");
@@ -216,18 +201,15 @@
   }
 
 
-  /* ---------- 3b. TONIGHT'S MOON ----------
-     Illumination from the Moon's phase angle (Meeus, ch. 48, low-precision
-     terms). Checked against a full ephemeris: within ~0.3% over 2026-27.
-     No API, nothing leaves the browser. */
+  
 
   function moonPhase(date) {
     const rad = Math.PI / 180;
     const T = (date.getTime() / 86400000 + 2440587.5 - 2451545) / 36525;
     const n = function (x) { return ((x % 360) + 360) % 360; };
-    const D  = n(297.8501921 + 445267.1114034 * T - 0.0018819 * T * T);  // elongation
-    const M  = n(357.5291092 + 35999.0502909 * T - 0.0001536 * T * T);   // Sun anomaly
-    const Mp = n(134.9633964 + 477198.8675055 * T + 0.0087414 * T * T);  // Moon anomaly
+    const D  = n(297.8501921 + 445267.1114034 * T - 0.0018819 * T * T);  
+    const M  = n(357.5291092 + 35999.0502909 * T - 0.0001536 * T * T);   
+    const Mp = n(134.9633964 + 477198.8675055 * T + 0.0087414 * T * T);  
     const i = 180 - D
       - 6.289 * Math.sin(Mp * rad) + 2.100 * Math.sin(M * rad)
       - 1.274 * Math.sin((2 * D - Mp) * rad) - 0.658 * Math.sin(2 * D * rad)
@@ -235,22 +217,22 @@
     return { lit: (1 + Math.cos(i * rad)) / 2, waxing: D < 180 };
   }
 
-  // "Tonight" means tonight: during the day, look ahead to 9 pm IST.
+  
   function tonight() {
     const now = new Date();
     const istHour = (now.getUTCHours() + 5.5 + now.getUTCMinutes() / 60) % 24;
     if (istHour >= 18 || istHour < 5) return now;
     const t = new Date(now);
-    t.setUTCHours(15, 30, 0, 0);   // 21:00 IST
+    t.setUTCHours(15, 30, 0, 0);   
     return t;
   }
 
-  // Lit part of the disc as an SVG path (as seen from the northern sky:
-  // waxing = lit on the right).
+  
+  
   function moonPath(lit, waxing) {
     const r = 8.5, cx = 10, top = 10 - r, bottom = 10 + r;
-    const tx = Math.abs(1 - 2 * lit) * r;          // terminator half-width
-    const limbSweep = waxing ? 1 : 0;              // right or left limb
+    const tx = Math.abs(1 - 2 * lit) * r;          
+    const limbSweep = waxing ? 1 : 0;              
     const termSweep = (lit > 0.5) === waxing ? 1 : 0;
     return "M" + cx + " " + top +
       " A" + r + " " + r + " 0 0 " + limbSweep + " " + cx + " " + bottom +
@@ -282,10 +264,7 @@
   }
 
 
-  /* ---------- 4. "I LIKE…" — types itself ----------
-     "I like" stays put; the bold part types out, rests, deletes, and the
-     next one types in. With reduced motion it just swaps every few
-     seconds. Pauses while the tab is hidden. */
+  
 
   const LIKES = [
     "exploring space.",
@@ -312,7 +291,7 @@
       return;
     }
 
-    // human-ish rhythm: a little jitter per key, a beat after punctuation
+    
     function keyDelay(ch) { return (ch === "." ? 0 : 45 + Math.random() * 55); }
     function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
     function visible() {
@@ -327,31 +306,31 @@
     }
 
     async function loop() {
-      await wait(2600);                       // the first one is already on screen
+      await wait(2600);                       
       for (;;) {
         await visible();
         line.classList.add("is-typing");
         let cur = LIKES[i];
-        for (let n = cur.length; n >= 0; n--) {          // delete
+        for (let n = cur.length; n >= 0; n--) {          
           text.textContent = cur.slice(0, n);
           await wait(22);
         }
         i = (i + 1) % LIKES.length;
         cur = LIKES[i];
         await wait(260);
-        for (let n = 1; n <= cur.length; n++) {         // type
+        for (let n = 1; n <= cur.length; n++) {         
           text.textContent = cur.slice(0, n);
           await wait(keyDelay(cur[n - 1]));
         }
         line.classList.remove("is-typing");
-        await wait(2200);                     // let it be read
+        await wait(2200);                     
       }
     }
     loop();
   }
 
 
-  /* ---------- 5. HAND-DRAWN ANNOTATIONS ---------- */
+  
 
   function initAnnotations() {
     if (typeof RoughNotation === "undefined") return;
@@ -363,8 +342,8 @@
     let notes = [];
     let shown = false;
 
-    // Same highlighter stroke in both themes, just a different ink, so the
-    // phrase looks the same whichever theme you're in.
+    
+    
     function build(animate) {
       notes.forEach(function (n) { n.remove(); });
       const dark = root.dataset.theme !== "light";
@@ -387,9 +366,9 @@
       notes.forEach(function (n) { n.show(); });
     }
 
-    // Nothing is drawn until the visitor starts scrolling. Then, while the
-    // intro is in view, the marks go on one at a time, each finishing
-    // before the next pen stroke starts, like someone marking up the page.
+    
+    
+    
     function draw() {
       if (shown) return;
       shown = true;
@@ -397,7 +376,7 @@
       let delay = 150;
       notes.forEach(function (n, i) {
         setTimeout(function () { n.show(); }, delay);
-        delay += (i === 0 ? 1300 : 650) + 120;   // stroke time + lifting the pen
+        delay += (i === 0 ? 1300 : 650) + 120;   
       });
     }
 
@@ -417,11 +396,11 @@
       intent.forEach(function (ev) { window.removeEventListener(ev, onIntent); });
       whenInView();
     }
-    if (window.scrollY > 2) whenInView();          // already scrolling before this loaded
+    if (window.scrollY > 2) whenInView();          
     else intent.forEach(function (ev) { window.addEventListener(ev, onIntent, { passive: true }); });
 
-    // Re-measure whenever the text could have moved: theme, page, webfont
-    // swap, or a resize that reflows the paragraph.
+    
+    
     let rt;
     function redrawSoon(ms) { clearTimeout(rt); rt = setTimeout(redraw, ms); }
     document.addEventListener("themechange", function () { redrawSoon(20); });
@@ -432,8 +411,7 @@
 
 
 
-  /* ---------- 6. ARCHIVE (inside Achievements) ----------
-     The Drive previews only load when someone opens them. */
+  
 
   document.querySelectorAll(".archive-toggle").forEach(function (btn) {
     btn.addEventListener("click", function () {
@@ -455,7 +433,7 @@
   });
 
 
-  /* ---------- 7. BLOG ---------- */
+  
 
   const postList = document.getElementById("postList");
   const blogHead = document.getElementById("blogHead");
@@ -484,7 +462,7 @@
     });
   });
 
-  // the post card on the home page goes straight into the post
+  
   document.querySelectorAll("[data-open-post]").forEach(function (link) {
     link.addEventListener("click", function (e) {
       e.preventDefault();
@@ -502,8 +480,8 @@
   });
 
 
-  // The blog moved to Memo (/blog, its own page). The home preview shows
-  // the latest two memos; the static card stays if the API is unreachable.
+  
+  
   (function loadLatestMemos() {
     const box = document.getElementById("memoLatest");
     if (!box || !window.fetch) return;
@@ -522,7 +500,7 @@
   })();
 
 
-  /* ---------- 8. GUESTBOOK, LATEST COMMIT, LOGO FALLBACK ---------- */
+  
 
   function initialsAvatar(name) {
     const span = document.createElement("span");
@@ -531,7 +509,7 @@
     const clean = (name || "?").replace(/[^a-z0-9]+/gi, " ").trim();
     const parts = clean.split(" ");
     span.textContent = (parts.length > 1 ? parts[0][0] + parts[1][0] : clean.slice(0, 2) || "?").toUpperCase();
-    // a stable hue per name, so the same person keeps their colour
+    
     let h = 0;
     for (let i = 0; i < clean.length; i++) h = (h * 31 + clean.charCodeAt(i)) % 360;
     span.style.setProperty("--hue", h);
@@ -550,7 +528,7 @@
         const login = issue.user && issue.user.login ? issue.user.login : "";
         const li = document.createElement("li");
 
-        // GitHub hands us the avatar with the issue; fall back to initials
+        
         const avatarUrl = issue.user && issue.user.avatar_url
           ? issue.user.avatar_url + (issue.user.avatar_url.indexOf("?") === -1 ? "?" : "&") + "s=80"
           : (login ? "https://github.com/" + encodeURIComponent(login) + ".png?size=80" : "");
@@ -580,17 +558,14 @@
         list.appendChild(li);
       });
       autoScrollGuestbook(list);
-    } catch (err) { /* leave the placeholder */ }
+    } catch (err) {  }
   }
 
-  /* Never-ending guestbook: the notes are cloned once and the box drifts
-     down at a reading pace, jumping back by exactly one set of notes so
-     the loop has no seam. Hover, focus, touch or the wheel pauses it,
-     manual scrolling still works, and reduced motion keeps it still. */
+  
   function autoScrollGuestbook(list) {
     if (reduceMotion || list.children.length < 2) return;
 
-    const SPEED = 22;                       // px per second
+    const SPEED = 22;                       
     const originals = Array.prototype.slice.call(list.children);
     originals.forEach(function (li) {
       const copy = li.cloneNode(true);
@@ -614,7 +589,7 @@
       requestAnimationFrame(frame);
       const dt = Math.min(64, now - (last || now)) / 1000;
       last = now;
-      // only move while the box is shown, the tab is visible and nobody is interacting
+      
       if (document.hidden || !list.offsetParent || hovering || now < resumeAt) return;
       if (list.scrollHeight <= list.clientHeight + 2) return;
       const p = period();
@@ -626,8 +601,8 @@
     }
 
     list.addEventListener("scroll", function () {
-      if (Math.abs(list.scrollTop - lastSet) <= 2) return;    // our own move
-      // the visitor scrolled: carry on from where they left it
+      if (Math.abs(list.scrollTop - lastSet) <= 2) return;    
+      
       const p = period();
       pos = list.scrollTop;
       if (p > 0 && pos >= p) { pos -= p; list.scrollTop = pos; }
@@ -660,7 +635,7 @@
       sha.textContent = "(" + c.sha.slice(0, 7) + ")";
       link.appendChild(sha);
       link.href = c.html_url;
-    } catch (err) { /* keep "View the source on GitHub" */ }
+    } catch (err) {  }
   }
 
   document.querySelectorAll("img[data-fallback]").forEach(function (img) {
@@ -675,10 +650,7 @@
   });
 
 
-  /* ---------- 9. SCROLL REVEAL ----------
-     Sections fade up as they arrive; items inside a group follow a beat
-     apart. Only switched on when JS runs and motion is welcome, so the
-     content is never hidden for anyone else. */
+  
 
   function initReveal() {
     if (reduceMotion || !("IntersectionObserver" in window)) return;
@@ -696,7 +668,7 @@
 
     const items = [];
     groups.forEach(function (sel) {
-      // stagger restarts for each parent
+      
       const seen = new Map();
       document.querySelectorAll(sel).forEach(function (el) {
         const k = seen.get(el.parentNode) || 0;
@@ -719,7 +691,7 @@
 
     items.forEach(function (el) { io.observe(el); });
 
-    // the reveal moves text a few px; redraw the hand-drawn marks once it settles
+    
     const intro = document.querySelector(".intro .prose");
     if (intro) intro.addEventListener("transitionend", function () {
       document.dispatchEvent(new CustomEvent("themechange"));
@@ -727,8 +699,7 @@
   }
 
 
-  /* ---------- 10. SUDO ----------
-     Type "sudo" anywhere (outside a text field) for a tiny terminal. */
+  
 
   function initTerminal() {
     const term = document.getElementById("term");
@@ -851,16 +822,12 @@
 
     try {
       console.log("%cpsst. type sudo anywhere on the page.", "font-family: monospace; color: #f2c14e");
-    } catch (err) { /* no console */ }
+    } catch (err) {  }
   }
 
 
 
-  /* ---------- 11. STARFIELD (astro page only) ----------
-     One fixed canvas. Stars are drawn once into an offscreen layer; each
-     frame just copies that layer and redraws a handful of twinkling
-     stars, at ~24 fps. Stops when you leave the page or hide the tab,
-     and stays still for reduced motion. */
+  
 
   const Starfield = (function () {
     const canvas = document.getElementById("starfield");
@@ -917,7 +884,7 @@
     function frame(now) {
       if (!active) return;
       raf = requestAnimationFrame(frame);
-      if (now - last < 42) return;           // ~24 fps is plenty for a twinkle
+      if (now - last < 42) return;           
       last = now;
       draw(now);
     }
@@ -955,9 +922,7 @@
   })();
 
 
-  /* ---------- 12. GALLERY LIGHTBOX ----------
-     Thumbnails are local WebP files; the viewer loads the full-size
-     original from the CDN. Arrow keys / swipe to move, Esc to close. */
+  
 
   function initLightbox() {
     const box = document.getElementById("lightbox");
@@ -979,7 +944,7 @@
       img.alt = thumb.alt;
       cap.textContent = thumb.alt;
       count.textContent = (index + 1) + " / " + links.length;
-      // warm the neighbours so arrowing feels instant
+      
       [index + 1, index - 1].forEach(function (k) {
         const n = links[(k + links.length) % links.length];
         const pre = new Image();
@@ -1006,7 +971,7 @@
 
     links.forEach(function (a, i) {
       a.addEventListener("click", function (e) {
-        if (e.metaKey || e.ctrlKey || e.shiftKey) return;   // let "open in new tab" work
+        if (e.metaKey || e.ctrlKey || e.shiftKey) return;   
         e.preventDefault();
         open(i);
       });
@@ -1023,7 +988,7 @@
       else if (e.key === "ArrowRight") { e.preventDefault(); show(index + 1); }
       else if (e.key === "ArrowLeft") { e.preventDefault(); show(index - 1); }
       else if (e.key === "Tab") {
-        // keep focus inside the viewer
+        
         const f = Array.prototype.slice.call(box.querySelectorAll("button"));
         const at = f.indexOf(document.activeElement);
         e.preventDefault();
@@ -1050,10 +1015,7 @@
   }
 
 
-  /* ---------- 13. SPACE FINDS FLIPBOOK ----------
-     pdf.js (cdnjs) renders each page to an image once. Wide screens get
-     a two-page spread with the cover on its own; narrow screens get one
-     page at a time. A turning leaf does the page-turn. */
+  
 
   const PDFJS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
 
@@ -1079,14 +1041,14 @@
     if (!section || !stage || !pdfLink) return;
 
     const narrowMq = window.matchMedia("(max-width: 640px)");
-    let pages = [];          // image URLs, one per page
+    let pages = [];          
     let ratio = 842.25 / 595.5;
-    let pos = 0;             // spread mode: index of the right-hand page (0 = cover); single mode: page index
+    let pos = 0;             
     let single = narrowMq.matches;
     let busy = false;
     let started = false;
 
-    // spread mode positions: 0 (cover alone), 2, 4, ... (left = pos-1, right = pos)
+    
     function spreads() {
       const list = [0];
       for (let r = 2; r <= pages.length; r += 2) list.push(r);
@@ -1149,8 +1111,8 @@
       busy = true;
       updateControls();
 
-      // The leaf: front shows the page being turned, back shows the page
-      // that lands on the other side. Under it, the destination is ready.
+      
+      
       const leaf = document.createElement("div");
       leaf.className = "flip-leaf " + (single ? "is-single-leaf" : dir > 0 ? "is-next" : "is-prev");
       let front, back;
@@ -1158,15 +1120,15 @@
       stage.innerHTML = "";
       if (single) {
         if (dir > 0) {
-          stage.appendChild(pageImg(to, "is-right"));       // next page underneath
+          stage.appendChild(pageImg(to, "is-right"));       
           front = pageImg(from, "leaf-front"); back = pageImg(-1, "leaf-back");
         } else {
-          stage.appendChild(pageImg(from, "is-right"));     // current underneath
+          stage.appendChild(pageImg(from, "is-right"));     
           front = pageImg(to, "leaf-front"); back = pageImg(-1, "leaf-back");
           leaf.classList.add("is-coming-back");
         }
       } else if (dir > 0) {
-        stage.appendChild(pageImg(from - 1, "is-left"));    // stays until the leaf lands
+        stage.appendChild(pageImg(from - 1, "is-left"));    
         stage.appendChild(pageImg(to, "is-right"));
         front = pageImg(from, "leaf-front"); back = pageImg(to - 1, "leaf-back");
       } else {
@@ -1188,7 +1150,7 @@
         pos = to; busy = false; render();
       }
       leaf.addEventListener("transitionend", finish, { once: true });
-      setTimeout(finish, 900);   // safety net
+      setTimeout(finish, 900);   
     }
 
     prevBtn.addEventListener("click", function () { turn(-1); });
@@ -1198,7 +1160,7 @@
       if (e.key === "ArrowRight") { e.preventDefault(); turn(1); }
       else if (e.key === "ArrowLeft") { e.preventDefault(); turn(-1); }
     });
-    // arrow keys also work while the book is on screen and nothing else wants them
+    
     document.addEventListener("keydown", function (e) {
       if (currentRoute !== "astrophotography" || e.target === flip) return;
       const lb = document.getElementById("lightbox");
@@ -1216,7 +1178,7 @@
       const was = single;
       single = narrowMq.matches;
       if (was === single || !pages.length) return;
-      // keep roughly the same place in the book
+      
       if (single) pos = Math.max(0, Math.min(pages.length - 1, pos === 0 ? 0 : pos - 1));
       else pos = pos === 0 ? 0 : Math.min(spreads()[spreads().length - 1], pos % 2 === 0 ? pos : pos + 1);
       render();
@@ -1247,7 +1209,7 @@
         const vp1 = first.getViewport({ scale: 1 });
         ratio = vp1.height / vp1.width;
 
-        // render size: a page is at most ~360 css px wide; 2x for sharp text
+        
         const targetW = Math.min(1100, Math.round(380 * Math.min(window.devicePixelRatio || 1, 2) * 1.4));
         for (let i = 1; i <= doc.numPages; i++) {
           status.textContent = "Loading the book… page " + i + " of " + doc.numPages;
@@ -1259,7 +1221,7 @@
           await page.render({ canvasContext: c.getContext("2d"), viewport: vp }).promise;
           pages.push(c.toDataURL("image/jpeg", 0.88));
           page.cleanup();
-          if (i === 1) { pos = 0; render(); }   // show the cover as soon as it's ready
+          if (i === 1) { pos = 0; render(); }   
           else updateControls();
         }
         doc.destroy();
@@ -1268,7 +1230,7 @@
       }
     }
 
-    // only fetch the PDF (~8 MB) once the book is near the screen
+    
     if ("IntersectionObserver" in window) {
       const io = new IntersectionObserver(function (entries) {
         if (entries.some(function (e) { return e.isIntersecting; })) { io.disconnect(); load(); }
@@ -1280,12 +1242,7 @@
   }
 
 
-  /* ---------- 14. SPLASH ----------
-     First load of a session only (the <head> script decides, before
-     paint). Pure black, HRIDHAAN over SAHAY, held for 4s; a hairline
-     cuts the middle and the screen splits top and bottom. Any click,
-     key, scroll or touch skips to the split. Never runs with reduced
-     motion. All the motion lives in CSS; this only sets the beats. */
+  
 
   function playIntro(done) {
     const box = document.getElementById("splash");
@@ -1294,9 +1251,9 @@
       done();
       return;
     }
-    try { sessionStorage.setItem("introSeen", "1"); } catch (e) { /* private mode */ }
+    try { sessionStorage.setItem("introSeen", "1"); } catch (e) {  }
 
-    const HOLD = 4000;             // name on screen before the split
+    const HOLD = 4000;             
     let started = false, opened = false, finished = false;
     let cutTimer = 0, openTimer = 0;
 
@@ -1333,22 +1290,22 @@
       window.addEventListener(ev, skip, { capture: true, passive: true });
     });
 
-    // the words are set in Figtree 800: wait for it (briefly) so they
-    // never swap fonts on screen
+    
+    
     const fontWait = setTimeout(start, 600);
     try {
       document.fonts.load('800 64px "Figtree"').then(function () {
         clearTimeout(fontWait);
         requestAnimationFrame(start);
       }, function () {});
-    } catch (e) { /* fonts API missing: the timeout starts it */ }
+    } catch (e) {  }
   }
 
 
-  /* ---------- boot ---------- */
+  
 
   const startRoute = routeFromUrl();
-  // /archive (or anything unknown) gets its URL corrected without a reload
+  
   if (location.pathname !== pathFor(startRoute) && !(startRoute === "blog" && location.pathname.replace(/\/+$/, "") === "/blog")) {
     history.replaceState({ route: startRoute }, "", pathFor(startRoute) + (startRoute === "blog" ? location.hash : ""));
   }
@@ -1366,12 +1323,12 @@
   loadGuestbook();
   loadLatestCommit();
 
-  // scroll reveal and the hand-drawn marks wait for the intro, so they
-  // play where people can see them
+  
+  
   playIntro(function () {
     initReveal();
     initLikes();
-    // rough-notation loads with defer just before this file; wait for the window
+    
     if (document.readyState === "complete") initAnnotations();
     else window.addEventListener("load", initAnnotations);
   });

@@ -1,11 +1,4 @@
-/* ==========================================================
-   memo-admin.js — the /admin editor for Memo.
 
-   1. API + auth        5. Images (paste, drop, compress, upload, resize)
-   2. Sidebar           6. Slash menu + markdown shortcuts
-   3. Open / save       7. Popovers (link, colour)
-   4. Toolbar           8. Boot
-   ========================================================== */
 
 (function () {
   "use strict";
@@ -19,7 +12,7 @@
     token: null,
     posts: [],
     settings: {},
-    current: null,      // { originalSlug, isNew, intro }
+    current: null,      
     dirty: false,
     saving: false,
     uploads: 0,
@@ -29,7 +22,7 @@
   };
 
 
-  /* ---------- 1. API + AUTH ---------- */
+  
 
   try { state.token = localStorage.getItem("memo-token"); } catch (e) {}
 
@@ -80,7 +73,7 @@
   });
 
 
-  /* ---------- 2. SIDEBAR ---------- */
+  
 
   async function loadList() {
     const d = await api("GET", "?admin=list");
@@ -121,7 +114,7 @@
   $("menuBtn").addEventListener("click", function () { $("side").classList.toggle("open"); });
 
 
-  /* ---------- 3. OPEN / SAVE ---------- */
+  
 
   function confirmLeave() {
     return !state.dirty || confirm("You have unsaved changes. Leave them?");
@@ -216,12 +209,12 @@
     };
   }
 
-  // the editor's HTML minus editor-only bits
+  
   function editorHTML() {
     const clone = ed.cloneNode(true);
     clone.querySelectorAll(".sel").forEach(function (x) { x.classList.remove("sel"); });
     clone.querySelectorAll("[class='']").forEach(function (x) { x.removeAttribute("class"); });
-    // trailing empty paragraphs aren't content
+    
     while (clone.lastElementChild && clone.lastElementChild.tagName === "P" && !clone.lastElementChild.textContent.trim() && !clone.lastElementChild.querySelector("img")) {
       clone.lastElementChild.remove();
     }
@@ -299,7 +292,7 @@
     renderList();
   }
 
-  // dirty tracking, local backup, autosave
+  
   let backupTimer = null, autoTimer = null;
   function setDirty(on) {
     state.dirty = on;
@@ -308,7 +301,7 @@
       clearTimeout(backupTimer);
       backupTimer = setTimeout(saveLocalDraft, 600);
       clearTimeout(autoTimer);
-      // drafts autosave to the server; published memos only save when you say so
+      
       if (!state.current.intro && $("vis").value === "draft" && !state.current.isNew) {
         autoTimer = setTimeout(function () { if (state.dirty) save({ auto: true }); }, 20000);
       }
@@ -333,7 +326,7 @@
     });
   }
 
-  // meta fields only count as changes if they differ from what was last loaded/saved
+  
   const META = ["date", "vis", "tags", "pinned", "slug", "excerpt"];
   let metaSnap = "";
   function metaNow() { return META.map(function (id) { return $(id).type === "checkbox" ? $(id).checked : $(id).value; }).join("\u0001"); }
@@ -360,7 +353,7 @@
   }
 
 
-  /* ---------- 4. TOOLBAR ---------- */
+  
 
   const I = {
     bold: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zM7 12h7a3.5 3.5 0 0 1 0 7H7z"/></svg>',
@@ -410,7 +403,7 @@
     return '<button type="button" data-cmd="' + cmd + '" title="' + title + '" aria-label="' + title.replace(/ \(.*/, "") + '">' + I[cmd] + "</button>";
   }
 
-  // keep the editor's selection when the toolbar is clicked
+  
   $("tb").addEventListener("mousedown", function (e) {
     if (e.target.closest("button")) e.preventDefault();
   });
@@ -468,7 +461,7 @@
     }
     exec("formatBlock", "<" + tag + ">");
     if (tag === "pre") {
-      // wrap the new <pre>'s text in <code> so highlighting knows what it is
+      
       const pre = closest(anchorNode(), "pre");
       if (pre && !pre.querySelector("code")) {
         const code = document.createElement("code");
@@ -480,7 +473,7 @@
     }
   }
 
-  // font and size: let the browser wrap the selection in <font>, then turn that into tidy spans
+  
   function applyInline(kind, value) {
     const r = sel();
     if (!r || r.collapsed) { toast("Select some text first."); return; }
@@ -489,7 +482,7 @@
     if (kind === "font") {
       document.execCommand("fontName", false, "memo-font-x");
       ed.querySelectorAll('font[face="memo-font-x"]').forEach(function (f) {
-        // drop older font choices inside, so the newest wins
+        
         f.querySelectorAll("[data-font]").forEach(function (inner) { inner.removeAttribute("data-font"); });
         const s = document.createElement("span");
         if (value) s.dataset.font = value;
@@ -508,7 +501,7 @@
         made.push(s);
       });
     }
-    // keep the same text selected so the next button (bold, colour…) applies to it too
+    
     if (made.length) {
       const first = made[0], last = made[made.length - 1];
       const r2 = document.createRange();
@@ -521,7 +514,7 @@
     afterChange();
   }
 
-  // remove spans that no longer carry anything
+  
   function unwrapStyled(onlyEmpty) {
     ed.querySelectorAll("span, font").forEach(function (s) {
       if (s.tagName === "FONT" && !onlyEmpty) { unwrap(s); return; }
@@ -549,7 +542,7 @@
     if (ul) { ul.dataset.type = "checklist"; afterChange(); }
   }
 
-  // execCommand lists sometimes land inside a <p>; lift them out, keeping the caret
+  
   function fixLists() {
     const bad = ed.querySelectorAll("p > ul, p > ol");
     if (!bad.length) return;
@@ -564,7 +557,7 @@
     }
   }
 
-  // Chrome turns "\n" from execCommand into a new block, so code gets real newlines by hand
+  
   function insertCodeText(text) {
     const r = sel();
     if (!r) return;
@@ -573,7 +566,7 @@
     r.deleteContents();
     const t = document.createTextNode(text);
     r.insertNode(t);
-    // a trailing newline needs a second one to give the caret a line to sit on
+    
     const after = document.createRange();
     after.setStartAfter(t);
     if (code) after.setEnd(code, code.childNodes.length);
@@ -586,7 +579,7 @@
     afterChange();
   }
 
-  // toolbar state follows the caret
+  
   function updateToolbar() {
     if (!document.activeElement || !ed.contains(document.activeElement) && document.activeElement !== ed) return;
     ["bold", "italic", "underline"].forEach(function (c) { mark(c, document.queryCommandState(c)); });
@@ -615,7 +608,7 @@
   }
 
 
-  /* ---------- editor events ---------- */
+  
 
   document.addEventListener("selectionchange", function () {
     const s = window.getSelection();
@@ -658,7 +651,7 @@
         const code = pre.querySelector("code") || pre;
         const before = textBeforeCaret(code, r);
         const after = code.textContent.slice(before.length);
-        // Enter on an empty last line leaves the code block
+        
         if (!after.trim() && (before.endsWith("\n") || !before)) {
           code.textContent = before.replace(/\n+$/, "");
           const p = document.createElement("p"); p.innerHTML = "<br>";
@@ -674,7 +667,7 @@
     if (e.key === " " && markdownShortcut()) { e.preventDefault(); return; }
     if (e.key === "Enter" && !e.shiftKey && dividerShortcut()) { e.preventDefault(); return; }
 
-    // Backspace on an empty heading/quote turns it back into a paragraph first
+    
     if (e.key === "Backspace") {
       const b = closest(anchorNode(), "h1,h2,h3,blockquote");
       const r = sel();
@@ -685,7 +678,7 @@
     }
   });
 
-  // the toggle box on checklists, and image selection
+  
   ed.addEventListener("click", function (e) {
     const li = e.target.closest && e.target.closest('ul[data-type="checklist"] > li');
     if (li && e.clientX - li.getBoundingClientRect().left < 22) {
@@ -704,11 +697,11 @@
     deselectImg();
   });
 
-  // tidy paste: images get uploaded, rich text loses the source page's styling
+  
   ed.addEventListener("paste", function (e) {
     const cd = e.clipboardData;
     if (!cd) return;
-    const files = Array.prototype.slice.call(cd.files || []).filter(function (f) { return /^image\//.test(f.type); });
+    const files = Array.prototype.slice.call(cd.files || []).filter(function (f) { return /^image\
     if (files.length) {
       e.preventDefault();
       files.forEach(insertImageFile);
@@ -755,10 +748,10 @@
   ed.addEventListener("dragleave", function (e) { if (!ed.contains(e.relatedTarget)) showDropHint(false); });
   ed.addEventListener("drop", function (e) {
     showDropHint(false);
-    const files = Array.prototype.slice.call(e.dataTransfer && e.dataTransfer.files || []).filter(function (f) { return /^image\//.test(f.type); });
+    const files = Array.prototype.slice.call(e.dataTransfer && e.dataTransfer.files || []).filter(function (f) { return /^image\
     if (!files.length) return;
     e.preventDefault();
-    // put the caret where the image was dropped
+    
     let r = null;
     if (document.caretRangeFromPoint) r = document.caretRangeFromPoint(e.clientX, e.clientY);
     else if (document.caretPositionFromPoint) { const p = document.caretPositionFromPoint(e.clientX, e.clientY); if (p) { r = document.createRange(); r.setStart(p.offsetNode, p.offset); } }
@@ -777,7 +770,7 @@
     this.value = "";
   });
 
-  // global shortcuts
+  
   document.addEventListener("keydown", function (e) {
     const mod = e.ctrlKey || e.metaKey;
     if (mod && e.key.toLowerCase() === "s") { e.preventDefault(); if (state.current) save(); }
@@ -786,10 +779,10 @@
   });
 
 
-  /* ---------- 5. IMAGES ---------- */
+  
 
   async function compress(file) {
-    // GIFs keep their animation; everything else becomes WebP, at most 2000px wide
+    
     if (file.type === "image/gif") return { blob: file, type: "image/gif" };
     try {
       const bmp = await createImageBitmap(file);
@@ -800,7 +793,7 @@
       c.getContext("2d").drawImage(bmp, 0, 0, w, h);
       const blob = await new Promise(function (res) { c.toBlob(res, "image/webp", 0.86); });
       if (blob && blob.type === "image/webp" && (blob.size < file.size || scale < 1)) return { blob, type: "image/webp" };
-    } catch (e) { /* fall through to the original */ }
+    } catch (e) {  }
     return { blob: file, type: file.type };
   }
 
@@ -850,7 +843,7 @@
     }
   }
 
-  // images pasted inside rich text arrive as data: URLs
+  
   function uploadDataImages() {
     ed.querySelectorAll('img[src^="data:"]').forEach(function (img) {
       const id = "up" + Math.random().toString(36).slice(2, 8);
@@ -859,7 +852,7 @@
     });
   }
 
-  // a small floating bar for the selected image
+  
   function selectImg(img) {
     deselectImg();
     state.selImg = img;
@@ -911,7 +904,7 @@
   }
 
 
-  /* ---------- 6. SLASH MENU + MARKDOWN SHORTCUTS ---------- */
+  
 
   const BLOCKS = [
     { k: "h1", n: "Heading 1", d: "Big section title", i: "H1", run: function () { setBlock("h1"); } },
@@ -990,7 +983,7 @@
   }
   function closeSlash() { if (slash) { slash.el.remove(); slash = null; } }
 
-  // "# " → H1, "- " → list, "[] " → checklist, "> " → quote, "```" → code, "1. " → numbered
+  
   function markdownShortcut() {
     const r = sel();
     if (!r || !r.collapsed) return false;
@@ -1004,7 +997,7 @@
     else if (/^1[.)]$/.test(before)) action = function () { exec("insertOrderedList"); fixLists(); };
     else if (before === "[]" || before === "[ ]") action = toggleChecklist;
     if (!action) return false;
-    // remove the typed marker, then convert the block
+    
     const range = document.createRange();
     range.setStart(b, 0);
     range.setEnd(r.startContainer, r.startOffset);
@@ -1024,7 +1017,7 @@
   }
 
 
-  /* ---------- 7. POPOVERS ---------- */
+  
 
   function pop(anchor, cls) {
     closePops(cls === "img");
@@ -1124,7 +1117,7 @@
   }
 
 
-  /* ---------- helpers ---------- */
+  
 
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -1138,7 +1131,7 @@
   function restore(range) {
     const live = window.getSelection();
     if (!range && live.rangeCount && ed.contains(live.getRangeAt(0).commonAncestorContainer)) {
-      // the selection is still in the editor (focus just went to a toolbar control): keep it
+      
       const keep = live.getRangeAt(0).cloneRange();
       ed.focus({ preventScroll: true });
       live.removeAllRanges();
@@ -1203,7 +1196,7 @@
     return b.getBoundingClientRect();
   }
 
-  // insert a block at the caret: after the current top-level block, or replacing it if empty
+  
   function insertBlockHTML(html, focusInside) {
     restore();
     const tmp = document.createElement("div");
@@ -1237,7 +1230,7 @@
     if (!last || last.tagName !== "P") { const p = document.createElement("p"); p.innerHTML = "<br>"; ed.appendChild(p); }
   }
 
-  // loose text at the top level becomes paragraphs
+  
   function normalize() {
     Array.prototype.slice.call(ed.childNodes).forEach(function (n) {
       if (n.nodeType === 3 && n.textContent.trim()) { const p = document.createElement("p"); n.replaceWith(p); p.appendChild(n); }
@@ -1247,7 +1240,7 @@
     ensureTrailingP();
   }
 
-  // before saving: drop browser junk (empty spans, &nbsp;-only styling, zero-width spaces)
+  
   function cleanEditor() {
     ed.querySelectorAll("span:not([style]):not([data-font]), font").forEach(unwrap);
     ed.querySelectorAll("code").forEach(function (c) { if (!closest(c, "pre")) c.innerHTML = c.innerHTML.replace(/​/g, ""); });
@@ -1288,7 +1281,7 @@
   });
 
 
-  /* ---------- 8. BOOT ---------- */
+  
 
   async function startApp() {
     $("login").hidden = true;
@@ -1300,7 +1293,7 @@
     else if (h && state.posts.some(function (p) { return p.slug === h; })) openPost(h);
   }
 
-  // Enter makes <p>, not Chrome's default <div>
+  
   try { document.execCommand("defaultParagraphSeparator", false, "p"); } catch (e) {}
 
   if (state.token) {

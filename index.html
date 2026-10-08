@@ -21,11 +21,10 @@
   <meta property="og:url" content="https://hridhaan.me" />
   <meta property="og:image" content="https://hridhaan.me/assets/img/pfp.jpg" />
 
-  <!-- Theme (and whether the name intro plays) is decided before first
-       paint so nothing flashes. The intro plays once per browser session. -->
+  
   <script>
     (function () {
-      // theme: the visitor's own pick if they made one, else their device's
+      
       var d = document.documentElement, t = null;
       try { t = localStorage.getItem("theme"); } catch (e) {}
       if (t !== "light" && t !== "dark") {
@@ -37,12 +36,12 @@
       var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (!seen && !still) {
         d.classList.add("intro-on");
-        // safety net: never leave the page hidden if the script below fails
+        
         setTimeout(function () { d.classList.remove("intro-on", "intro-go", "intro-cut", "intro-out"); }, 7000);
       }
     })();
   </script>
-  <!-- OLED black from the very first frame, even before site.css arrives -->
+  
   <style>html.intro-on:not(.intro-out) { background: #000; }</style>
 
   <link rel="icon" href="assets/img/memoji.png" />
@@ -56,9 +55,7 @@
 <body>
   <canvas id="starfield" class="starfield" aria-hidden="true"></canvas>
 
-  <!-- Splash (first load of a session only): HRIDHAAN over SAHAY on pure
-       black, held for 4s, then a hairline cuts the middle and the screen
-       splits open top and bottom. -->
+  
   <div class="splash" id="splash" aria-hidden="true">
     <div class="splash-half splash-top"><span class="splash-word">HRIDHAAN</span></div>
     <div class="splash-half splash-bottom"><span class="splash-word">SAHAY</span></div>
@@ -67,7 +64,7 @@
 
   <div class="wrap">
 
-    <!-- ========== HEADER ========== -->
+    
     <header class="site-head">
       <div class="head-row">
         <a class="brand" href="/" data-route="home">Hridhaan Sahay</a>
@@ -98,16 +95,13 @@
     </header>
 
 
-    <!-- Every view lives in here. The router fades this box out, swaps
-         which page/sections are visible, and fades it back in. -->
+    
     <div id="view" class="view">
 
-    <!-- ========== HOME ==========
-         Home shows every section. /about, /experience, /projects and
-         /links show only their own section(s), as a full view. -->
+    
     <main id="page-home" class="page">
 
-      <!-- Intro -->
+      
       <section class="intro" id="about">
         <img class="avatar" src="assets/img/pfp.webp" alt="Hridhaan Sahay" width="88" height="88" />
 
@@ -147,7 +141,7 @@
 
           <p class="statement">Building projects with curiosity, and a love for engineering.</p>
 
-          <!-- types itself out: I like <thing>, deletes, types the next -->
+          
           <p class="likes">
             I like <strong class="like-typed" id="likeText" aria-hidden="true">exploring space.</strong><span class="like-caret" aria-hidden="true"></span>
             <span class="sr-only">I like exploring space, cybersecurity, writing clean code, building cool projects, competitive programming, learning something new, and building stuff at Hack Club.</span>
@@ -160,7 +154,7 @@
       </section>
 
 
-      <!-- Connect -->
+      
       <section class="block" id="links">
         <h2>Connect with me</h2>
         <p class="sub">Here are my social handles, feel free to connect and say hi</p>
@@ -174,7 +168,7 @@
       </section>
 
 
-      <!-- Experience -->
+      
       <section class="block" id="experience">
         <h2>Experience</h2>
         <p class="sub">Building, leading, and collaborating across student developer communities.</p>
@@ -235,7 +229,7 @@
       </section>
 
 
-      <!-- Education -->
+      
       <section class="block" id="education">
         <h2>Education</h2>
 
@@ -279,7 +273,7 @@
       </section>
 
 
-      <!-- Projects -->
+      
       <section class="block" id="projects">
         <div class="block-head">
           <h2>Projects</h2>
@@ -293,7 +287,7 @@
 
         <div class="project-grid">
           <a class="card project" href="https://bitbuzz.app" target="_blank" rel="noopener">
-            <!-- logo at rest, the BitBuzz cover crossfades in on hover -->
+            
             <span class="bb-thumb">
               <img class="bb-mark" src="assets/logos/bitbuzz.svg" alt="BitBuzz logo" width="96" height="96" />
               <img class="bb-cover" src="assets/projects/bitbuzz-cover.jpg" alt="" width="1200" height="546" loading="lazy" decoding="async" />
@@ -353,8 +347,7 @@
       </section>
 
 
-      <!-- Astrophotography teaser. The full gallery and the book live on
-           their own night-sky page at /astrophotography. -->
+      
       <section class="block" id="astrophotography">
         <h2>Astrophotography</h2>
         <p class="sub">I do astrophotography as a hobby.</p>
@@ -376,7 +369,7 @@
       </section>
 
 
-      <!-- Achievements shortcut (home only) -->
+      
       <section class="block block-tight" id="more">
         <a class="card row-card" href="/achievements" data-route="achievements">
           <h3>Achievements &amp; Leadership</h3>
@@ -386,7 +379,7 @@
       </section>
 
 
-      <!-- Blog preview: the latest memos, filled in from /api/memo (Memo lives at /blog) -->
+      
       <section class="block" id="writing">
         <div class="block-head">
           <h2>Blog</h2>
@@ -403,7 +396,7 @@
       </section>
 
 
-      <!-- Guestbook -->
+      
       <section class="block" id="guestbook">
         <div class="block-head">
           <h2>Notes from visitors</h2>
@@ -421,7 +414,7 @@
     </main>
 
 
-    <!-- ========== ACHIEVEMENTS ========== -->
+    
     <section id="page-achievements" class="page" hidden>
       <header class="page-head">
         <h1>Recent Highlights</h1>
@@ -472,7 +465,7 @@
           </a>
         </article>
 
-        <!-- Earlier: what used to be the separate /archive page. -->
+        
         <h2 class="awards-group" id="earlier">Earlier</h2>
         <p class="sub">Every school-level certificate and record, kept for reference. Documents are view-only.</p>
 
@@ -529,9 +522,7 @@
     </section>
 
 
-    <!-- ========== ASTROPHOTOGRAPHY ==========
-         Same site, night-sky palette: the router sets data-night on <html>
-         while this view is open, and a starfield runs behind it. -->
+    
     <section id="page-astro" class="page astro-page" hidden>
       <header class="page-head">
         <p class="kicker">Astrophotography</p>
@@ -597,8 +588,7 @@
         </figure>
       </div>
 
-      <!-- Flipbook: pdf.js (cdnjs) renders the PDF's pages, loaded only
-           when this section is close to the screen. -->
+      
       <section class="book" id="book" aria-labelledby="bookTitle">
         <div class="block-head">
           <h2 id="bookTitle">Space Finds</h2>
@@ -621,9 +611,7 @@
     </section>
 
 
-    <!-- ========== BLOG ==========
-         Adding a post: copy one .post-card in the list and one <article class="post">,
-         and make the card's data-post match the article's id. -->
+    
     <section id="page-blog" class="page" hidden>
       <header class="page-head" id="blogHead">
         <p class="kicker">Writing</p>
@@ -666,10 +654,10 @@
     </section>
 
 
-    </div><!-- /view -->
+    </div>
 
 
-    <!-- ========== FOOTER ========== -->
+    
     <footer class="site-foot">
       <img src="assets/img/signature.svg" class="signature" alt="Signature" />
       <p>© 2026 Hridhaan Sahay.</p>
@@ -685,7 +673,7 @@
 
   </div>
 
-  <!-- Photo viewer for the astrophotography gallery -->
+  
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
     <button type="button" class="lb-btn lb-close" id="lbClose" aria-label="Close">×</button>
     <button type="button" class="lb-btn lb-prev" id="lbPrev" aria-label="Previous photo">‹</button>
@@ -696,7 +684,7 @@
     <button type="button" class="lb-btn lb-next" id="lbNext" aria-label="Next photo">›</button>
   </div>
 
-  <!-- Easter egg: type "sudo" anywhere. -->
+  
   <div class="term" id="term" role="dialog" aria-modal="true" aria-label="Terminal" hidden>
     <div class="term-bar">
       <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>

@@ -1,11 +1,4 @@
-/* ==========================================================
-   memo.js — the reader for Memo (hridhaan.me/blog).
 
-   /blog            list: intro, search, tag filter, posts by year
-   /blog/<slug>     one memo: TOC, progress bar, copy-code, zoom, prev/next
-   The server injects the first view's data into #memo-data so the page
-   renders without a round trip; later navigation fetches /api/memo.
-   ========================================================== */
 
 (function () {
   "use strict";
@@ -15,14 +8,14 @@
   const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  let index = null;               // { settings, posts }
+  let index = null;               
   const postCache = {};
   let tocObserver = null;
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 
 
-  /* ---------- data ---------- */
+  
 
   try {
     const el = document.getElementById("memo-data");
@@ -31,7 +24,7 @@
       index = d.index;
       if (d.post) postCache[d.post.slug] = d.post;
     }
-  } catch (e) { /* fall back to fetching */ }
+  } catch (e) {  }
 
   async function getIndex() {
     if (index) return index;
@@ -48,7 +41,7 @@
   }
 
 
-  /* ---------- helpers ---------- */
+  
 
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -102,7 +95,7 @@
   }
 
 
-  /* ---------- list view ---------- */
+  
 
   async function renderList() {
     stopPostExtras();
@@ -191,7 +184,7 @@
   }
 
 
-  /* ---------- post view ---------- */
+  
 
   async function renderPost(slug) {
     stopPostExtras();
@@ -257,12 +250,12 @@
   }
 
   function enhanceBody(body) {
-    // links out open in a new tab
+    
     body.querySelectorAll("a[href]").forEach(function (a) {
       if (/^https?:/i.test(a.getAttribute("href")) && a.host !== location.host) { a.target = "_blank"; a.rel = "noopener"; }
     });
 
-    // heading anchors + table of contents
+    
     const used = {};
     const heads = Array.prototype.slice.call(body.querySelectorAll("h1, h2, h3"));
     heads.forEach(function (h) {
@@ -297,7 +290,7 @@
       }
     }
 
-    // code: highlight + copy button
+    
     body.querySelectorAll("pre").forEach(function (pre) {
       const code = pre.querySelector("code") || pre;
       function hl() { if (window.hljs && !code.dataset.highlighted) { try { window.hljs.highlightElement(code); } catch (e) {} } }
@@ -312,7 +305,7 @@
       pre.appendChild(btn);
     });
 
-    // images: lazy + zoom
+    
     body.querySelectorAll("img").forEach(function (img) {
       img.loading = "lazy"; img.decoding = "async";
       img.addEventListener("click", function () { zoom(img.currentSrc || img.src, img.alt); });
@@ -352,10 +345,10 @@
   }
 
 
-  /* ---------- router ---------- */
+  
 
   async function route(push, scroll) {
-    // old links from the previous blog: /blog#post-frameworkless-portfolio
+    
     if (!slugFromPath() && /^#post-/.test(location.hash)) {
       const legacy = { "post-frameworkless-portfolio": "building-this-portfolio-without-frameworks" }[location.hash.slice(1)];
       if (legacy) history.replaceState(null, "", "/blog/" + legacy);
@@ -379,7 +372,7 @@
 
   window.addEventListener("popstate", function () { route(false); });
 
-  // "/" focuses search, like every good site
+  
   document.addEventListener("keydown", function (e) {
     if (e.key === "/" && !/INPUT|TEXTAREA/.test(document.activeElement.tagName) && !document.activeElement.isContentEditable) {
       const q = document.getElementById("q");
@@ -388,7 +381,7 @@
   });
 
 
-  /* ---------- theme ---------- */
+  
 
   document.getElementById("theme").addEventListener("click", function () {
     const root = document.documentElement;

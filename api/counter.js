@@ -5,7 +5,7 @@ export default function handler(req, res) {
   const filePath = path.join(process.cwd(), "api", "count.json");
   const file = JSON.parse(fs.readFileSync(filePath, "utf8"));
 
-  file.visits += 1; // increment global count
+  file.visits += 1; 
 
   fs.writeFileSync(filePath, JSON.stringify(file, null, 2));
 

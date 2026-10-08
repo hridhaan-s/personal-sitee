@@ -1,28 +1,4 @@
-/* ==========================================================
-   api/memo.js — the whole backend for Memo (hridhaan.me/blog).
 
-   One serverless function, GitHub as the database:
-   every post is posts/<slug>.json, the list is index.json and pasted
-   screenshots are media/<hash>.<ext>, all in MEMO_REPO @ MEMO_BRANCH.
-   Each save is one git commit, so every edit has history.
-
-   Env vars (Vercel → Settings → Environment Variables):
-     GITHUB_TOKEN    fine-grained token, "Contents: read & write" on MEMO_REPO
-     MEMO_PASSWORD   the /admin password
-     MEMO_REPO       owner/name of the content repo   (default hridhaan-s/memo-content)
-     MEMO_BRANCH     branch to store content on       (default main)
-     MEMO_SECRET     optional; signs login tokens (defaults to a hash of the above)
-     MEMO_SITE_URL   optional; default https://hridhaan.me
-     MEMO_LOCAL_DIR  local dev only: store content in this folder instead of GitHub
-
-   Public routes (see vercel.json rewrites):
-     /blog, /blog/:slug   → ?page=…   server-rendered shell with meta + data
-     /blog/rss.xml        → ?rss=1
-     GET ?list | ?post=slug | ?media=name
-   Admin (Authorization: Bearer <token>):
-     POST {action:"login"} · GET ?admin=list | ?admin=post&slug=
-     POST {action:"save"|"delete"|"upload"|"settings"}
-   ========================================================== */
 
 import fs from "fs";
 import path from "path";
@@ -38,7 +14,7 @@ const MEDIA_TYPES = { "image/png": "png", "image/jpeg": "jpg", "image/webp": "we
 const EXT_TYPES = { png: "image/png", jpg: "image/jpeg", webp: "image/webp", gif: "image/gif", avif: "image/avif" };
 
 
-/* ---------- storage: GitHub or a local folder ---------- */
+
 
 function ghHeaders(extra) {
   return Object.assign({
@@ -79,28 +55,28 @@ const store = LOCAL ? {
     }
   }
 } : {
-  // current head commit of the branch, or null if it doesn't exist yet
+  
   async head() {
     if (!process.env.GITHUB_TOKEN) return null;
     try { return (await gh("GET", "/repos/" + REPO + "/git/ref/heads/" + BRANCH)).object.sha; }
     catch (e) { if (e.status === 404 || e.status === 409) return null; throw e; }
   },
 
-  // ref: a commit sha to read a consistent snapshot, default the branch tip
+  
   async read(p, ref) {
-    if (!process.env.GITHUB_TOKEN) return null;   // not set up yet: everything falls back to the seed
+    if (!process.env.GITHUB_TOKEN) return null;   
     const res = await fetch(GH + "/repos/" + REPO + "/contents/" + encodeURI(p) + "?ref=" + encodeURIComponent(ref || BRANCH), {
       headers: ghHeaders({ Accept: "application/vnd.github.raw" }),
       cache: "no-store"
     });
-    if (res.status === 404 || res.status === 409) return null;   // missing file, branch or an empty repo
+    if (res.status === 404 || res.status === 409) return null;   
     if (!res.ok) throw new Error("GitHub read " + p + " → " + res.status);
     return Buffer.from(await res.arrayBuffer());
   },
 
-  // One commit for the whole batch. With `base`, the commit must sit directly
-  // on that commit or it fails with .conflict (the caller re-reads and retries);
-  // without it, it retries on top of whatever the tip is (fine for new media).
+  
+  
+  
   async write(files, message, base) {
     for (let attempt = 0; attempt < 5; attempt++) {
       try {
@@ -109,7 +85,7 @@ const store = LOCAL ? {
         const tree = [];
         for (const f of files) {
           if (f.delete) {
-            // deleting a path that doesn't exist makes GitHub reject the tree
+            
             if (await this.read(f.path, head) !== null) tree.push({ path: f.path, mode: "100644", type: "blob", sha: null });
             continue;
           }
@@ -132,7 +108,7 @@ const store = LOCAL ? {
   }
 };
 
-// The branch's head commit; creates the branch (or the repo's first commit) if needed.
+
 async function branchHead() {
   try {
     return (await gh("GET", "/repos/" + REPO + "/git/ref/heads/" + BRANCH)).object.sha;
@@ -141,7 +117,7 @@ async function branchHead() {
   }
   const readme = Buffer.from("# Memo content\n\nPosts and media for hridhaan.me/blog, written by /admin. Don't edit by hand unless you mean it.\n").toString("base64");
   try {
-    // a non-empty repo: start the branch as an orphan so it carries none of the site
+    
     const tree = await gh("POST", "/repos/" + REPO + "/git/trees", {
       tree: [{ path: "README.md", mode: "100644", type: "blob", content: Buffer.from(readme, "base64").toString() }]
     });
@@ -149,14 +125,14 @@ async function branchHead() {
     await gh("POST", "/repos/" + REPO + "/git/refs", { ref: "refs/heads/" + BRANCH, sha: c.sha });
     return c.sha;
   } catch (e) {
-    // an empty repo has no git database yet; the contents API can make the first commit
+    
     await gh("PUT", "/repos/" + REPO + "/contents/README.md", { message: "Memo: first commit", content: readme, branch: BRANCH });
     return (await gh("GET", "/repos/" + REPO + "/git/ref/heads/" + BRANCH)).object.sha;
   }
 }
 
 
-/* ---------- data ---------- */
+
 
 function loadSeed() {
   try { return JSON.parse(fs.readFileSync(path.join(process.cwd(), "memo-seed.json"), "utf8")); }
@@ -168,7 +144,7 @@ async function readJSON(p, ref) {
   return buf ? JSON.parse(buf.toString("utf8")) : null;
 }
 
-// index.json, or the seed (with its posts) when nothing has been saved yet
+
 async function getIndex(ref) {
   const idx = await readJSON("index.json", ref);
   if (idx) return { idx, seeded: false };
@@ -183,12 +159,12 @@ async function getIndex(ref) {
 async function getPost(slug, ref) {
   const p = await readJSON("posts/" + slug + ".json", ref);
   if (p) return p;
-  // the seed only stands in until the first save (which writes its posts for real)
+  
   if (!(await getIndex(ref)).seeded) return null;
   return (loadSeed().posts || []).find(function (x) { return x.slug === slug; }) || null;
 }
 
-// commit files; if this is the very first write, carry the seed along with it
+
 async function commit(files, message, current, base) {
   if (current.seeded) {
     for (const sp of current.seedPosts) {
@@ -200,7 +176,7 @@ async function commit(files, message, current, base) {
   await store.write(files, message, base);
 }
 
-// read-modify-write on the index, retried if another save landed in between
+
 async function mutate(build, message) {
   for (let attempt = 0; ; attempt++) {
     const base = await store.head();
@@ -259,7 +235,7 @@ function cleanTags(t) {
     .filter(Boolean).slice(0, 8);
 }
 
-// Strip what a rich-text paste should never carry. The page also runs DOMPurify on render.
+
 function scrub(html) {
   return String(html || "")
     .replace(/<(script|style|iframe|object|embed|form|noscript)\b[\s\S]*?<\/\1\s*>/gi, "")
@@ -269,7 +245,7 @@ function scrub(html) {
 }
 
 
-/* ---------- auth ---------- */
+
 
 function secret() {
   return process.env.MEMO_SECRET ||
@@ -294,7 +270,7 @@ function authed(req) {
 }
 
 
-/* ---------- page shell + RSS ---------- */
+
 
 function esc(s) {
   return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -363,7 +339,7 @@ async function renderPage(res, slug) {
 
   const html = tpl
     .replace(/<title>[\s\S]*?<\/title>/, head)
-    .replace("<!--MEMO_DATA-->", '<script id="memo-data" type="application/json">' + jsonForScript(data) + "</script>");
+    .replace("", '<script id="memo-data" type="application/json">' + jsonForScript(data) + "</script>");
 
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.setHeader("Cache-Control", "public, s-maxage=15, stale-while-revalidate=300");
@@ -399,7 +375,7 @@ async function renderRSS(res) {
 }
 
 
-/* ---------- handler ---------- */
+
 
 function json(res, status, body, cache) {
   res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -463,7 +439,7 @@ export default async function handler(req, res) {
       const given = crypto.createHash("sha256").update(String(body.password || "")).digest();
       const real = crypto.createHash("sha256").update(process.env.MEMO_PASSWORD).digest();
       if (!crypto.timingSafeEqual(given, real)) {
-        await new Promise(function (r) { setTimeout(r, 900); });   // slow down guessing
+        await new Promise(function (r) { setTimeout(r, 900); });   
         return json(res, 401, { error: "Wrong password." });
       }
       const exp = Date.now() + 30 * 24 * 3600 * 1000;
@@ -498,7 +474,7 @@ export default async function handler(req, res) {
       const out = await mutate(async function (current, base) {
         const idx = current.idx;
         let slug = slugify(input.slug || title);
-        // a new post (or a rename) can't take a slug another post already has
+        
         const taken = function (s) { return idx.posts.some(function (p) { return p.slug === s && s !== original; }); };
         if (taken(slug)) {
           let n = 2;
