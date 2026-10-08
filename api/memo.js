@@ -81,12 +81,14 @@ const store = LOCAL ? {
 } : {
   // current head commit of the branch, or null if it doesn't exist yet
   async head() {
+    if (!process.env.GITHUB_TOKEN) return null;
     try { return (await gh("GET", "/repos/" + REPO + "/git/ref/heads/" + BRANCH)).object.sha; }
     catch (e) { if (e.status === 404 || e.status === 409) return null; throw e; }
   },
 
   // ref: a commit sha to read a consistent snapshot, default the branch tip
   async read(p, ref) {
+    if (!process.env.GITHUB_TOKEN) return null;   // not set up yet: everything falls back to the seed
     const res = await fetch(GH + "/repos/" + REPO + "/contents/" + encodeURI(p) + "?ref=" + encodeURIComponent(ref || BRANCH), {
       headers: ghHeaders({ Accept: "application/vnd.github.raw" }),
       cache: "no-store"
@@ -319,7 +321,10 @@ async function renderPage(res, slug) {
   try { tpl = fs.readFileSync(path.join(process.cwd(), "blog.html"), "utf8"); }
   catch (e) { res.status(500).send("blog.html missing from the function bundle"); return; }
 
-  const { idx } = await getIndex();
+  // if GitHub is having a moment, still serve the shell; the page retries from the browser
+  let idx;
+  try { idx = (await getIndex()).idx; }
+  catch (e) { console.error(e); const seed = loadSeed(); idx = { settings: seed.settings || {}, posts: (seed.posts || []).map(meta) }; }
   const data = { index: publicIndex(idx), post: null, slug: slug || "" };
   let title = "Memo — Hridhaan Sahay";
   let desc = "Notes, logs and half-finished thoughts by Hridhaan Sahay.";
@@ -327,7 +332,8 @@ async function renderPage(res, slug) {
   let status = 200;
 
   if (slug) {
-    const p = await getPost(slug);
+    let p = null;
+    try { p = await getPost(slug); } catch (e) { console.error(e); }
     if (p && p.visibility !== "draft") {
       const m = meta(p);
       data.post = Object.assign({}, m, { html: p.html });
