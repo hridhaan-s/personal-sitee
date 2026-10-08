@@ -339,7 +339,7 @@ async function renderPage(res, slug) {
 
   const html = tpl
     .replace(/<title>[\s\S]*?<\/title>/, head)
-    .replace("", '<script id="memo-data" type="application/json">' + jsonForScript(data) + "</script>");
+    .replace("<!--MEMO_DATA-->", '<script id="memo-data" type="application/json">' + jsonForScript(data) + "</script>");
 
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.setHeader("Cache-Control", "public, s-maxage=15, stale-while-revalidate=300");
@@ -355,8 +355,8 @@ async function renderRSS(res) {
     const body = String(p && p.html || "").replace(/(src|href)="\/(?!\/)/g, '$1="' + SITE + "/");
     items.push(
       "<item><title>" + esc(m.title) + "</title>" +
-      "<link>" + SITE + "/memo/ + m.slug + "</link>" +
-      '<guid isPermaLink="true">' + SITE + "/memo/ + m.slug + "</guid>" +
+      "<link>" + SITE + "/memo/" + m.slug + "</link>" +
+      '<guid isPermaLink="true">' + SITE + "/memo/" + m.slug + "</guid>" +
       "<pubDate>" + new Date(m.date).toUTCString() + "</pubDate>" +
       m.tags.map(function (t) { return "<category>" + esc(t) + "</category>"; }).join("") +
       "<description>" + esc(m.excerpt) + "</description>" +
