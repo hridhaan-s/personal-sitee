@@ -502,6 +502,26 @@
   });
 
 
+  // The blog moved to Memo (/blog, its own page). The home preview shows
+  // the latest two memos; the static card stays if the API is unreachable.
+  (function loadLatestMemos() {
+    const box = document.getElementById("memoLatest");
+    if (!box || !window.fetch) return;
+    const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    function esc(s) { return String(s || "").replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+    fetch("/api/memo?list=1").then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      if (!d || !d.posts || !d.posts.length) return;
+      box.innerHTML = d.posts.slice(0, 2).map(function (p) {
+        const m = /^(\d{4})-(\d{2})/.exec(p.date || "");
+        const when = m ? MONTHS[+m[2] - 1] + " " + m[1] : "";
+        return '<a class="card post-card" href="/blog/' + encodeURIComponent(p.slug) + '">' +
+          '<time datetime="' + esc(p.date) + '">' + when + " · " + p.readMins + " min read</time>" +
+          "<h3>" + esc(p.title) + "</h3><p>" + esc(p.excerpt) + "</p></a>";
+      }).join("");
+    }).catch(function () {});
+  })();
+
+
   /* ---------- 8. GUESTBOOK, LATEST COMMIT, LOGO FALLBACK ---------- */
 
   function initialsAvatar(name) {
