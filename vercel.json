@@ -5,7 +5,6 @@
   "redirects": [
     { "source": "/archive", "destination": "/achievements", "permanent": true },
     { "source": "/archive.html", "destination": "/achievements", "permanent": true },
-    { "source": "/memo", "destination": "/memo", "permanent": true },
     { "source": "/blog/", "destination": "/memo", "permanent": true },
     { "source": "/admin/", "destination": "/admin", "permanent": true }
   ],
