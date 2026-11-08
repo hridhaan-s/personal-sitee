@@ -524,9 +524,12 @@ export default async function handler(req, res) {
       const s = body.settings || {};
       const out = await mutate(async function (current) {
         const idx = current.idx;
-        idx.settings = Object.assign({}, idx.settings, { intro: scrub(s.intro).slice(0, 20000) });
+        const next = Object.assign({}, idx.settings);
+        if (Object.prototype.hasOwnProperty.call(s, "intro")) next.intro = scrub(s.intro).slice(0, 20000);
+        if (typeof s.accent === "string" && /^#[0-9a-fA-F]{6}$/.test(s.accent)) next.accent = s.accent.toLowerCase();
+        idx.settings = next;
         return { files: [indexFile(idx)], settings: idx.settings };
-      }, function () { return "Memo: update intro"; });
+      }, function () { return "Memo: update settings"; });
       return json(res, 200, { ok: true, settings: out.settings });
     }
 
