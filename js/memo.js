@@ -22,14 +22,25 @@
     if (el) {
       const d = JSON.parse(el.textContent);
       index = d.index;
+      applyAccent(index && index.settings && index.settings.accent);
       if (d.post) postCache[d.post.slug] = d.post;
     }
   } catch (e) {  }
+
+  function applyAccent(hex) {
+    if (!/^#[0-9a-f]{6}$/i.test(hex || "")) return;
+    const rgb = hex.match(/[0-9a-f]{2}/gi).map(function (v) { return parseInt(v, 16); });
+    const luminance = (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255;
+    document.documentElement.style.setProperty("--accent", hex);
+    document.documentElement.style.setProperty("--accent-ink", luminance > 0.62 ? "#142018" : "#ffffff");
+    document.documentElement.style.setProperty("--mark", "rgba(" + rgb.join(",") + ",.22)");
+  }
 
   async function getIndex() {
     if (index) return index;
     const r = await fetch("/api/memo?list=1");
     index = r.ok ? await r.json() : { settings: {}, posts: [] };
+    applyAccent(index.settings && index.settings.accent);
     return index;
   }
 
@@ -60,7 +71,7 @@
   function clean(html) {
     if (!window.DOMPurify) return "";
     return window.DOMPurify.sanitize(html || "", {
-      ADD_ATTR: ["target", "data-width", "data-align", "data-type", "data-checked", "data-emoji", "data-font", "open"],
+      ADD_ATTR: ["target", "data-width", "data-align", "data-layout", "data-card", "data-type", "data-checked", "data-emoji", "data-font", "open"],
       ADD_TAGS: ["details", "summary"],
       FORBID_TAGS: ["style", "form", "input", "button"]
     });
@@ -228,6 +239,7 @@
 
     document.title = post.title + " — Memo";
     enhanceBody(document.getElementById("body"));
+    initCardImages(document.getElementById("body"));
 
     document.getElementById("share").addEventListener("click", function () {
       const url = location.origin + "/memo/" + post.slug;
@@ -247,6 +259,23 @@
       const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
       if (target) setTimeout(function () { target.scrollIntoView(); }, 0);
     }
+  }
+
+  function initCardImages(body) {
+    if (!body || !window.matchMedia || !window.matchMedia("(hover: hover) and (pointer: fine)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    body.querySelectorAll('img[data-card="3d"]').forEach(function (img) {
+      img.classList.add("memo-card3d");
+      img.addEventListener("pointermove", function (e) {
+        const r = img.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width;
+        const y = (e.clientY - r.top) / r.height;
+        img.style.setProperty("--tilt-x", ((.5 - y) * 16).toFixed(2) + "deg");
+        img.style.setProperty("--tilt-y", ((x - .5) * 18).toFixed(2) + "deg");
+        img.style.setProperty("--shine-x", (x * 100).toFixed(1) + "%");
+        img.style.setProperty("--shine-y", (y * 100).toFixed(1) + "%");
+      });
+      img.addEventListener("pointerleave", function () { img.style.setProperty("--tilt-x", "0deg"); img.style.setProperty("--tilt-y", "0deg"); });
+    });
   }
 
   function enhanceBody(body) {
