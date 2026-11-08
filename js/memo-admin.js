@@ -18,7 +18,8 @@
     uploads: 0,
     filter: "all",
     lastRange: null,
-    selImg: null
+    selImg: null,
+    dragImg: null
   };
 
 
@@ -75,10 +76,32 @@
 
   
 
+  function applyAccent(hex) {
+    if (!/^#[0-9a-f]{6}$/i.test(hex || "")) return;
+    const root = document.documentElement;
+    const rgb = hex.match(/[0-9a-f]{2}/gi).map(function (v) { return parseInt(v, 16); });
+    const luminance = (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255;
+    root.style.setProperty("--accent", hex);
+    root.style.setProperty("--accent-ink", luminance > 0.62 ? "#142018" : "#ffffff");
+    root.style.setProperty("--mark", "rgba(" + rgb.join(",") + ",.22)");
+  }
+
+  async function saveAccent(hex) {
+    if (!/^#[0-9a-f]{6}$/i.test(hex || "")) return;
+    applyAccent(hex);
+    try {
+      const d = await api("POST", "", { action: "settings", settings: { accent: hex } });
+      state.settings = d.settings || state.settings;
+      toast("Accent colour saved");
+    } catch (e) { toast("Could not save accent: " + e.message, 3500); }
+  }
+
   async function loadList() {
     const d = await api("GET", "?admin=list");
     state.posts = d.posts;
     state.settings = d.settings || {};
+    const picker = $("accentColor");
+    if (picker) { picker.value = /^#[0-9a-f]{6}$/i.test(state.settings.accent || "") ? state.settings.accent : "#9fd3b4"; applyAccent(picker.value); }
     $("repoName").textContent = d.repo || "admin";
     renderList();
   }
@@ -97,6 +120,7 @@
     }).join("") : '<li class="faint" style="padding:12px 10px;font-size:14px">' + (state.posts.length ? "No matches." : "No memos yet.") + "</li>";
   }
 
+  $("accentColor").addEventListener("change", function () { saveAccent(this.value); });
   $("find").addEventListener("input", renderList);
   document.querySelectorAll("[data-f]").forEach(function (b) {
     b.addEventListener("click", function () {
@@ -146,6 +170,7 @@
     $("slug").value = p.slug || "";
     $("excerpt").value = p.excerpt || "";
     ed.innerHTML = p.html || "<p><br></p>";
+    ed.querySelectorAll("img").forEach(function (img) { img.draggable = true; });
     normalize();
     autosizeTitle();
     stats();
@@ -679,6 +704,24 @@
   });
 
   
+  ed.addEventListener("dragstart", function (e) {
+    if (e.target && e.target.tagName === "IMG") { state.dragImg = e.target; e.dataTransfer.effectAllowed = "move"; try { e.dataTransfer.setData("text/plain", "memo-image"); } catch (err) {} }
+  });
+  ed.addEventListener("dragover", function (e) {
+    if (state.dragImg && e.target && e.target.tagName === "IMG" && e.target !== state.dragImg) { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }
+  });
+  ed.addEventListener("drop", function (e) {
+    if (!state.dragImg) return;
+    const target = e.target && e.target.closest ? e.target.closest("img") : null;
+    if (target && target !== state.dragImg) {
+      e.preventDefault();
+      const rect = target.getBoundingClientRect();
+      if (e.clientY < rect.top + rect.height / 2) target.before(state.dragImg); else target.after(state.dragImg);
+      afterChange();
+    }
+    state.dragImg = null;
+  });
+
   ed.addEventListener("click", function (e) {
     const li = e.target.closest && e.target.closest('ul[data-type="checklist"] > li');
     if (li && e.clientX - li.getBoundingClientRect().left < 22) {
@@ -816,7 +859,7 @@
   function insertImageFile(file) {
     const id = "up" + Math.random().toString(36).slice(2, 8);
     const local = URL.createObjectURL(file);
-    insertBlockHTML('<img src="' + local + '" alt="" data-uploading="' + id + '" data-width="100">');
+    insertBlockHTML('<img draggable="true" src="' + local + '" alt="" data-uploading="' + id + '" data-width="100">');
     trackUpload(file, id, local);
   }
 
@@ -858,12 +901,15 @@
     state.selImg = img;
     img.classList.add("sel");
     const p = pop(img, "img");
-    const w = img.dataset.width || "100", a = img.dataset.align || "center";
+    const w = img.dataset.width || "100", a = img.dataset.align || "center", layout = img.dataset.layout || "center";
     p.innerHTML =
       '<div class="row">' +
         ["25", "50", "75", "100"].map(function (v) { return '<button type="button" data-w="' + v + '" class="' + (v === w ? "on" : "") + '">' + v + "%</button>"; }).join("") +
         '<span class="sep" style="width:1px;height:18px;background:var(--line)"></span>' +
         [["left", "⇤"], ["center", "↔"], ["right", "⇥"]].map(function (x) { return '<button type="button" data-a="' + x[0] + '" title="Align ' + x[0] + '" class="' + (x[0] === a ? "on" : "") + '">' + x[1] + "</button>"; }).join("") +
+        '<span class="sep" style="width:1px;height:18px;background:var(--line)"></span>' +
+        [["center","Center"],["left","Float left"],["right","Float right"],["wide","Full width"]].map(function (x) { return '<button type="button" data-layout="' + x[0] + '" class="' + (x[0] === layout ? "on" : "") + '">' + x[1] + "</button>"; }).join("") +
+        '<button type="button" data-card class="' + (img.dataset.card === "3d" ? "on" : "") + '" title="3D card hover effect">✧ 3D</button>' +
         '<button type="button" data-alt>Alt text</button><button type="button" data-cap>Caption</button><button type="button" data-del style="color:#e5484d">Remove</button>' +
       "</div>";
     p.addEventListener("click", async function (e) {
@@ -871,6 +917,8 @@
       if (!b) return;
       if (b.dataset.w) { img.dataset.width = b.dataset.w; }
       if (b.dataset.a) { if (b.dataset.a === "center") delete img.dataset.align; else img.dataset.align = b.dataset.a; }
+      if (b.dataset.layout) { img.dataset.layout = b.dataset.layout; if (b.dataset.layout === "center") delete img.dataset.layout; }
+      if (b.hasAttribute("data-card")) { if (img.dataset.card === "3d") delete img.dataset.card; else img.dataset.card = "3d"; }
       if (b.hasAttribute("data-alt")) {
         const v = await ask("Describe the image (for screen readers + link previews)", img.alt);
         if (v !== null) img.alt = v;
