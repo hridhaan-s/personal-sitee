@@ -304,7 +304,7 @@ async function renderPage(res, slug) {
   const data = { index: publicIndex(idx), post: null, slug: slug || "" };
   let title = "Memo — Hridhaan Sahay";
   let desc = "Notes, logs and half-finished thoughts by Hridhaan Sahay.";
-  let image = null;
+  let image = SITE + "/assets/img/memo-preview.png";
   let status = 200;
 
   if (slug) {
@@ -315,7 +315,7 @@ async function renderPage(res, slug) {
       data.post = Object.assign({}, m, { html: p.html });
       title = m.title + " — Memo";
       desc = m.excerpt;
-      image = m.cover;
+      // Use the same Memo preview artwork for every note link preview.
     } else {
       status = 404;
       title = "Not found — Memo";
@@ -333,7 +333,8 @@ async function renderPage(res, slug) {
     '<meta property="og:type" content="' + (data.post ? "article" : "website") + '">',
     '<meta property="og:site_name" content="Memo">',
     image ? '<meta property="og:image" content="' + esc(absolutize(image)) + '">' : "",
-    '<meta name="twitter:card" content="' + (image ? "summary_large_image" : "summary") + '">',
+    '<meta name="twitter:card" content="summary_large_image">',
+    '<meta name="twitter:image" content="' + esc(absolutize(image)) + '">',
     data.post && data.post.visibility === "unlisted" ? '<meta name="robots" content="noindex">' : ""
   ].filter(Boolean).join("\n  ");
 
