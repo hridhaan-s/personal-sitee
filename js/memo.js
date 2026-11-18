@@ -190,7 +190,7 @@
     return "<li><time datetime=\"" + esc(p.date) + "\">" + (pinned ? longDate(p.date).replace(/, \d+$/, "") : shortDate(p.date)) + "</time><div>" +
       (pinned ? '<span class="pin" aria-label="Pinned">✦</span>' : "") +
       '<a class="t" data-nav href="/memo/' + encodeURIComponent(p.slug) + '">' + highlight(q, p.title) + "</a>" +
-      (q && p.excerpt ? '<span class="x">' + highlight(q, p.excerpt) + "</span>" : "") +
+      (p.excerpt ? '<span class="x">' + highlight(q, p.excerpt) + "</span>" : "") +
       "</div></li>";
   }
 
