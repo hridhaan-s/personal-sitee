@@ -77,9 +77,19 @@
     const ua = navigator.userAgent || "";
     const deviceType = /ipad|tablet|kindle/i.test(ua) ? "tablet" :
       /mobile|android|iphone|ipod/i.test(ua) ? "mobile" : "desktop";
-    const started = Date.now();
+    let activeSince = document.hidden ? 0 : Date.now();
+    let activeMilliseconds = 0;
     const sent = {};
     let finished = false;
+
+    function visibilityChanged() {
+      if (document.hidden) {
+        if (activeSince) activeMilliseconds += Date.now() - activeSince;
+        activeSince = 0;
+      } else if (!activeSince) {
+        activeSince = Date.now();
+      }
+    }
 
     function send(eventType, extra) {
       const payload = Object.assign({
@@ -116,16 +126,19 @@
     function finish() {
       if (finished) return;
       finished = true;
-      const seconds = Math.max(0, Math.round((Date.now() - started) / 1000));
+      if (activeSince) activeMilliseconds += Date.now() - activeSince;
+      const seconds = Math.max(0, Math.round(activeMilliseconds / 1000));
       if (seconds >= 3) send("reading_time", { durationSeconds: seconds });
       window.removeEventListener("scroll", measure);
       window.removeEventListener("pagehide", finish);
+      document.removeEventListener("visibilitychange", visibilityChanged);
       if (stopAnalytics === finish) stopAnalytics = null;
     }
 
     send("page_view");
     window.addEventListener("scroll", measure, { passive: true });
     window.addEventListener("pagehide", finish);
+    document.addEventListener("visibilitychange", visibilityChanged);
     measure();
     stopAnalytics = finish;
   }
