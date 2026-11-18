@@ -1253,7 +1253,7 @@
     }
     try { sessionStorage.setItem("introSeen", "1"); } catch (e) {  }
 
-    const HOLD = 4000;             
+    const HOLD = 1700;             
     let started = false, opened = false, finished = false;
     let cutTimer = 0, openTimer = 0;
 
@@ -1271,7 +1271,7 @@
       clearTimeout(cutTimer);
       clearTimeout(openTimer);
       root.classList.add("intro-go", "intro-cut", "intro-out");
-      setTimeout(finish, 1000);
+      setTimeout(finish, 650);
     }
 
     function finish() {
@@ -1292,7 +1292,7 @@
 
     
     
-    const fontWait = setTimeout(start, 600);
+    const fontWait = setTimeout(start, 250);
     try {
       document.fonts.load('800 64px "Figtree"').then(function () {
         clearTimeout(fontWait);
