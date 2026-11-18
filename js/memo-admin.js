@@ -19,7 +19,8 @@
     filter: "all",
     lastRange: null,
     selImg: null,
-    dragImg: null
+    dragImg: null,
+    analyticsData: null
   };
 
 
@@ -136,6 +137,10 @@
   $("newBtn").addEventListener("click", function () { newPost(); });
   $("introBtn").addEventListener("click", function () { openIntro(); });
   $("menuBtn").addEventListener("click", function () { $("side").classList.toggle("open"); });
+  $("analyticsBtn").addEventListener("click", showAnalytics);
+  $("analyticsRefresh").addEventListener("click", loadAnalytics);
+  $("analyticsRange").addEventListener("change", loadAnalytics);
+  $("analyticsExport").addEventListener("click", exportAnalytics);
 
 
   
@@ -145,6 +150,8 @@
   }
 
   function showDoc(isIntro) {
+    $("analytics").hidden = true;
+    $("app").classList.remove("analytics-mode");
     $("emptyState").hidden = true;
     $("doc").hidden = false;
     $("stats").hidden = false;
@@ -154,6 +161,124 @@
     $("deleteBtn").hidden = isIntro;
     $("publishBtn").hidden = isIntro;
     $("side").classList.remove("open");
+  }
+
+
+  function showAnalytics() {
+    if (!confirmLeave()) return;
+    state.current = null;
+    state.dirty = false;
+    $("doc").hidden = true;
+    $("emptyState").hidden = true;
+    $("stats").hidden = true;
+    $("analytics").hidden = false;
+    $("app").classList.add("analytics-mode");
+    $("side").classList.remove("open");
+    setStatus("Analytics");
+    history.replaceState(null, "", "/admin#analytics");
+    loadAnalytics();
+  }
+
+  function formatReadTime(seconds) {
+    const n = Math.max(0, Math.round(Number(seconds) || 0));
+    if (n < 60) return n + "s";
+    const mins = Math.floor(n / 60);
+    const secs = n % 60;
+    return mins + "m" + (secs ? " " + secs + "s" : "");
+  }
+
+  function renderBreakdown(id, rows, key) {
+    const box = $(id);
+    if (!rows || !rows.length) {
+      box.innerHTML = '<p class="analytics-empty">No data in this period yet.</p>';
+      return;
+    }
+    const max = Math.max(1, ...rows.map(function (r) { return Number(r.count) || 0; }));
+    box.innerHTML = rows.map(function (r) {
+      const value = Number(r.count) || 0;
+      const pct = Math.round(value / max * 100);
+      return '<div class="a-break-row"><span>' + esc(r[key]) + '</span><strong>' + value.toLocaleString("en-IN") + '</strong><div class="a-break-track"><i style="width:' + pct + '%"></i></div></div>';
+    }).join("");
+  }
+
+  function renderAnalytics(data) {
+    const t = data.totals || {};
+    const cards = [
+      ["Article views", t.views || 0, "Total opens in this period"],
+      ["Unique readers", t.visitors || 0, "Estimated distinct browsers"],
+      ["Reading sessions", t.sessions || 0, "Sessions that opened an article"],
+      ["Average read time", formatReadTime(t.avgReadSeconds), "Across measured reading sessions"],
+      ["100% scrolls", t.completedReads || 0, "Readers who reached the end"]
+    ];
+    $("analyticsKpis").innerHTML = cards.map(function (c) {
+      return '<div class="analytics-kpi"><small>' + c[0] + '</small><strong>' + (typeof c[1] === "number" ? c[1].toLocaleString("en-IN") : c[1]) + '</strong><span>' + c[2] + '</span></div>';
+    }).join("");
+
+    $("analyticsPeriod").textContent = "Last " + data.days + " days";
+    const daily = data.daily || [];
+    const max = Math.max(1, ...daily.map(function (d) { return d.views || 0; }));
+    $("analyticsChart").innerHTML = daily.length ? daily.map(function (d) {
+      const height = Math.max(2, Math.round((d.views || 0) / max * 100));
+      const label = d.date.slice(5);
+      return '<div class="a-bar-col" title="' + esc(d.date) + ': ' + d.views + ' views · ' + d.visitors + ' readers"><span class="a-bar-value">' + (d.views || 0) + '</span><div class="a-bar-track"><i class="a-bar-fill" style="height:' + height + '%"></i></div><small>' + label + '</small></div>';
+    }).join("") : '<p class="analytics-empty">No reading activity yet.</p>';
+
+    renderBreakdown("analyticsSources", data.sources || [], "name");
+    renderBreakdown("analyticsDevices", data.devices || [], "name");
+    const depth = (data.progress || []).map(function (p) { return { name: p.value + "% reached", count: p.count }; });
+    renderBreakdown("analyticsProgress", depth, "name");
+
+    const posts = (data.topPosts || []).filter(function (p) {
+      return state.posts.some(function (item) { return item.slug === p.slug && item.visibility !== "draft"; });
+    });
+    $("analyticsPosts").innerHTML = posts.length ? '<table class="analytics-table"><thead><tr><th>Article</th><th>Views</th><th>Readers</th><th>Avg. read</th><th>Completion</th></tr></thead><tbody>' +
+      posts.map(function (p) {
+        const meta = state.posts.find(function (item) { return item.slug === p.slug; });
+        return '<tr><td title="' + esc(p.slug) + '">' + esc(meta ? meta.title : p.slug) + '</td><td>' + p.views.toLocaleString("en-IN") + '</td><td>' + p.readers.toLocaleString("en-IN") + '</td><td>' + formatReadTime(p.avgReadSeconds) + '</td><td>' + p.completionRate + '%</td></tr>';
+      }).join("") + '</tbody></table>' : '<p class="analytics-empty">No article reads recorded yet. Once tracking is live, your best-performing memos will appear here.</p>';
+  }
+
+  async function loadAnalytics() {
+    if (!$("analytics") || $("analytics").hidden) return;
+    const days = $("analyticsRange").value || "30";
+    $("analyticsStatus").className = "analytics-status";
+    $("analyticsStatus").textContent = "Loading reader data…";
+    $("analyticsContent").hidden = true;
+    try {
+      const res = await fetch("/api/memo-analytics?admin=1&days=" + encodeURIComponent(days), {
+        headers: { Authorization: "Bearer " + state.token },
+        cache: "no-store"
+      });
+      let data = {};
+      try { data = await res.json(); } catch (e) {}
+      if (res.status === 401) { logout(); throw new Error("Session expired. Log in again."); }
+      if (!res.ok) throw new Error(data.error || "Could not load analytics.");
+      state.analyticsData = data;
+      renderAnalytics(data);
+      $("analyticsContent").hidden = false;
+      $("analyticsStatus").textContent = "Updated " + new Date(data.generatedAt).toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" }) + (data.truncated ? " · showing the latest 10,000 events" : "");
+    } catch (e) {
+      $("analyticsStatus").className = "analytics-status error";
+      $("analyticsStatus").textContent = e.message;
+    }
+  }
+
+  function exportAnalytics() {
+    const data = state.analyticsData;
+    if (!data) { toast("Load analytics before exporting."); return; }
+    const rows = [["type", "date_or_slug", "views", "readers", "avg_read_seconds", "completion_rate"]];
+    (data.daily || []).forEach(function (d) { rows.push(["daily", d.date, d.views, d.visitors, "", ""]); });
+    (data.topPosts || []).forEach(function (p) { rows.push(["article", p.slug, p.views, p.readers, p.avgReadSeconds, p.completionRate]); });
+    const csv = rows.map(function (row) { return row.map(function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; }).join(","); }).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "memo-analytics-" + (data.days || 30) + "d.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   }
 
   function today() {
@@ -309,6 +434,8 @@
 
   function closeDoc() {
     state.current = null;
+    $("analytics").hidden = true;
+    $("app").classList.remove("analytics-mode");
     $("doc").hidden = true;
     $("stats").hidden = true;
     $("emptyState").hidden = false;
@@ -1403,7 +1530,8 @@
     $("app").hidden = false;
     await loadList();
     const h = decodeURIComponent(location.hash.slice(1));
-    if (h === "intro") openIntro();
+    if (h === "analytics") showAnalytics();
+    else if (h === "intro") openIntro();
     else if (h === "new") newPost();
     else if (h && state.posts.some(function (p) { return p.slug === h; })) openPost(h);
   }
