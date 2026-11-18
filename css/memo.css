@@ -326,3 +326,14 @@ img { max-width: 100%; }
 .memo-file-name { min-width:0; overflow-wrap:anywhere; color:var(--head); font-weight:600; }
 .memo-file-hint { margin-left:auto; flex:none; color:var(--muted); font:11px var(--mono); }
 @media (max-width:560px) { .memo-file-hint { font-size:10px; } .prose a.memo-file { gap:9px; padding:12px; } }
+
+
+/* Numbered source citations and footnotes */
+.prose sup.memo-cite { font-size:.72em; vertical-align:super; line-height:0; margin-left:2px; }
+.prose sup.memo-cite a { color:var(--accent); text-decoration:none; font-weight:600; padding:0 2px; }
+.prose .memo-footnotes { margin-top:3em; padding-top:1.2em; border-top:1px solid var(--line); font-size:.9em; color:var(--muted); }
+.prose .memo-footnotes h2 { margin:0 0 .8em; font:500 12px var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--faint); }
+.prose .memo-footnotes ol { padding-left:1.8em; }
+.prose .memo-footnotes li { padding:.2em 0 .35em .2em; scroll-margin-top:5rem; }
+.prose .memo-footnotes li:target { color:var(--head); }
+.prose .memo-cite-back { margin-left:.35em; text-decoration:none; color:var(--faint); }
