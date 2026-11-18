@@ -10,8 +10,8 @@ const SITE = (process.env.MEMO_SITE_URL || "https://hridhaan.me").replace(/\/+$/
 const LOCAL = process.env.MEMO_LOCAL_DIR || "";
 const GH = "https://api.github.com";
 const MAX_UPLOAD = 4 * 1024 * 1024;
-const MEDIA_TYPES = { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp", "image/gif": "gif", "image/avif": "avif" };
-const EXT_TYPES = { png: "image/png", jpg: "image/jpeg", webp: "image/webp", gif: "image/gif", avif: "image/avif" };
+const MEDIA_TYPES = { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp", "image/gif": "gif", "image/avif": "avif", "application/pdf": "pdf" };
+const EXT_TYPES = { png: "image/png", jpg: "image/jpeg", webp: "image/webp", gif: "image/gif", avif: "image/avif", pdf: "application/pdf" };
 
 
 
@@ -396,10 +396,12 @@ export default async function handler(req, res) {
 
       if (q.media) {
         const name = String(q.media);
-        if (!/^[a-f0-9]{16}\.(png|jpg|webp|gif|avif)$/.test(name)) return json(res, 400, { error: "bad media name" });
+        if (!/^[a-f0-9]{16}\.(png|jpg|webp|gif|avif|pdf)$/.test(name)) return json(res, 400, { error: "bad media name" });
         const buf = await store.read("media/" + name);
         if (!buf) return json(res, 404, { error: "not found" });
         res.setHeader("Content-Type", EXT_TYPES[name.split(".").pop()]);
+        res.setHeader("X-Content-Type-Options", "nosniff");
+        if (name.endsWith(".pdf")) res.setHeader("Content-Disposition", "inline; filename=\"memo-attachment.pdf\"");
         res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
         return res.status(200).send(buf);
       }
@@ -451,10 +453,10 @@ export default async function handler(req, res) {
 
     if (body.action === "upload") {
       const ext = MEDIA_TYPES[body.type];
-      if (!ext) return json(res, 400, { error: "Only PNG, JPEG, WebP, GIF or AVIF images." });
+      if (!ext) return json(res, 400, { error: "Supported uploads: PNG, JPEG, WebP, GIF, AVIF and PDF." });
       const buf = Buffer.from(String(body.data || ""), "base64");
       if (!buf.length) return json(res, 400, { error: "Empty image." });
-      if (buf.length > MAX_UPLOAD) return json(res, 413, { error: "Image is over 4 MB, even after compression." });
+      if (buf.length > MAX_UPLOAD) return json(res, 413, { error: "File is over the 4 MB upload limit." });
       const name = crypto.createHash("sha256").update(buf).digest("hex").slice(0, 16) + "." + ext;
       if (!(await store.read("media/" + name))) {
         await store.write([{ path: "media/" + name, content: buf }], "Memo: add image " + name);
