@@ -387,6 +387,7 @@
     strike: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12h16M16 6.5C15 5 13.6 4.5 12 4.5c-2.5 0-4 1.3-4 3 0 1.2.7 2 2 2.5M8 17.5c1 1.5 2.4 2 4 2 2.6 0 4-1.4 4-3.2 0-.7-.2-1.3-.6-1.8"/></svg>',
     code: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg>',
     link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>',
+    cite: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 7h4v5H6v-2a3 3 0 0 1 3-3M17 7h4v5h-5v-2a3 3 0 0 1 3-3"/><path d="M5 19h14"/></svg>',
     color: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 16 6-12 6 12M8.5 11h7"/><path d="M4 20h16" stroke-width="3" stroke="var(--accent)"/></svg>',
     mark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 11 6-6 4 4-6 6M9 11l-3 3 4 4 3-3M6 14l-2 4h4"/><path d="M4 21h16" stroke-width="3" stroke="#e6c88f"/></svg>',
     ul: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="18" r="1" fill="currentColor"/></svg>',
@@ -415,7 +416,7 @@
     '<select id="tbSize" title="Font size" aria-label="Font size"><option value="">Size</option>' + SIZES.map(function (s) { return '<option value="' + s + '">' + s + "px</option>"; }).join("") + '<option value="reset">Default</option></select>' +
     '<span class="sep"></span>' +
     btn("bold", "Bold (Ctrl+B)") + btn("italic", "Italic (Ctrl+I)") + btn("underline", "Underline (Ctrl+U)") + btn("strike", "Strikethrough") + btn("code", "Inline code (Ctrl+E)") +
-    btn("link", "Link (Ctrl+K)") + btn("color", "Text colour") + btn("mark", "Highlight (Ctrl+Shift+H)") +
+    btn("link", "Link (Ctrl+K)") + btn("cite", "Insert citation / footnote") + btn("color", "Text colour") + btn("mark", "Highlight (Ctrl+Shift+H)") +
     '<span class="sep"></span>' +
     btn("ul", "Bulleted list") + btn("ol", "Numbered list") + btn("check", "Checklist") + btn("quote", "Quote") +
     '<span class="sep"></span>' +
@@ -459,6 +460,7 @@
       case "strike": exec("strikeThrough"); break;
       case "code": toggleInlineCode(); break;
       case "link": linkPop(); break;
+      case "cite": citationPop(); break;
       case "color": colorPop(el, "fore"); break;
       case "mark": colorPop(el, "back"); break;
       case "ul": exec("insertUnorderedList"); fixLists(); break;
@@ -1002,6 +1004,7 @@
     { k: "warning callout", n: "Warning", d: "Heads-up box", i: "⚠️", run: function () { insertBlockHTML('<div class="callout" data-emoji="⚠️"><p>Careful with this one.</p></div>', true); } },
     { k: "toggle details collapse spoiler", n: "Toggle", d: "Click to reveal", i: "▸", run: function () { insertBlockHTML("<details open><summary>Click to reveal</summary><p>Hidden content.</p></details>", true); } },
     { k: "table grid", n: "Table", d: "3 × 3", i: "▦", run: insertTable },
+    { k: "citation footnote source reference", n: "Citation", d: "Add a numbered source footnote", i: "¹", run: citationPop },
     { k: "divider hr line", n: "Divider", d: "· · ·", i: "—", run: function () { insertBlockHTML("<hr>"); } },
     { k: "date today", n: "Today's date", d: "Insert " + today(), i: "📅", run: function () { exec("insertText", new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })); } }
   ];
@@ -1152,6 +1155,37 @@
       bg.querySelector("[data-no]").addEventListener("click", function () { done(false); });
       bg.addEventListener("keydown", function (e) { if (e.key === "Escape") done(false); });
     });
+  }
+
+  async function citationPop() {
+    const current = sel();
+    const saved = current ? current.cloneRange() : state.lastRange;
+    const source = await ask("Citation source / title");
+    restore(saved);
+    if (source === null || !source.trim()) return;
+    const rawUrl = await ask("Source URL (optional)", "https://");
+    restore(saved);
+    if (rawUrl === null) return;
+    const url = rawUrl.trim();
+    if (url && !/^https?:\/\//i.test(url)) { toast("Use a full https:// or http:// source URL."); return; }
+    const existing = Array.prototype.slice.call(ed.querySelectorAll(".memo-footnotes li[id^=cite-note-]"));
+    const next = existing.reduce(function (max, li) { const m = /cite-note-(\\d+)/.exec(li.id); return m ? Math.max(max, +m[1]) : max; }, 0) + 1;
+    const refId = "cite-ref-" + next;
+    const noteId = "cite-note-" + next;
+    exec("insertHTML", '<sup class="memo-cite" id="' + refId + '"><a href="#' + noteId + '" aria-label="Citation ' + next + '">[' + next + ']</a></sup>');
+    let section = ed.querySelector(".memo-footnotes");
+    if (!section) {
+      section = document.createElement("section");
+      section.className = "memo-footnotes";
+      section.innerHTML = "<h2>Sources</h2><ol></ol>";
+      ed.appendChild(section);
+    }
+    const li = document.createElement("li"); li.id = noteId;
+    if (url) { const a = document.createElement("a"); a.href = url; a.target = "_blank"; a.rel = "noopener"; a.textContent = source.trim(); li.appendChild(a); }
+    else li.appendChild(document.createTextNode(source.trim()));
+    const back = document.createElement("a"); back.href = "#" + refId; back.className = "memo-cite-back"; back.textContent = "↩"; back.setAttribute("aria-label", "Back to citation"); li.appendChild(back);
+    section.querySelector("ol").appendChild(li);
+    ensureTrailingP(); afterChange(); toast("Citation added");
   }
 
   async function linkPop() {
