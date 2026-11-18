@@ -1169,7 +1169,7 @@
     const url = rawUrl.trim();
     if (url && !/^https?:\/\//i.test(url)) { toast("Use a full https:// or http:// source URL."); return; }
     const existing = Array.prototype.slice.call(ed.querySelectorAll(".memo-footnotes li[id^=cite-note-]"));
-    const next = existing.reduce(function (max, li) { const m = /cite-note-(\\d+)/.exec(li.id); return m ? Math.max(max, +m[1]) : max; }, 0) + 1;
+    const next = existing.reduce(function (max, li) { const m = /cite-note-(\d+)/.exec(li.id); return m ? Math.max(max, +m[1]) : max; }, 0) + 1;
     const refId = "cite-ref-" + next;
     const noteId = "cite-note-" + next;
     exec("insertHTML", '<sup class="memo-cite" id="' + refId + '"><a href="#' + noteId + '" aria-label="Citation ' + next + '">[' + next + ']</a></sup>');
