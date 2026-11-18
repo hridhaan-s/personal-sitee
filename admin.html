@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Caveat:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/memo.css">
+  <link rel="stylesheet" href="/css/memo-analytics.css">
   <script>
     try { var t = localStorage.getItem("memo-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
   </script>
@@ -210,6 +211,7 @@
       </div>
       <ul class="plist" id="plist"></ul>
       <div class="side-foot">
+        <button class="btn" type="button" id="analyticsBtn">Analytics ↗</button>
         <button class="btn" type="button" id="introBtn">Edit intro</button>
         <a class="btn" href="/memo" target="_blank" rel="noopener">View blog ↗</a>
         <label class="btn" for="accentColor" style="gap:8px;cursor:pointer">Accent <input id="accentColor" type="color" value="#9fd3b4" aria-label="Memo accent colour" style="width:24px;height:22px;padding:0;border:0;background:transparent;cursor:pointer"></label>
@@ -260,6 +262,52 @@
         <div class="tb" id="tb" role="toolbar" aria-label="Formatting"></div>
         <div class="editor prose" id="ed" contenteditable="true" spellcheck="true" aria-label="Memo body" role="textbox" aria-multiline="true"></div>
       </div>
+
+      <section class="analytics-page" id="analytics" hidden aria-labelledby="analyticsTitle">
+        <header class="analytics-head">
+          <div>
+            <p class="analytics-kicker">MEMO / READER INTELLIGENCE</p>
+            <h1 id="analyticsTitle">Blog analytics<span>.</span></h1>
+            <p class="analytics-sub">Understand what readers open, where they arrive from, and how far they get.</p>
+          </div>
+          <div class="analytics-actions">
+            <select class="field" id="analyticsRange" aria-label="Analytics date range">
+              <option value="7">Last 7 days</option>
+              <option value="30" selected>Last 30 days</option>
+              <option value="90">Last 90 days</option>
+            </select>
+            <button class="btn" type="button" id="analyticsRefresh">Refresh</button>
+            <button class="btn" type="button" id="analyticsExport">Export CSV</button>
+          </div>
+        </header>
+        <p class="analytics-status" id="analyticsStatus" role="status">Loading analytics…</p>
+        <div id="analyticsContent" hidden>
+          <div class="analytics-kpis" id="analyticsKpis"></div>
+          <div class="analytics-grid">
+            <section class="analytics-panel analytics-wide">
+              <div class="analytics-panel-head"><div><p class="analytics-kicker">TRAFFIC</p><h2>Reading activity</h2></div><span id="analyticsPeriod"></span></div>
+              <div class="analytics-chart" id="analyticsChart"></div>
+            </section>
+            <section class="analytics-panel">
+              <div class="analytics-panel-head"><div><p class="analytics-kicker">DISCOVERY</p><h2>Where readers come from</h2></div></div>
+              <div id="analyticsSources" class="analytics-breakdown"></div>
+            </section>
+            <section class="analytics-panel">
+              <div class="analytics-panel-head"><div><p class="analytics-kicker">AUDIENCE</p><h2>Devices</h2></div></div>
+              <div id="analyticsDevices" class="analytics-breakdown"></div>
+            </section>
+            <section class="analytics-panel">
+              <div class="analytics-panel-head"><div><p class="analytics-kicker">ENGAGEMENT</p><h2>Reading depth</h2></div></div>
+              <div id="analyticsProgress" class="analytics-breakdown"></div>
+            </section>
+            <section class="analytics-panel analytics-wide">
+              <div class="analytics-panel-head"><div><p class="analytics-kicker">CONTENT</p><h2>Most-read memos</h2></div><span>Ranked by views</span></div>
+              <div class="analytics-table-wrap" id="analyticsPosts"></div>
+            </section>
+          </div>
+          <p class="analytics-footnote">Privacy-conscious, first-party analytics. Random visitor IDs are hashed server-side; IP addresses and full user-agent strings are not stored. New data starts after tracking is deployed.</p>
+        </div>
+      </section>
     </div>
   </div>
 
