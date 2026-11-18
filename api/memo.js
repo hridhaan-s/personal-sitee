@@ -304,7 +304,7 @@ async function renderPage(res, slug) {
   const data = { index: publicIndex(idx), post: null, slug: slug || "" };
   let title = "Memo — Hridhaan Sahay";
   let desc = "Notes, logs and half-finished thoughts by Hridhaan Sahay.";
-  let image = SITE + "/assets/img/memo-preview.png";
+  let image = SITE + "/assets/img/memo-preview.svg";
   let status = 200;
 
   if (slug) {
