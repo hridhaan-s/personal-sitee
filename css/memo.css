@@ -317,3 +317,12 @@ img { max-width: 100%; }
   .pager { grid-template-columns: 1fr; }
   .pager .next { grid-column: 1; }
 }
+
+
+/* Inline PDF attachment cards inside memos */
+.prose a.memo-file { display:flex; align-items:center; gap:12px; width:100%; max-width:560px; box-sizing:border-box; margin:1.2em 0; padding:14px 16px; border:1px solid var(--line); border-radius:var(--r); background:var(--bg-2); color:var(--text); text-decoration:none; transition:border-color .15s, transform .15s; }
+.prose a.memo-file:hover { border-color:var(--accent); transform:translateY(-1px); }
+.memo-file-icon { display:grid; place-items:center; flex:none; width:42px; height:48px; border-radius:7px; background:var(--mark); color:var(--head); font:600 11px var(--mono); }
+.memo-file-name { min-width:0; overflow-wrap:anywhere; color:var(--head); font-weight:600; }
+.memo-file-hint { margin-left:auto; flex:none; color:var(--muted); font:11px var(--mono); }
+@media (max-width:560px) { .memo-file-hint { font-size:10px; } .prose a.memo-file { gap:9px; padding:12px; } }
