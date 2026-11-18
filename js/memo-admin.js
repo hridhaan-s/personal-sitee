@@ -138,6 +138,13 @@
   $("introBtn").addEventListener("click", function () { openIntro(); });
   $("menuBtn").addEventListener("click", function () { $("side").classList.toggle("open"); });
   $("analyticsBtn").addEventListener("click", showAnalytics);
+  $("analyticsBack").addEventListener("click", function () {
+    $("analytics").hidden = true;
+    $("app").classList.remove("analytics-mode");
+    $("emptyState").hidden = false;
+    setStatus("Ready");
+    history.replaceState(null, "", "/admin");
+  });
   $("analyticsRefresh").addEventListener("click", loadAnalytics);
   $("analyticsRange").addEventListener("change", loadAnalytics);
   $("analyticsExport").addEventListener("click", exportAnalytics);
