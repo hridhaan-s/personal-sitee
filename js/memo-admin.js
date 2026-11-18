@@ -397,6 +397,8 @@
     center: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 10h10M4 14h16M7 18h10"/></svg>',
     right: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M10 10h10M4 14h16M10 18h10"/></svg>',
     image: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m21 16-5-5-8 9"/></svg>',
+    table: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 16h18M9 4v16M15 4v16"/></svg>',
+    file: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3h8l5 5v13H6z"/><path d="M14 3v6h5M9 14h6M9 18h6"/></svg>',
     hr: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18"/></svg>',
     undo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg>',
     redo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H9a5 5 0 0 0 0 10h3"/></svg>',
@@ -419,7 +421,7 @@
     '<span class="sep"></span>' +
     btn("left", "Align left") + btn("center", "Align centre") + btn("right", "Align right") +
     '<span class="sep"></span>' +
-    btn("image", "Image (or just paste one)") + btn("hr", "Divider") +
+    btn("image", "Image / GIF") + btn("table", "Insert table") + btn("file", "Attach PDF") + btn("hr", "Divider") +
     '<button type="button" data-cmd="more" title="More blocks (or type /)" aria-label="More blocks">＋</button>' +
     '<span class="sep"></span>' +
     btn("undo", "Undo (Ctrl+Z)") + btn("redo", "Redo (Ctrl+Shift+Z)") + btn("clear", "Clear formatting");
@@ -467,12 +469,18 @@
       case "center": exec("justifyCenter"); break;
       case "right": exec("justifyRight"); break;
       case "image": $("fileIn").click(); break;
+      case "table": insertTable(); break;
+      case "file": $("fileIn").click(); break;
       case "hr": insertBlockHTML("<hr>"); break;
       case "more": openSlash(el, true); break;
       case "undo": exec("undo"); break;
       case "redo": exec("redo"); break;
       case "clear": exec("removeFormat"); unwrapStyled(); break;
     }
+  }
+
+  function insertTable() {
+    insertBlockHTML("<table><thead><tr><th>Column</th><th>Column</th><th>Column</th></tr></thead><tbody><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td></tr></tbody></table>", true);
   }
 
   function setBlock(tag) {
@@ -747,7 +755,7 @@
     const files = Array.prototype.slice.call(cd.files || []).filter(function (f) { return /^image\//.test(f.type); });
     if (files.length) {
       e.preventDefault();
-      files.forEach(insertImageFile);
+      files.forEach(insertSelectedFile);
       return;
     }
     const html = cd.getData("text/html");
@@ -799,17 +807,17 @@
     if (document.caretRangeFromPoint) r = document.caretRangeFromPoint(e.clientX, e.clientY);
     else if (document.caretPositionFromPoint) { const p = document.caretPositionFromPoint(e.clientX, e.clientY); if (p) { r = document.createRange(); r.setStart(p.offsetNode, p.offset); } }
     if (r) { const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); state.lastRange = r; }
-    files.forEach(insertImageFile);
+    files.forEach(insertSelectedFile);
   });
   function showDropHint(on) {
     let h = document.querySelector(".drop-hint");
-    if (on && !h) { h = document.createElement("div"); h.className = "drop-hint"; h.textContent = "Drop to add images"; document.body.appendChild(h); }
+    if (on && !h) { h = document.createElement("div"); h.className = "drop-hint"; h.textContent = "Drop to add images or PDFs"; document.body.appendChild(h); }
     if (!on && h) h.remove();
   }
 
   $("fileIn").addEventListener("change", function () {
     restore();
-    Array.prototype.slice.call(this.files).forEach(insertImageFile);
+    Array.prototype.slice.call(this.files).forEach(insertSelectedFile);
     this.value = "";
   });
 
@@ -850,10 +858,20 @@
   }
 
   async function uploadBlob(file) {
-    const c = await compress(file);
-    if (c.blob.size > 4 * 1024 * 1024) throw new Error("That image is over 4 MB even after compressing.");
+    const isImage = /^image\//i.test(file.type);
+    const c = isImage ? await compress(file) : { blob: file, type: file.type || "application/pdf" };
+    if (c.blob.size > 4 * 1024 * 1024) throw new Error("That file is over the 4 MB upload limit.");
     const d = await api("POST", "", { action: "upload", type: c.type, data: await toBase64(c.blob) });
     return d.url;
+  }
+
+  function insertSelectedFile(file) {
+    if (/^image\//i.test(file.type)) { insertImageFile(file); return; }
+    if (file.type !== "application/pdf" && !/\.pdf$/i.test(file.name || "")) { toast("For now, attach an image, GIF or PDF."); return; }
+    const id = "up" + Math.random().toString(36).slice(2, 8);
+    const name = esc(file.name || "PDF attachment");
+    insertBlockHTML('<a class="memo-file" href="#" data-uploading="' + id + '" target="_blank" rel="noopener"><span class="memo-file-icon">PDF</span><span class="memo-file-name">' + name + '</span><span class="memo-file-hint">Uploading…</span></a>');
+    trackFileUpload(file, id);
   }
 
   function insertImageFile(file) {
@@ -861,6 +879,20 @@
     const local = URL.createObjectURL(file);
     insertBlockHTML('<img draggable="true" src="' + local + '" alt="" data-uploading="' + id + '" data-width="100">');
     trackUpload(file, id, local);
+  }
+
+  async function trackFileUpload(file, id) {
+    state.uploads++;
+    setStatus("Uploading PDF…");
+    try {
+      const url = await uploadBlob(file);
+      const link = ed.querySelector('[data-uploading="' + id + '"]');
+      if (link) { link.href = url; link.removeAttribute("data-uploading"); const hint = link.querySelector(".memo-file-hint"); if (hint) hint.textContent = "Open PDF ↗"; }
+      setStatus("PDF uploaded", "dirty");
+    } catch (e) {
+      const link = ed.querySelector('[data-uploading="' + id + '"]'); if (link) link.remove();
+      toast(e.message, 4000); setStatus(e.message, "err");
+    } finally { state.uploads--; afterChange(); }
   }
 
   async function trackUpload(file, id, local) {
@@ -964,11 +996,12 @@
     { k: "todo checklist task", n: "Checklist", d: "[] item", i: "☑", run: toggleChecklist },
     { k: "quote", n: "Quote", d: "> a quote", i: "❝", run: function () { setBlock("blockquote"); } },
     { k: "code", n: "Code block", d: "``` with highlighting", i: "{}", run: function () { setBlock("pre"); } },
-    { k: "image photo screenshot", n: "Image", d: "Upload, or just paste one", i: "▣", run: function () { $("fileIn").click(); } },
+    { k: "image photo screenshot gif", n: "Image / GIF", d: "Upload, or just paste one", i: "▣", run: function () { $("fileIn").click(); } },
+    { k: "pdf attachment document", n: "PDF attachment", d: "Insert a PDF at the cursor", i: "PDF", run: function () { $("fileIn").click(); } },
     { k: "callout note tip", n: "Callout", d: "Box with an emoji (click it to change)", i: "💡", run: function () { insertBlockHTML('<div class="callout" data-emoji="💡"><p>Something worth noticing.</p></div>', true); } },
     { k: "warning callout", n: "Warning", d: "Heads-up box", i: "⚠️", run: function () { insertBlockHTML('<div class="callout" data-emoji="⚠️"><p>Careful with this one.</p></div>', true); } },
     { k: "toggle details collapse spoiler", n: "Toggle", d: "Click to reveal", i: "▸", run: function () { insertBlockHTML("<details open><summary>Click to reveal</summary><p>Hidden content.</p></details>", true); } },
-    { k: "table grid", n: "Table", d: "3 × 3", i: "▦", run: function () { insertBlockHTML("<table><thead><tr><th>Column</th><th>Column</th><th>Column</th></tr></thead><tbody><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td></tr></tbody></table>", true); } },
+    { k: "table grid", n: "Table", d: "3 × 3", i: "▦", run: insertTable },
     { k: "divider hr line", n: "Divider", d: "· · ·", i: "—", run: function () { insertBlockHTML("<hr>"); } },
     { k: "date today", n: "Today's date", d: "Insert " + today(), i: "📅", run: function () { exec("insertText", new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })); } }
   ];
