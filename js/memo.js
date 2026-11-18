@@ -11,6 +11,7 @@
   let index = null;               
   const postCache = {};
   let tocObserver = null;
+  let stopAnalytics = null;
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 
@@ -53,6 +54,85 @@
 
 
   
+
+
+  function analyticsId(storage, key) {
+    try {
+      let value = storage.getItem(key);
+      if (!value || !/^[a-zA-Z0-9-]{16,80}$/.test(value)) {
+        value = window.crypto && crypto.randomUUID ? crypto.randomUUID() :
+          "m-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+        storage.setItem(key, value);
+      }
+      return value;
+    } catch (e) {
+      return "m-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+    }
+  }
+
+  function startPostAnalytics(slug) {
+    stopPostAnalytics();
+    const visitorId = analyticsId(localStorage, "memo-analytics-visitor");
+    const sessionId = analyticsId(sessionStorage, "memo-analytics-session");
+    const ua = navigator.userAgent || "";
+    const deviceType = /ipad|tablet|kindle/i.test(ua) ? "tablet" :
+      /mobile|android|iphone|ipod/i.test(ua) ? "mobile" : "desktop";
+    const started = Date.now();
+    const sent = {};
+    let finished = false;
+
+    function send(eventType, extra) {
+      const payload = Object.assign({
+        action: "track",
+        slug: slug,
+        eventType: eventType,
+        visitorId: visitorId,
+        sessionId: sessionId,
+        referrer: document.referrer || "",
+        deviceType: deviceType
+      }, extra || {});
+      try {
+        fetch("/api/memo-analytics", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          keepalive: true
+        }).catch(function () {});
+      } catch (e) {}
+    }
+
+    function measure() {
+      const doc = document.documentElement;
+      const max = Math.max(0, Math.max(doc.scrollHeight, document.body.scrollHeight) - window.innerHeight);
+      const percent = max <= 0 ? 100 : Math.min(100, Math.round((window.scrollY / max) * 100));
+      [25, 50, 75, 100].forEach(function (mark) {
+        if (percent >= mark && !sent[mark]) {
+          sent[mark] = true;
+          send("reading_progress", { progress: mark });
+        }
+      });
+    }
+
+    function finish() {
+      if (finished) return;
+      finished = true;
+      const seconds = Math.max(0, Math.round((Date.now() - started) / 1000));
+      if (seconds >= 3) send("reading_time", { durationSeconds: seconds });
+      window.removeEventListener("scroll", measure);
+      window.removeEventListener("pagehide", finish);
+      if (stopAnalytics === finish) stopAnalytics = null;
+    }
+
+    send("page_view");
+    window.addEventListener("scroll", measure, { passive: true });
+    window.addEventListener("pagehide", finish);
+    measure();
+    stopAnalytics = finish;
+  }
+
+  function stopPostAnalytics() {
+    if (stopAnalytics) stopAnalytics();
+  }
 
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -255,6 +335,7 @@
     });
 
     startProgress();
+    startPostAnalytics(post.slug);
     if (location.hash) {
       const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
       if (target) setTimeout(function () { target.scrollIntoView(); }, 0);
@@ -368,6 +449,7 @@
   }
   function startProgress() { progress.hidden = false; onScroll(); window.addEventListener("scroll", onScroll, { passive: true }); }
   function stopPostExtras() {
+    stopPostAnalytics();
     progress.hidden = true;
     window.removeEventListener("scroll", onScroll);
     if (tocObserver) { tocObserver.disconnect(); tocObserver = null; }
