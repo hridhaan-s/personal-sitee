@@ -556,7 +556,7 @@
     '<span class="sep"></span>' +
     btn("left", "Align left") + btn("center", "Align centre") + btn("right", "Align right") +
     '<span class="sep"></span>' +
-    btn("image", "Image / GIF") + btn("table", "Insert table") + btn("file", "Attach PDF") + btn("hr", "Divider") +
+    btn("image", "Image / GIF") + btn("video", "Insert video") + btn("table", "Insert table") + btn("file", "Attach PDF") + btn("hr", "Divider") +
     '<button type="button" data-cmd="more" title="More blocks (or type /)" aria-label="More blocks">＋</button>' +
     '<span class="sep"></span>' +
     btn("undo", "Undo (Ctrl+Z)") + btn("redo", "Redo (Ctrl+Shift+Z)") + btn("clear", "Clear formatting");
@@ -605,6 +605,7 @@
       case "center": exec("justifyCenter"); break;
       case "right": exec("justifyRight"); break;
       case "image": $("fileIn").click(); break;
+      case "video": openVideoInsert(); break;
       case "table": insertTable(); break;
       case "file": $("fileIn").click(); break;
       case "hr": insertBlockHTML("<hr>"); break;
@@ -949,6 +950,105 @@
     let h = document.querySelector(".drop-hint");
     if (on && !h) { h = document.createElement("div"); h.className = "drop-hint"; h.textContent = "Drop to add images or PDFs"; document.body.appendChild(h); }
     if (!on && h) h.remove();
+  }
+
+  $("videoIn").addEventListener("change", function () {
+    restore();
+    const file = this.files && this.files[0];
+    if (file) insertVideoFile(file);
+    this.value = "";
+  });
+
+  async function openVideoInsert() {
+    const saved = sel() ? sel().cloneRange() : state.lastRange;
+    const choice = await ask("Video URL (MP4/WebM, YouTube or Vimeo). Leave blank to upload a file.");
+    restore(saved);
+    if (choice === null) return;
+    if (choice.trim()) {
+      insertVideoURL(choice.trim());
+      return;
+    }
+    $("videoIn").click();
+  }
+
+  function videoOptions() {
+    const autoplay = confirm("Enable autoplay? Browsers generally require autoplay videos to be muted.");
+    const muted = autoplay ? true : confirm("Start muted?");
+    const loop = confirm("Loop this video?");
+    const controls = !confirm("Hide playback controls?");
+    return { autoplay, muted, loop, controls };
+  }
+
+  function videoMarkup(url, opts) {
+    const attrs = (opts.autoplay ? " autoplay" : "") + (opts.muted ? " muted" : "") +
+      (opts.loop ? " loop" : "") + (opts.controls ? " controls" : "");
+    return '<video class="memo-video" playsinline preload="metadata"' + attrs + '><source src="' + esc(url) + '"></video>';
+  }
+
+  function insertVideoURL(raw) {
+    let url;
+    try { url = new URL(raw); } catch (e) { toast("Enter a valid video URL."); return; }
+    if (url.protocol !== "https:" && url.protocol !== "http:") { toast("Only http(s) video URLs are supported."); return; }
+    const opts = videoOptions();
+    let html = "";
+    const host = url.hostname.replace(/^www\./, "").toLowerCase();
+    let embed = "";
+    if (host === "youtu.be") embed = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(url.pathname.slice(1)) + (opts.autoplay ? "?autoplay=1&mute=1" : "");
+    else if (host.endsWith("youtube.com") && (url.pathname === "/watch" || url.pathname.startsWith("/shorts/") || url.pathname.startsWith("/embed/"))) {
+      const id = url.searchParams.get("v") || url.pathname.split("/").filter(Boolean).pop();
+      if (id) embed = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + (opts.autoplay ? "?autoplay=1&mute=1" : "");
+    } else if (host.endsWith("vimeo.com")) {
+      const id = url.pathname.split("/").filter(Boolean).pop();
+      if (/^\d+$/.test(id || "")) embed = "https://player.vimeo.com/video/" + id + (opts.autoplay ? "?autoplay=1&muted=1" : "");
+    }
+    if (embed) {
+      html = '<div class="memo-video-embed"><iframe src="' + esc(embed) + '" title="Embedded video" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>';
+    } else if (/\.(mp4|webm)(?:$|[?#])/i.test(url.href)) {
+      html = videoMarkup(url.href, opts);
+    } else {
+      toast("Use a direct .mp4/.webm, YouTube or Vimeo link.");
+      return;
+    }
+    insertBlockHTML(html);
+  }
+
+  function insertVideoFile(file) {
+    if (!/^video\/(mp4|webm)$/i.test(file.type) && !/\.(mp4|webm)$/i.test(file.name || "")) {
+      toast("Choose an MP4 or WebM video.");
+      return;
+    }
+    if (file.size > 4 * 1024 * 1024) {
+      toast("Uploads are currently limited to 4 MB. Use a hosted video URL for larger files.", 4500);
+      return;
+    }
+    const id = "vid" + Math.random().toString(36).slice(2, 8);
+    const local = URL.createObjectURL(file);
+    const opts = videoOptions();
+    insertBlockHTML('<div data-video-uploading="' + id + '"><video class="memo-video" controls playsinline preload="metadata" src="' + local + '"></video><p class="memo-video-status">Uploading video…</p></div>');
+    state.uploads++;
+    setStatus("Uploading video…");
+    uploadBlob(file).then(function (url) {
+      const holder = ed.querySelector('[data-video-uploading="' + id + '"]');
+      if (holder) {
+        const v = holder.querySelector("video");
+        v.src = url;
+        v.autoplay = opts.autoplay;
+        v.muted = opts.muted;
+        v.loop = opts.loop;
+        v.controls = opts.controls;
+        const status = holder.querySelector(".memo-video-status");
+        if (status) status.remove();
+        holder.removeAttribute("data-video-uploading");
+      }
+      URL.revokeObjectURL(local);
+      setStatus("Video uploaded", "dirty");
+    }).catch(function (e) {
+      const holder = ed.querySelector('[data-video-uploading="' + id + '"]');
+      if (holder) holder.remove();
+      URL.revokeObjectURL(local);
+      toast(e.message, 4000);
+      setStatus(e.message, "err");
+    }).finally(function () { state.uploads--; afterChange(); });
   }
 
   $("fileIn").addEventListener("change", function () {
