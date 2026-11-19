@@ -163,11 +163,25 @@
 
   function clean(html) {
     if (!window.DOMPurify) return "";
-    return window.DOMPurify.sanitize(html || "", {
+    const safe = window.DOMPurify.sanitize(html || "", {
       ADD_ATTR: ["target", "data-width", "data-align", "data-layout", "data-card", "data-type", "data-checked", "data-emoji", "data-font", "open", "autoplay", "muted", "loop", "controls", "playsinline", "preload", "allow", "allowfullscreen", "loading"],
       ADD_TAGS: ["details", "summary"],
       FORBID_TAGS: ["style", "form", "input", "button"]
     });
+    // Content must adapt to the reader's theme, not the author's editor theme.
+    const template = document.createElement("template");
+    template.innerHTML = safe;
+    template.content.querySelectorAll("*").forEach(function (el) {
+      el.removeAttribute("color");
+      el.removeAttribute("bgcolor");
+      if (el.hasAttribute("style")) {
+        el.style.removeProperty("color");
+        el.style.removeProperty("background");
+        el.style.removeProperty("background-color");
+        if (!el.getAttribute("style").trim()) el.removeAttribute("style");
+      }
+    });
+    return template.innerHTML;
   }
 
   function toast(msg) {
