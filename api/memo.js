@@ -10,8 +10,8 @@ const SITE = (process.env.MEMO_SITE_URL || "https://hridhaan.me").replace(/\/+$/
 const LOCAL = process.env.MEMO_LOCAL_DIR || "";
 const GH = "https://api.github.com";
 const MAX_UPLOAD = 4 * 1024 * 1024;
-const MEDIA_TYPES = { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp", "image/gif": "gif", "image/avif": "avif", "application/pdf": "pdf" };
-const EXT_TYPES = { png: "image/png", jpg: "image/jpeg", webp: "image/webp", gif: "image/gif", avif: "image/avif", pdf: "application/pdf" };
+const MEDIA_TYPES = { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp", "image/gif": "gif", "image/avif": "avif", "application/pdf": "pdf", "video/mp4": "mp4", "video/webm": "webm" };
+const EXT_TYPES = { png: "image/png", jpg: "image/jpeg", webp: "image/webp", gif: "image/gif", avif: "image/avif", pdf: "application/pdf", mp4: "video/mp4", webm: "video/webm" };
 
 
 
@@ -397,7 +397,7 @@ export default async function handler(req, res) {
 
       if (q.media) {
         const name = String(q.media);
-        if (!/^[a-f0-9]{16}\.(png|jpg|webp|gif|avif|pdf)$/.test(name)) return json(res, 400, { error: "bad media name" });
+        if (!/^[a-f0-9]{16}\.(png|jpg|webp|gif|avif|pdf|mp4|webm)$/.test(name)) return json(res, 400, { error: "bad media name" });
         const buf = await store.read("media/" + name);
         if (!buf) return json(res, 404, { error: "not found" });
         res.setHeader("Content-Type", EXT_TYPES[name.split(".").pop()]);
