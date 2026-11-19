@@ -237,13 +237,25 @@ function cleanTags(t) {
 
 
 function scrub(html) {
-  return String(html || "")
-    .replace(/<(script|style|iframe|object|embed|form|noscript)\b[\s\S]*?<\/\1\s*>/gi, "")
-    .replace(/<\/?(script|style|iframe|object|embed|form|noscript|meta|link|base)\b[^>]*>/gi, "")
-    .replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "")
-    .replace(/(href|src)\s*=\s*(["'])\s*javascript:[^"']*\2/gi, '$1="#"');
+  let safe = String(html || "");
+  safe = safe.replace(/<iframe\\b([^>]*)><\\/iframe>/gi, function (tag, attrs) {
+    const src = /\\bsrc\\s*=\\s*["']([^"']+)["']/i.exec(attrs);
+    if (!src) return "";
+    let u;
+    try { u = new URL(src[1]); } catch (e) { return ""; }
+    const host = u.hostname.toLowerCase();
+    const allowed = u.protocol === "https:" &&
+      ((host === "www.youtube-nocookie.com" && u.pathname.startsWith("/embed/")) ||
+       (host === "player.vimeo.com" && u.pathname.startsWith("/video/")));
+    if (!allowed) return "";
+    return '<iframe src="' + esc(u.href) + '" title="Embedded video" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';
+  });
+  return safe
+    .replace(/<(script|style|object|embed|form|noscript)\\b[\\s\\S]*?<\\/\\1\\s*>/gi, "")
+    .replace(/<\\/?(script|style|object|embed|form|noscript|meta|link|base)\\b[^>]*>/gi, "")
+    .replace(/\\son\\w+\\s*=\\s*("[^"]*"|'[^']*'|[^\\s>]+)/gi, "")
+    .replace(/(href|src)\\s*=\\s*(["'])\\s*javascript:[^"']*\\2/gi, '$1="#"');
 }
-
 
 
 
