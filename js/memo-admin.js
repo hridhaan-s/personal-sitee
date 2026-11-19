@@ -523,6 +523,7 @@
     link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>',
     cite: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 7h4v5H6v-2a3 3 0 0 1 3-3M17 7h4v5h-5v-2a3 3 0 0 1 3-3"/><path d="M5 19h14"/></svg>',
     color: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 16 6-12 6 12M8.5 11h7"/><path d="M4 20h16" stroke-width="3" stroke="var(--accent)"/></svg>',
+    paint: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 4 6 6M4 20l4.5-1 10-10a2.1 2.1 0 0 0-3-3l-10 10L4 20Z"/><path d="M3 21h18"/></svg>',
     mark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 11 6-6 4 4-6 6M9 11l-3 3 4 4 3-3M6 14l-2 4h4"/><path d="M4 21h16" stroke-width="3" stroke="#e6c88f"/></svg>',
     ul: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="18" r="1" fill="currentColor"/></svg>',
     ol: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 6h10M10 12h10M10 18h10M4 5l1.5-1v5M3.5 14.5c.4-.6 1-.9 1.6-.9.8 0 1.4.5 1.4 1.2 0 1.3-3 2.2-3 4h3"/></svg>',
@@ -550,7 +551,7 @@
     '<select id="tbSize" title="Font size" aria-label="Font size"><option value="">Size</option>' + SIZES.map(function (s) { return '<option value="' + s + '">' + s + "px</option>"; }).join("") + '<option value="reset">Default</option></select>' +
     '<span class="sep"></span>' +
     btn("bold", "Bold (Ctrl+B)") + btn("italic", "Italic (Ctrl+I)") + btn("underline", "Underline (Ctrl+U)") + btn("strike", "Strikethrough") + btn("code", "Inline code (Ctrl+E)") +
-    btn("link", "Link (Ctrl+K)") + btn("cite", "Insert citation / footnote") + btn("color", "Text colour") + btn("mark", "Highlight (Ctrl+Shift+H)") +
+    btn("link", "Link (Ctrl+K)") + btn("cite", "Insert citation / footnote") + btn("color", "Text colour") + btn("mark", "Highlight (Ctrl+Shift+H)") + btn("paint", "Copy / apply formatting") +
     '<span class="sep"></span>' +
     btn("ul", "Bulleted list") + btn("ol", "Numbered list") + btn("check", "Checklist") + btn("quote", "Quote") +
     '<span class="sep"></span>' +
@@ -581,6 +582,59 @@
     this.value = "";
   });
 
+  let copiedFormat = null;
+  let painterArmed = false;
+
+  function formatPainter() {
+    const range = sel();
+    if (!copiedFormat) {
+      if (!range || range.collapsed) {
+        toast("Select formatted text first, then click the paintbrush.");
+        return;
+      }
+      const node = range.startContainer.nodeType === 1 ? range.startContainer : range.startContainer.parentElement;
+      const source = node && (node.closest("span,strong,b,em,i,u,s,del,a,code,mark") || node);
+      if (!source || !ed.contains(source)) return;
+      const style = getComputedStyle(source);
+      copiedFormat = {};
+      ["font-family","font-size","font-weight","font-style","color","background-color","text-decoration-line","vertical-align","letter-spacing"].forEach(function (prop) {
+        const value = style.getPropertyValue(prop);
+        if (value && value !== "normal" && value !== "none" && value !== "rgba(0, 0, 0, 0)") copiedFormat[prop] = value;
+      });
+      painterArmed = true;
+      const button = $('tb').querySelector('[data-cmd="paint"]');
+      if (button) button.classList.add("active");
+      toast("Formatting copied. Select target text and click the paintbrush again.");
+      return;
+    }
+    if (!range || range.collapsed) {
+      toast("Select the text you want to format.");
+      return;
+    }
+    const span = document.createElement("span");
+    Object.keys(copiedFormat).forEach(function (prop) { span.style.setProperty(prop, copiedFormat[prop]); });
+    try {
+      span.appendChild(range.extractContents());
+      range.insertNode(span);
+      const next = document.createRange();
+      next.selectNodeContents(span);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(next);
+      state.lastRange = next.cloneRange();
+      afterChange();
+      copiedFormat = null;
+      painterArmed = false;
+      const button = $('tb').querySelector('[data-cmd="paint"]');
+      if (button) button.classList.remove("active");
+      toast("Formatting applied.");
+    } catch (err) {
+      copiedFormat = null;
+      painterArmed = false;
+      toast("Couldn't apply formatting to that selection.");
+    }
+  }
+
   function exec(cmd, val) {
     ed.focus();
     document.execCommand(cmd, false, val == null ? null : val);
@@ -597,6 +651,7 @@
       case "cite": citationPop(); break;
       case "color": colorPop(el, "fore"); break;
       case "mark": colorPop(el, "back"); break;
+      case "paint": formatPainter(); break;
       case "ul": exec("insertUnorderedList"); fixLists(); break;
       case "ol": exec("insertOrderedList"); fixLists(); break;
       case "check": toggleChecklist(); break;
