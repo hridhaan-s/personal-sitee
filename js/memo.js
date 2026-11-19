@@ -164,7 +164,7 @@
   function clean(html) {
     if (!window.DOMPurify) return "";
     return window.DOMPurify.sanitize(html || "", {
-      ADD_ATTR: ["target", "data-width", "data-align", "data-layout", "data-card", "data-type", "data-checked", "data-emoji", "data-font", "open"],
+      ADD_ATTR: ["target", "data-width", "data-align", "data-layout", "data-card", "data-type", "data-checked", "data-emoji", "data-font", "open", "autoplay", "muted", "loop", "controls", "playsinline", "preload", "allow", "allowfullscreen", "loading"],
       ADD_TAGS: ["details", "summary"],
       FORBID_TAGS: ["style", "form", "input", "button"]
     });
